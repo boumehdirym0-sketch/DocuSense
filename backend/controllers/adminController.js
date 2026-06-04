@@ -1,5 +1,5 @@
-const User = require('../models/User')
-const Manual = require('../models/Manual')
+const User = require('../models/user')
+const Manual = require('../models/manual')
 
 const getStats = async (req, res) => {
   try {

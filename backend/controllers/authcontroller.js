@@ -12,7 +12,7 @@ const register = async (req, res) => {
     if (exists) return res.status(400).json({ message: 'Email déjà utilisé' })
 
     const hashed = await bcrypt.hash(password, 10)
-    const user = await User.create({ name, email, password: hashed, role: req.body.role || 'developer' })
+    const user = await User.create({ name, email, password: hashed, role: 'developer' })
 
     res.status(201).json({
       id: user.id,

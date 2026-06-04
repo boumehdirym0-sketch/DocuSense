@@ -1,0 +1,86 @@
+\xpg@aux {}{french}
+\contentsline {chapter}{Remerciements}{iii}{chapter*.1}%
+\contentsline {chapter}{R\'esum\'e}{iv}{chapter*.2}%
+\xpg@aux {}{arabic}
+\xpg@aux {}{french}
+\contentsline {chapter}{Liste des figures}{ix}{chapter*.4}%
+\contentsline {chapter}{Liste des tableaux}{x}{chapter*.5}%
+\contentsline {chapter}{Liste des abr\'eviations}{xi}{chapter*.6}%
+\contentsline {chapter}{Introduction g\'en\'erale}{1}{chapter*.7}%
+\contentsline {chapter}{\numberline {1}\'Etat de l'art et \'etude de l'existant}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Introduction}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}La documentation technique logicielle}{3}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}D\'efinition et importance}{3}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Les d\'efis de la documentation manuelle}{4}{subsection.1.2.2}%
+\contentsline {section}{\numberline {1.3}L'intelligence artificielle g\'en\'erative}{4}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}D\'efinition et \'evolution}{4}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Les mod\`eles multimodaux}{4}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}Google Gemini 2.0 Flash}{5}{subsection.1.3.3}%
+\contentsline {section}{\numberline {1.4}La gamification}{5}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Concept et principes}{5}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}Impact de la gamification sur l'apprentissage}{6}{subsection.1.4.2}%
+\contentsline {section}{\numberline {1.5}\'Etude de l'existant}{6}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}Solutions actuelles}{6}{subsection.1.5.1}%
+\contentsline {subsection}{\numberline {1.5.2}Positionnement de DocuSense}{6}{subsection.1.5.2}%
+\contentsline {section}{\numberline {1.6}Technologies retenues}{6}{section.1.6}%
+\contentsline {subsection}{\numberline {1.6.1}Architecture g\'en\'erale}{6}{subsection.1.6.1}%
+\contentsline {subsection}{\numberline {1.6.2}Frontend -- React.js}{7}{subsection.1.6.2}%
+\contentsline {subsection}{\numberline {1.6.3}Backend -- Node.js / Express.js}{7}{subsection.1.6.3}%
+\contentsline {subsection}{\numberline {1.6.4}Base de donn\'ees -- MySQL / Sequelize}{7}{subsection.1.6.4}%
+\contentsline {subsection}{\numberline {1.6.5}Authentification -- JWT / bcrypt}{7}{subsection.1.6.5}%
+\contentsline {subsection}{\numberline {1.6.6}Traitement multim\'edia -- Multer / Sharp}{8}{subsection.1.6.6}%
+\contentsline {section}{\numberline {1.7}Conclusion}{8}{section.1.7}%
+\contentsline {chapter}{\numberline {2}Analyse et conception}{9}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Introduction}{9}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Identification des acteurs}{9}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Sp\'ecification des besoins}{9}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Besoins fonctionnels}{9}{subsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.1.1}Module Authentification}{9}{subsubsection.2.3.1.1}%
+\contentsline {subsubsection}{\numberline {2.3.1.2}Module Gestion des manuels}{10}{subsubsection.2.3.1.2}%
+\contentsline {subsubsection}{\numberline {2.3.1.3}Module Intelligence Artificielle}{10}{subsubsection.2.3.1.3}%
+\contentsline {subsubsection}{\numberline {2.3.1.4}Module Gamification}{10}{subsubsection.2.3.1.4}%
+\contentsline {subsection}{\numberline {2.3.2}Besoins non fonctionnels}{11}{subsection.2.3.2}%
+\contentsline {section}{\numberline {2.4}Mod\'elisation UML}{11}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Diagramme des cas d'utilisation}{11}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Diagramme de classes}{11}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}Diagramme de s\'equence -- Analyse d'image par IA}{13}{subsection.2.4.3}%
+\contentsline {section}{\numberline {2.5}Conception de la base de donn\'ees}{13}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Sch\'ema relationnel}{13}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Relations entre les tables}{13}{subsection.2.5.2}%
+\contentsline {section}{\numberline {2.6}Conception de l'API REST}{14}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Endpoints de l'API}{14}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Middleware d'authentification JWT}{14}{subsection.2.6.2}%
+\contentsline {section}{\numberline {2.7}Conclusion}{15}{section.2.7}%
+\contentsline {chapter}{\numberline {3}R\'ealisation et tests}{16}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Introduction}{16}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Environnement de d\'eveloppement}{16}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Outils et versions}{16}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Structure du projet}{16}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Impl\'ementation du backend}{17}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Configuration du serveur}{17}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Mod\`eles Sequelize}{18}{subsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.2.1}Mod\`ele User}{18}{subsubsection.3.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.3.2.2}Mod\`ele Progress (gamification)}{19}{subsubsection.3.3.2.2}%
+\contentsline {subsection}{\numberline {3.3.3}Module Intelligence Artificielle}{19}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}Module Gamification}{20}{subsection.3.3.4}%
+\contentsline {section}{\numberline {3.4}Impl\'ementation du frontend}{20}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Configuration du client Axios}{21}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Routeur principal React}{21}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}Pr\'esentation des interfaces}{21}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Page d'accueil (Landing)}{22}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Pages d'authentification}{22}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}Tableau de bord (Dashboard)}{22}{subsection.3.5.3}%
+\contentsline {subsubsection}{\numberline {3.5.3.1}Sidebar de navigation}{22}{subsubsection.3.5.3.1}%
+\contentsline {subsubsection}{\numberline {3.5.3.2}Zone principale}{23}{subsubsection.3.5.3.2}%
+\contentsline {subsection}{\numberline {3.5.4}Module Gamification (Quiz)}{23}{subsection.3.5.4}%
+\contentsline {section}{\numberline {3.6}Tests}{23}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Tests des routes API}{23}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3.6.2}Tests fonctionnels}{24}{subsection.3.6.2}%
+\contentsline {subsection}{\numberline {3.6.3}Gestion des erreurs}{24}{subsection.3.6.3}%
+\contentsline {section}{\numberline {3.7}Conclusion}{24}{section.3.7}%
+\contentsline {chapter}{Conclusion g\'en\'erale et perspectives}{25}{chapter*.22}%
+\contentsline {chapter}{Bibliographie}{27}{chapter*.23}%
+\contentsline {chapter}{\numberline {A}Variables d'environnement}{29}{chapter.A}%
+\contentsline {chapter}{\numberline {B}Instructions de d\'eploiement}{30}{chapter.B}%
+\contentsline {chapter}{\numberline {C}Exemple de r\'eponse JSON de l'API Gemini}{31}{chapter.C}%
+\contentsline {chapter}{\numberline {D}Glossaire}{32}{chapter.D}%

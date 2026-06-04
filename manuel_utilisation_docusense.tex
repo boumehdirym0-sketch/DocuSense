@@ -1,0 +1,749 @@
+% ============================================================
+%  MANUEL D'UTILISATION -- DocuSense
+%  Projet PFE Licence LMI -- IFAG 2025-2026
+%  Auteur : Boumehdi Rym
+% ============================================================
+% Compiler avec : xelatex manuel_utilisation_docusense.tex
+
+\documentclass[12pt, a4paper]{article}
+
+% ─── Moteur XeLaTeX ───────────────────────────────────────
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{french}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont[Scale=0.85]{Courier New}
+
+% ─── Mise en page ─────────────────────────────────────────
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.8cm, right=2.8cm, headheight=15pt]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{6pt}
+
+% ─── En-têtes / pieds de page ─────────────────────────────
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textit{Manuel d'utilisation -- DocuSense}}
+\fancyhead[R]{\small\textit{IFAG 2025-2026}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ─── Couleurs ─────────────────────────────────────────────
+\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+\definecolor{DSblue}{HTML}{185FA5}
+\definecolor{DSdark}{HTML}{0C2340}
+\definecolor{DSlight}{HTML}{EFF6FF}
+\definecolor{DSgreen}{HTML}{27AE60}
+\definecolor{DSorange}{HTML}{E67E22}
+\definecolor{DSgray}{HTML}{7F8C8D}
+\definecolor{DSlightgray}{HTML}{F2F3F4}
+\definecolor{DSpurple}{HTML}{8E44AD}
+
+% ─── Graphiques ───────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{font=small, labelfont=bf, labelsep=period}
+
+% ─── Boîtes ───────────────────────────────────────────────
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+\newtcolorbox{astuce}[1][Astuce]{
+  colback=DSlight, colframe=DSblue, fonttitle=\bfseries\small,
+  title=\faIcon{lightbulb}\quad #1, breakable, enhanced,
+  left=6pt, right=6pt, top=4pt, bottom=4pt}
+
+\newtcolorbox{attention}[1][Attention]{
+  colback=orange!8, colframe=DSorange, fonttitle=\bfseries\small,
+  title=#1, breakable, enhanced,
+  left=6pt, right=6pt, top=4pt, bottom=4pt}
+
+\newtcolorbox{etape}[2][]{
+  colback=DSlightgray, colframe=DSblue!60, fonttitle=\bfseries,
+  title={\textcolor{DSblue}{\Large\bfseries#2}},
+  breakable, enhanced, left=8pt, right=8pt, top=6pt, bottom=6pt,
+  attach boxed title to top left={yshift=-2mm, xshift=8mm},
+  boxed title style={colback=DSblue, colframe=DSblue}}
+
+% ─── Placeholder capture d'écran ──────────────────────────
+\usepackage{tikz}
+\newcommand{\capture}[2][10cm]{%
+  \begin{center}
+    \begin{tikzpicture}
+      \draw[DSgray, dashed, rounded corners=4pt, line width=1pt]
+        (0,0) rectangle (#1, -5.5cm);
+      \node[DSgray] at (#1/2, -2.75cm) {%
+        \begin{minipage}{0.85\linewidth}\centering
+          \textit{\small [Capture d'écran : #2]}
+        \end{minipage}};
+    \end{tikzpicture}
+  \end{center}}
+
+% ─── Listes ───────────────────────────────────────────────
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.5em, itemsep=2pt}
+\setlist[enumerate]{leftmargin=1.8em, itemsep=2pt}
+
+% ─── Hyperliens ───────────────────────────────────────────
+\usepackage[unicode=true, colorlinks=true, linkcolor=DSblue,
+  urlcolor=DSblue, bookmarks=true,
+  pdftitle={Manuel d'utilisation -- DocuSense},
+  pdfauthor={Boumehdi Rym}]{hyperref}
+
+% ─── Divers ───────────────────────────────────────────────
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{pifont}
+\newcommand{\cmark}{\textcolor{DSgreen}{\ding{51}}}
+\newcommand{\xmark}{\textcolor{red}{\ding{55}}}
+
+% ─── Numérotation sections ─────────────────────────────────
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+% ──────────────────────────────────────────────────────────
+\begin{document}
+
+% ═══════════════════════════════════════════════════════════
+%  PAGE DE TITRE
+% ═══════════════════════════════════════════════════════════
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+  % Bandeau bleu en haut
+  \fill[DSdark] (current page.north west) rectangle
+    ([yshift=-3.5cm]current page.north east);
+  % Bande bleue claire
+  \fill[DSblue] ([yshift=-3.5cm]current page.north west) rectangle
+    ([yshift=-4cm]current page.north east);
+  % Pied de page
+  \fill[DSlightgray] (current page.south west) rectangle
+    ([yshift=2cm]current page.south east);
+\end{tikzpicture}
+
+\vspace*{0.5cm}
+\begin{center}
+  {\color{white}\sffamily\Large\bfseries IFAG -- Institut de Formation en
+  Algérie de Gestion}\\[0.3cm]
+  {\color{white}\sffamily\large Licence LMI -- Année universitaire 2025-2026}
+\end{center}
+
+\vspace{3cm}
+
+\begin{center}
+  % Logo / nom plateforme
+  \begin{tikzpicture}
+    \node[rounded corners=8pt, fill=DSblue, text=white,
+          font=\sffamily\Huge\bfseries,
+          inner xsep=20pt, inner ysep=12pt] {DocuSense};
+  \end{tikzpicture}
+
+  \vspace{0.8cm}
+  {\sffamily\huge\bfseries\color{DSdark} Manuel d'Utilisation}\\[0.4cm]
+  {\sffamily\large\color{DSgray} Guide pas à pas avec scénario de démonstration}
+
+  \vspace{1.5cm}
+  \begin{tcolorbox}[colback=DSlight, colframe=DSblue, width=0.75\linewidth,
+    halign=center, boxrule=1pt]
+    \textbf{Plateforme intelligente de génération de\\
+    documentation technique gamifiée}\\[4pt]
+    {\small Propulsée par l'IA générative -- Google Gemini 2.0 Flash}
+  \end{tcolorbox}
+
+  \vspace{2cm}
+  {\large\bfseries Réalisé par :} {\large Boumehdi Rym}\\[0.3cm]
+  {\large\bfseries Encadrant :} {\large Mr. Abbas}\\[0.6cm]
+  {\large\color{DSgray} Juin 2026}
+\end{center}
+\end{titlepage}
+
+% ═══════════════════════════════════════════════════════════
+%  TABLE DES MATIÈRES
+% ═══════════════════════════════════════════════════════════
+\newpage
+\tableofcontents
+\newpage
+
+% ═══════════════════════════════════════════════════════════
+%  INTRODUCTION
+% ═══════════════════════════════════════════════════════════
+\section{Introduction}
+
+Ce manuel décrit, étape par étape, comment utiliser la plateforme
+\textbf{DocuSense}. Il s'adresse à deux types d'utilisateurs :
+
+\begin{itemize}
+  \item \textbf{Le Développeur} : crée des manuels techniques,
+        génère des étapes automatiquement via l'IA, publie le contenu
+        et crée des quiz.
+  \item \textbf{L'Utilisateur final (End User)} : consulte les manuels
+        publiés, suit les tutoriels étape par étape, répond aux quiz
+        et remporte des badges.
+\end{itemize}
+
+\begin{tcolorbox}[colback=DSlight, colframe=DSblue, title=\textbf{Accès à la plateforme}]
+  Ouvrez votre navigateur web (Google Chrome, Firefox, Edge) et
+  accédez à l'adresse suivante :\\[4pt]
+  \texttt{\textbf{http://localhost:3000}} \quad (environnement local)
+\end{tcolorbox}
+
+\vspace{0.3cm}
+
+% ═══════════════════════════════════════════════════════════
+%  SECTION 1 : PAGE D'ACCUEIL
+% ═══════════════════════════════════════════════════════════
+\section{Page d'accueil}
+
+La page d'accueil est la première interface visible par tout visiteur.
+Elle présente la plateforme DocuSense, ses fonctionnalités principales
+et les boutons d'accès à l'inscription ou à la connexion.
+
+\capture[14cm]{Page d'accueil -- vue générale de DocuSense}
+
+\vspace{0.3cm}
+
+La page d'accueil contient les éléments suivants :
+
+\begin{itemize}
+  \item \textbf{Barre de navigation} : liens vers les rubriques
+        \textit{Fonctionnalités}, \textit{Tarifs}, \textit{Documentation}
+        et \textit{À propos}.
+  \item \textbf{Section héro} : titre principal, description et deux
+        boutons d'action (\textit{Commencer gratuitement} /
+        \textit{Voir la démo}).
+  \item \textbf{Section fonctionnalités} : présentation des trois
+        piliers de la plateforme (IA générative, Gamification,
+        Ultra rapide).
+  \item \textbf{Section tarifs} : offre 100\,\% gratuite.
+  \item \textbf{Section À propos} : contexte du projet IFAG / LMI.
+\end{itemize}
+
+\capture[14cm]{Section "Fonctionnalités" de la page d'accueil}
+
+% ═══════════════════════════════════════════════════════════
+%  SECTION 2 : INSCRIPTION
+% ═══════════════════════════════════════════════════════════
+\section{Inscription (Créer un compte)}
+
+\subsection{Accéder à la page d'inscription}
+
+Depuis la page d'accueil, cliquez sur le bouton
+\textbf{« Commencer gratuitement »} ou sur le lien \textbf{« S'inscrire »}
+dans la barre de navigation.
+
+\capture[14cm]{Bouton "Commencer gratuitement" sur la page d'accueil}
+
+\subsection{Remplir le formulaire d'inscription}
+
+La page d'inscription affiche un formulaire composé des champs suivants :
+
+\begin{enumerate}
+  \item \textbf{Nom complet} : saisissez votre prénom et nom.
+  \item \textbf{Adresse e-mail} : entrez une adresse e-mail valide.
+  \item \textbf{Mot de passe} : choisissez un mot de passe sécurisé
+        (minimum 6 caractères).
+  \item \textbf{Rôle} : sélectionnez votre profil :
+    \begin{itemize}
+      \item \textit{Développeur} -- pour créer et gérer des manuels.
+      \item \textit{Utilisateur} -- pour consulter les manuels publiés.
+    \end{itemize}
+\end{enumerate}
+
+\capture[14cm]{Formulaire d'inscription avec sélection du rôle}
+
+\subsection{Valider l'inscription}
+
+Après avoir rempli tous les champs, cliquez sur le bouton
+\textbf{« S'inscrire »}. Un message de confirmation s'affiche et vous
+êtes redirigé(e) vers la page de connexion.
+
+\begin{tcolorbox}[colback=orange!8, colframe=DSorange,
+  title=\textbf{Remarque}]
+  Vous pouvez également vous inscrire rapidement via votre compte
+  \textbf{Google} en cliquant sur le bouton \textit{« Continuer avec Google »}.
+\end{tcolorbox}
+
+% ═══════════════════════════════════════════════════════════
+%  SECTION 3 : CONNEXION
+% ═══════════════════════════════════════════════════════════
+\section{Connexion (Se connecter)}
+
+\subsection{Accéder à la page de connexion}
+
+Depuis la page d'accueil, cliquez sur le bouton \textbf{« Se connecter »}
+dans la barre de navigation.
+
+\subsection{Saisir les identifiants}
+
+\begin{enumerate}
+  \item Entrez votre \textbf{adresse e-mail} et votre \textbf{mot de passe}.
+  \item Cliquez sur \textbf{« Se connecter »}.
+\end{enumerate}
+
+\capture[14cm]{Page de connexion avec formulaire email et mot de passe}
+
+Selon le rôle associé à votre compte, vous serez automatiquement
+redirigé(e) vers :
+\begin{itemize}
+  \item \textbf{Le tableau de bord (Dashboard)} si vous êtes Développeur.
+  \item \textbf{L'espace utilisateur (End User)} si vous êtes Utilisateur.
+\end{itemize}
+
+% ═══════════════════════════════════════════════════════════
+%  SECTION 4 : ESPACE DÉVELOPPEUR
+% ═══════════════════════════════════════════════════════════
+\section{Espace Développeur -- Tableau de bord}
+
+L'espace développeur est le cœur de la création de contenu sur DocuSense.
+Il permet de créer, modifier, publier et archiver des manuels techniques.
+
+\capture[14cm]{Tableau de bord -- vue générale avec liste des manuels}
+
+\subsection{Créer un nouveau manuel}
+
+\textbf{Étape 1 -- Cliquer sur « Nouveau manuel »}
+
+Dans la barre latérale ou en haut de la liste, cliquez sur le bouton
+\textbf{« + Nouveau manuel »}.
+
+\capture[14cm]{Bouton "Nouveau manuel" dans le tableau de bord}
+
+\textbf{Étape 2 -- Renseigner les informations du manuel}
+
+Un formulaire apparaît avec les champs suivants :
+\begin{itemize}
+  \item \textbf{Titre} : nom du manuel (ex. : \textit{Guide d'installation
+        de Node.js}).
+  \item \textbf{Description} : brève description du sujet traité.
+\end{itemize}
+
+Cliquez sur \textbf{« Créer »} pour valider.
+
+\capture[14cm]{Formulaire de création d'un nouveau manuel}
+
+\subsection{Générer les étapes automatiquement avec l'IA}
+
+DocuSense propose plusieurs méthodes de génération automatique d'étapes
+grâce à l'intelligence artificielle (Google Gemini 2.0 Flash).
+
+\subsubsection{Méthode 1 : Génération par description texte}
+
+\begin{enumerate}
+  \item Ouvrez le manuel créé.
+  \item Dans la section \textbf{« Générer avec l'IA »}, saisissez une
+        description de votre processus (ex. : \textit{«~Comment installer
+        Node.js sur Windows~»}).
+  \item Cliquez sur \textbf{« Suggérer les étapes »}.
+  \item L'IA génère automatiquement 5 étapes structurées.
+\end{enumerate}
+
+\capture[14cm]{Interface de génération IA par description texte}
+
+\capture[14cm]{Résultat : 5 étapes générées automatiquement par l'IA}
+
+\subsubsection{Méthode 2 : Analyse d'une capture d'écran}
+
+\begin{enumerate}
+  \item Cliquez sur l'onglet \textbf{« Analyser une image »}.
+  \item Chargez une capture d'écran (format PNG ou JPG).
+  \item Cliquez sur \textbf{« Analyser »}.
+  \item L'IA analyse l'image et génère les étapes correspondantes.
+\end{enumerate}
+
+\capture[14cm]{Upload d'une capture d'écran pour analyse IA}
+
+\subsubsection{Méthode 3 : Analyse d'une URL de site web}
+
+\begin{enumerate}
+  \item Cliquez sur l'onglet \textbf{« Analyser une URL »}.
+  \item Collez l'URL du site web à documenter.
+  \item Cliquez sur \textbf{« Analyser »}.
+  \item L'IA génère les étapes de navigation sur ce site.
+\end{enumerate}
+
+\capture[14cm]{Interface d'analyse par URL}
+
+\subsubsection{Méthode 4 : Analyse d'une vidéo}
+
+\begin{enumerate}
+  \item Cliquez sur l'onglet \textbf{« Analyser une vidéo »}.
+  \item Chargez une vidéo de démonstration (MP4).
+  \item Cliquez sur \textbf{« Analyser »}.
+  \item L'IA extrait les étapes à partir du contenu vidéo.
+\end{enumerate}
+
+\capture[14cm]{Upload d'une vidéo pour analyse IA}
+
+\subsection{Modifier les étapes manuellement}
+
+Après la génération automatique (ou manuellement), vous pouvez modifier
+chaque étape :
+\begin{enumerate}
+  \item Cliquez sur une étape pour l'éditer.
+  \item Modifiez le \textbf{titre} et la \textbf{description}.
+  \item Ajoutez ou remplacez le \textbf{média} associé (image/vidéo).
+  \item Cliquez sur \textbf{« Enregistrer »}.
+\end{enumerate}
+
+\capture[14cm]{Éditeur d'étape -- modification du titre et description}
+
+\subsection{Créer un quiz pour une étape}
+
+Chaque étape peut comporter un quiz de validation des connaissances.
+
+\begin{enumerate}
+  \item Sélectionnez une étape dans le manuel.
+  \item Cliquez sur \textbf{« Ajouter un quiz »}.
+  \item Remplissez les champs :
+    \begin{itemize}
+      \item \textbf{Question} : posez une question sur le contenu de l'étape.
+      \item \textbf{Options} : saisissez 4 propositions de réponse (A, B, C, D).
+      \item \textbf{Bonne réponse} : indiquez la réponse correcte.
+      \item \textbf{Points} : attribuez un nombre de points (ex. : 10 pts).
+    \end{itemize}
+  \item Cliquez sur \textbf{« Créer le quiz »}.
+\end{enumerate}
+
+\capture[14cm]{Formulaire de création d'un quiz pour une étape}
+
+\subsection{Publier un manuel}
+
+Une fois le manuel complet, publiez-le pour le rendre accessible
+aux utilisateurs finaux.
+
+\begin{enumerate}
+  \item Dans la liste des manuels, localisez le manuel à publier.
+  \item Cliquez sur le bouton \textbf{« Publier »} (icône de publication).
+  \item Le statut du manuel passe à \textbf{« Publié »}.
+\end{enumerate}
+
+\capture[14cm]{Manuel avec statut "Publié" visible dans le tableau de bord}
+
+\begin{tcolorbox}[colback=DSlight, colframe=DSblue, title=\textbf{Information}]
+  Un manuel publié est immédiatement visible dans l'espace utilisateur
+  (End User). Vous pouvez le dépublier à tout moment en cliquant à nouveau
+  sur le bouton de publication.
+\end{tcolorbox}
+
+\subsection{Exporter un manuel en PDF}
+
+\begin{enumerate}
+  \item Ouvrez le manuel souhaité.
+  \item Cliquez sur le bouton \textbf{« Exporter PDF »}.
+  \item Le fichier PDF est automatiquement téléchargé sur votre ordinateur.
+\end{enumerate}
+
+\capture[14cm]{Bouton "Exporter PDF" et aperçu du fichier généré}
+
+\subsection{Archiver et restaurer un manuel}
+
+\begin{itemize}
+  \item \textbf{Archiver} : cliquez sur l'icône d'archivage à côté du
+        manuel. Il disparaît de la liste principale et passe dans
+        les \textit{Archives}.
+  \item \textbf{Restaurer} : accédez à la section \textit{Archives},
+        cliquez sur \textbf{« Restaurer »} pour remettre le manuel
+        dans la liste active.
+\end{itemize}
+
+\capture[14cm]{Section Archives avec bouton "Restaurer"}
+
+% ═══════════════════════════════════════════════════════════
+%  SECTION 5 : ESPACE UTILISATEUR FINAL
+% ═══════════════════════════════════════════════════════════
+\section{Espace Utilisateur Final (End User)}
+
+L'espace utilisateur final permet de consulter les manuels publiés,
+de suivre les tutoriels, de répondre aux quiz et de gagner des récompenses.
+
+\capture[14cm]{Espace utilisateur -- liste des manuels disponibles}
+
+\subsection{Parcourir les manuels disponibles}
+
+\begin{enumerate}
+  \item Connectez-vous avec un compte de type \textbf{Utilisateur}.
+  \item La page principale affiche tous les manuels publiés.
+  \item Cliquez sur un manuel pour commencer à le consulter.
+\end{enumerate}
+
+\capture[14cm]{Liste des manuels publiés avec titre et description}
+
+\subsection{Suivre un tutoriel étape par étape}
+
+\begin{enumerate}
+  \item Après avoir ouvert un manuel, les étapes s'affichent dans l'ordre.
+  \item Lisez la description de chaque étape.
+  \item Consultez le média associé (image ou vidéo) si disponible.
+  \item Cliquez sur \textbf{« Étape suivante »} pour progresser.
+\end{enumerate}
+
+\capture[14cm]{Vue d'une étape avec description et média associé}
+
+\capture[14cm]{Navigation entre les étapes (boutons Précédent / Suivant)}
+
+\subsection{Répondre aux quiz}
+
+Lorsqu'une étape comporte un quiz, il s'affiche automatiquement
+après avoir lu le contenu.
+
+\begin{enumerate}
+  \item Lisez la \textbf{question} affichée.
+  \item Sélectionnez une des quatre options proposées (A, B, C ou D).
+  \item Cliquez sur \textbf{« Valider ma réponse »}.
+  \item Le résultat s'affiche :
+    \begin{itemize}
+      \item \cmark\ \textbf{Bonne réponse} : des points sont ajoutés
+            à votre score.
+      \item \xmark\ \textbf{Mauvaise réponse} : la bonne réponse
+            vous est indiquée.
+    \end{itemize}
+\end{enumerate}
+
+\capture[14cm]{Interface du quiz avec les 4 options de réponse}
+
+\capture[14cm]{Résultat après validation -- bonne ou mauvaise réponse}
+
+\subsection{Badges et système de récompenses}
+
+DocuSense intègre un système de \textbf{gamification} basé sur
+l'accumulation de points :
+
+\begin{center}
+\begin{tabular}{clcc}
+\toprule
+\textbf{Badge} & \textbf{Nom} & \textbf{Points requis} & \textbf{Couleur} \\
+\midrule
+\ding{72} & Bronze & 50 pts  & \textcolor{DSorange}{\rule{1cm}{6pt}} \\
+\ding{72} & Silver & 100 pts & \textcolor{DSgray}{\rule{1cm}{6pt}} \\
+\ding{72} & Gold   & 200 pts & \textcolor{yellow!60!DSorange}{\rule{1cm}{6pt}} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+Les badges obtenus s'affichent dans votre profil utilisateur.
+
+\capture[14cm]{Profil utilisateur affichant les badges obtenus}
+
+\subsection{Classement (Leaderboard)}
+
+Le \textbf{leaderboard} affiche le classement des 10 meilleurs
+utilisateurs selon leur score total.
+
+\begin{enumerate}
+  \item Accédez à la section \textbf{« Classement »} dans le menu.
+  \item Consultez votre position dans le tableau.
+\end{enumerate}
+
+\capture[14cm]{Tableau du classement -- Top 10 des utilisateurs}
+
+% ═══════════════════════════════════════════════════════════
+%  SECTION 6 : SCÉNARIO DE DÉMONSTRATION
+% ═══════════════════════════════════════════════════════════
+\newpage
+\section{Scénario de Démonstration}
+
+\begin{tcolorbox}[colback=DSlight, colframe=DSblue,
+  title=\textbf{Description du scénario}]
+  Ce scénario illustre le cycle complet d'utilisation de DocuSense :
+  un développeur crée un manuel technique via l'IA, puis un utilisateur
+  final le consulte, répond aux quiz et remporte un badge.
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection*{Acteurs}
+\begin{itemize}
+  \item \textbf{Rym} -- Développeur, créatrice du manuel.
+  \item \textbf{Karim} -- Utilisateur final, apprenant.
+\end{itemize}
+
+\vspace{0.3cm}
+
+%----- Étape A -----
+\begin{tcolorbox}[colback=DSlightgray, colframe=DSblue, breakable,
+  title={\textbf{Étape A -- Rym s'inscrit en tant que Développeur}}]
+
+Rym ouvre DocuSense dans son navigateur et clique sur
+\textit{« Commencer gratuitement »}. Elle remplit le formulaire
+d'inscription avec son nom, son e-mail et choisit le rôle
+\textbf{Développeur}. Elle valide et se retrouve sur le tableau de bord.
+
+\end{tcolorbox}
+\capture[14cm]{Scénario -- Rym complète le formulaire d'inscription}
+
+\vspace{0.3cm}
+
+%----- Étape B -----
+\begin{tcolorbox}[colback=DSlightgray, colframe=DSblue, breakable,
+  title={\textbf{Étape B -- Rym crée un manuel "Comment utiliser DocuSense"}}]
+
+Depuis son tableau de bord, Rym clique sur \textit{« + Nouveau manuel »}.
+Elle saisit le titre \textit{« Comment utiliser DocuSense »} et une courte
+description. Elle valide la création.
+
+\end{tcolorbox}
+\capture[14cm]{Scénario -- Rym crée le manuel "Comment utiliser DocuSense"}
+
+\vspace{0.3cm}
+
+%----- Étape C -----
+\begin{tcolorbox}[colback=DSlightgray, colframe=DSblue, breakable,
+  title={\textbf{Étape C -- Rym génère les étapes par IA (description texte)}}]
+
+Dans le manuel créé, Rym tape dans le champ IA :
+\textit{«~Guide pas à pas pour utiliser la plateforme DocuSense~»}.
+Elle clique sur \textit{« Suggérer les étapes »}. En quelques secondes,
+Gemini génère \textbf{5 étapes structurées} : inscription, connexion,
+création de manuel, publication et quiz.
+
+\end{tcolorbox}
+\capture[14cm]{Scénario -- 5 étapes générées par Gemini IA en quelques secondes}
+
+\vspace{0.3cm}
+
+%----- Étape D -----
+\begin{tcolorbox}[colback=DSlightgray, colframe=DSblue, breakable,
+  title={\textbf{Étape D -- Rym ajoute un quiz sur l'étape 1}}]
+
+Rym sélectionne la première étape \textit{«~Inscription~»} et clique
+sur \textit{« Ajouter un quiz »}. Elle crée la question :
+\textit{«~Quel rôle choisir pour créer des manuels ?~»} avec les options
+A) Développeur, B) Utilisateur, C) Administrateur, D) Visiteur.
+La bonne réponse est \textbf{A -- Développeur}, valant 10 points.
+
+\end{tcolorbox}
+\capture[14cm]{Scénario -- Rym crée un quiz sur l'étape 1}
+
+\vspace{0.3cm}
+
+%----- Étape E -----
+\begin{tcolorbox}[colback=DSlightgray, colframe=DSblue, breakable,
+  title={\textbf{Étape E -- Rym publie le manuel}}]
+
+Une fois toutes les étapes et quiz configurés, Rym clique sur
+\textit{« Publier »}. Le statut du manuel passe à \textbf{Publié}
+et il devient accessible aux utilisateurs finaux.
+
+\end{tcolorbox}
+\capture[14cm]{Scénario -- Rym publie le manuel, statut "Publié" affiché}
+
+\vspace{0.3cm}
+
+%----- Étape F -----
+\begin{tcolorbox}[colback=DSlightgray, colframe=DSgreen!60, breakable,
+  title={\textbf{Étape F -- Karim s'inscrit en tant qu'Utilisateur}}]
+
+Karim ouvre DocuSense, s'inscrit avec le rôle \textbf{Utilisateur}
+et accède à l'espace End User. Il voit immédiatement le manuel
+\textit{« Comment utiliser DocuSense »} publié par Rym.
+
+\end{tcolorbox}
+\capture[14cm]{Scénario -- Karim voit le manuel de Rym dans l'espace utilisateur}
+
+\vspace{0.3cm}
+
+%----- Étape G -----
+\begin{tcolorbox}[colback=DSlightgray, colframe=DSgreen!60, breakable,
+  title={\textbf{Étape G -- Karim consulte le tutoriel étape par étape}}]
+
+Karim clique sur le manuel et parcourt les 5 étapes une par une.
+Il lit les descriptions et regarde les médias associés à chaque étape.
+Il navigue avec les boutons \textit{Précédent} et \textit{Suivant}.
+
+\end{tcolorbox}
+\capture[14cm]{Scénario -- Karim navigue entre les étapes du tutoriel}
+
+\vspace{0.3cm}
+
+%----- Étape H -----
+\begin{tcolorbox}[colback=DSlightgray, colframe=DSgreen!60, breakable,
+  title={\textbf{Étape H -- Karim répond au quiz et gagne des points}}]
+
+À la fin de l'étape 1, le quiz apparaît. Karim sélectionne
+\textbf{A -- Développeur} et clique sur \textit{« Valider »}.
+La bonne réponse est confirmée et \textbf{+10 points} sont ajoutés
+à son score. Il complète les autres quiz et accumule au total 60 points.
+
+\end{tcolorbox}
+\capture[14cm]{Scénario -- Karim valide sa réponse et gagne +10 points}
+
+\vspace{0.3cm}
+
+%----- Étape I -----
+\begin{tcolorbox}[colback=DSlightgray, colframe=DSorange!80, breakable,
+  title={\textbf{Étape I -- Karim remporte le badge Bronze}}]
+
+Avec 60 points accumulés (seuil Bronze = 50 pts), le badge
+\textbf{Bronze} s'affiche automatiquement sur le profil de Karim.
+Il consulte le \textbf{leaderboard} et voit son nom figurer dans
+le classement.
+
+\end{tcolorbox}
+\capture[14cm]{Scénario -- Badge Bronze attribué à Karim sur son profil}
+
+\capture[14cm]{Scénario -- Karim apparaît dans le leaderboard Top 10}
+
+% ═══════════════════════════════════════════════════════════
+%  SECTION 7 : RÉCAPITULATIF DES FONCTIONNALITÉS
+% ═══════════════════════════════════════════════════════════
+\newpage
+\section{Récapitulatif des fonctionnalités}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\linewidth}{lXc}
+\toprule
+\textbf{Fonctionnalité} & \textbf{Description} & \textbf{Profil} \\
+\midrule
+Inscription / Connexion & Créer un compte et se connecter (email ou Google OAuth) & Tous \\
+\midrule
+Création de manuel & Créer un manuel avec titre et description & Développeur \\
+Génération IA (texte) & Générer des étapes via une description textuelle & Développeur \\
+Génération IA (image) & Analyser une capture d'écran pour générer des étapes & Développeur \\
+Génération IA (URL) & Analyser un site web pour générer des étapes & Développeur \\
+Génération IA (vidéo) & Analyser une vidéo pour générer des étapes & Développeur \\
+Édition des étapes & Modifier manuellement le titre, description et médias & Développeur \\
+Création de quiz & Ajouter un quiz (QCM 4 options) à chaque étape & Développeur \\
+Publication & Rendre un manuel accessible aux utilisateurs finaux & Développeur \\
+Export PDF & Télécharger le manuel en fichier PDF & Développeur \\
+Archivage & Archiver / restaurer un manuel & Développeur \\
+\midrule
+Consultation manuals & Parcourir les manuels publiés & Utilisateur \\
+Navigation étapes & Suivre un tutoriel étape par étape & Utilisateur \\
+Quiz interactif & Répondre aux quiz et gagner des points & Utilisateur \\
+Badges & Obtenir des badges (Bronze / Silver / Gold) selon les points & Utilisateur \\
+Leaderboard & Consulter le classement des 10 meilleurs utilisateurs & Utilisateur \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+% ═══════════════════════════════════════════════════════════
+%  CONCLUSION
+% ═══════════════════════════════════════════════════════════
+\section{Conclusion}
+
+Ce manuel d'utilisation a présenté, étape par étape, l'ensemble des
+fonctionnalités de la plateforme \textbf{DocuSense}. Le scénario de
+démonstration a illustré le cycle complet : de la création d'un manuel
+par un développeur jusqu'à l'obtention d'un badge par un utilisateur final.
+
+DocuSense simplifie la documentation technique en automatisant la
+génération d'étapes grâce à l'IA générative, tout en engageant les
+apprenants via la gamification (quiz, badges, classement).
+
+\vspace{1cm}
+\begin{tcolorbox}[colback=DSlightgray, colframe=DSgray]
+  \textbf{Contact :} \texttt{boumehdirym0@gmail.com} \quad
+  \textbf{Encadrant :} Mr. Abbas \quad
+  \textbf{IFAG -- Licence LMI -- 2025-2026}
+\end{tcolorbox}
+
+\end{document}

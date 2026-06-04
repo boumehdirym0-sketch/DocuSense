@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(cd \"c:\\\\Users\\\\Brothres\\\\Desktop\\\\pfe\\\\docusense\\\\backend\"; $body = '{\"url\":\"https://github.com\"}'; try { $r = Invoke-WebRequest -Uri \"http://localhost:5000/api/ai/analyze-url\" -Method POST -Body $body -ContentType \"application/json\" -Headers @{Authorization=\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzgwMzMyMDgzLCJleHAiOjE3ODI5MjQwODN9.dbuT7IlrQDYOqJstmvC1HWBHQS4Xe2j9AhEgklhsftE\"} -UseBasicParsing; Write-Output \"OK: $\\($r.Content.Substring\\(0,200\\)\\)\" } catch { $reader = New-Object System.IO.StreamReader\\($_.Exception.Response.GetResponseStream\\(\\)\\); Write-Output \"ERREUR: $\\($reader.ReadToEnd\\(\\)\\)\" })"
+    ]
+  }
+}

@@ -1,0 +1,1826 @@
+% ============================================================
+%  RAPPORT DE FIN D'ÉTUDES -- LICENCE LMI
+%  Projet : DocuSense
+%  IFAG -- Année universitaire 2025-2026
+% ============================================================
+
+\documentclass[12pt, a4paper, twoside, openany]{report}
+
+% ─── Moteur XeLaTeX : encodage, langues & polices ─────────
+% Compiler avec : xelatex rapport_pfe_docusense.tex
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{french}
+\setotherlanguage[numerals=maghrib]{arabic}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont[Scale=0.85]{Courier New}
+\newfontfamily\arabicfont[Script=Arabic, Scale=1.2]{Arial}
+
+% ─── Mise en page ─────────────────────────────────────────
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=15pt]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\setlength{\parindent}{1cm}
+\setlength{\parskip}{0pt}
+
+% ─── En-têtes / pieds de page ─────────────────────────────
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\leftmark}
+\fancyhead[R]{\small DocuSense}
+\fancyfoot[LE,RO]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ─── Couleurs ─────────────────────────────────────────────
+\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+\definecolor{DSblue}{HTML}{185FA5}
+\definecolor{DSdark}{HTML}{0C2340}
+\definecolor{DSlight}{HTML}{EFF6FF}
+\definecolor{DSpurple}{HTML}{8E44AD}
+\definecolor{DSgreen}{HTML}{27AE60}
+\definecolor{DSorange}{HTML}{E67E22}
+\definecolor{codebg}{HTML}{F8F9FA}
+\definecolor{codeframe}{HTML}{DEE2E6}
+\definecolor{keywordcolor}{HTML}{0D47A1}
+\definecolor{stringcolor}{HTML}{2E7D32}
+\definecolor{commentcolor}{HTML}{757575}
+
+% ─── Graphiques & TikZ ────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds, calc}
+
+% ─── Tableaux ─────────────────────────────────────────────
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{array}
+
+% ─── Code source ──────────────────────────────────────────
+\usepackage{listings}
+% monofont défini via fontspec (Courier New)
+
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeframe},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{keywordcolor}\bfseries,
+  stringstyle=\color{stringcolor},
+  commentstyle=\color{commentcolor}\itshape,
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  numbersep=8pt,
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=2,
+  captionpos=b,
+  showstringspaces=false,
+  xleftmargin=1.5em,
+  framexleftmargin=1.5em,
+  aboveskip=10pt,
+  belowskip=10pt,
+  literate={≥}{{$\geq$}}1 {≤}{{$\leq$}}1,
+}
+\lstset{style=mystyle}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={const, let, var, function, return, if, else, try, catch,
+            async, await, require, module, exports, import, export,
+            default, from, new, class, extends, this, typeof,
+            null, true, false, undefined, for, while, of, in},
+  morestring=[b]',
+  morestring=[b]",
+  morestring=[b]`,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  sensitive=true,
+}
+
+% ─── Hyperliens ───────────────────────────────────────────
+\usepackage[
+  unicode=true, colorlinks=true, linkcolor=NavyBlue,
+  urlcolor=Blue, citecolor=Green,
+  bookmarks=true, bookmarksnumbered=true,
+  pdftitle={Rapport PFE -- DocuSense},
+  pdfauthor={Boumehdi Rym}
+]{hyperref}
+
+% ─── Divers ───────────────────────────────────────────────
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath, amssymb, textcomp}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+\usepackage{pifont}
+
+% ─── Boîtes stylisées ─────────────────────────────────────
+\newtcolorbox{remarque}[1][Remarque]{
+  colback=DSlight, colframe=DSblue, fonttitle=\bfseries,
+  title=#1, breakable, enhanced}
+
+\newtcolorbox{definition}[1][D{\'e}finition]{
+  colback=green!5, colframe=DSgreen, fonttitle=\bfseries,
+  title=#1, breakable, enhanced}
+
+\newtcolorbox{important}[1][Important]{
+  colback=orange!8, colframe=DSorange, fonttitle=\bfseries,
+  title=#1, breakable, enhanced}
+
+% ─── Numérotation ─────────────────────────────────────────
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+% ─── Format des titres (titlesec) ─────────────────────────
+\usepackage{titlesec}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{DSdark}}
+  {\hfill\colorbox{DSblue}{\color{white}\chaptertitlename~\thechapter}}
+  {12pt}
+  {\Huge\color{DSdark}}
+  [\vspace{4pt}\noindent\color{DSblue}\rule{\linewidth}{1.5pt}]
+
+\titlespacing*{\chapter}{0pt}{-20pt}{20pt}
+
+\titleformat{\section}
+  {\large\bfseries\color{DSblue}}{\thesection}{1em}{}
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{DSdark}}{\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\itshape\color{DSblue}}{\thesubsubsection}{1em}{}
+
+% ─── Commande raccourci ───────────────────────────────────
+\newcommand{\DS}{\textbf{\textcolor{DSblue}{DocuSense}}}
+
+% ─── Style TikZ commun ────────────────────────────────────
+\tikzset{
+  mybox/.style={rectangle, rounded corners=6pt, draw=DSblue, fill=DSlight,
+                align=center, text centered, minimum height=1cm, font=\small\bfseries},
+  myarrow/.style={-Stealth, thick, DSblue},
+  mydarrow/.style={-Stealth, thick, DSblue, dashed},
+  actorbox/.style={rectangle, draw=DSdark, fill=DSlight!60,
+                   minimum width=2.5cm, minimum height=0.8cm,
+                   align=center, text centered, font=\small\bfseries, rounded corners=4pt},
+  ucbox/.style={ellipse, draw=DSblue, fill=white,
+                minimum width=4.2cm, minimum height=0.8cm,
+                text centered, font=\small},
+}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+% ─────────────────────────────────────────────────────────
+%  PAGE DE GARDE
+% ─────────────────────────────────────────────────────────
+\pagenumbering{roman}
+\begin{titlepage}
+  \thispagestyle{empty}
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[DSblue]  (current page.north west)
+        rectangle ([yshift=-3.5cm] current page.north east);
+    \fill[DSdark]  (current page.south west)
+        rectangle ([yshift=2cm]   current page.south east);
+    \fill[DSpurple!70!DSblue]
+        (current page.north west)
+        rectangle ([xshift=0.6cm, yshift=-3.5cm] current page.north west);
+  \end{tikzpicture}
+
+  \vspace*{0.2cm}
+  {\color{white}\bfseries\Large\centering
+    Institut de Formation en Administration et Gestion (IFAG)\\[4pt]
+    \normalsize D\'epartement Informatique -- Fili\`ere LMI\\
+  }
+
+  \vspace{1.2cm}
+  \begin{center}
+    {\large\color{DSdark}\bfseries Rapport de Projet de Fin d'\'Etudes}\\[6pt]
+    {\normalsize En vue de l'obtention de la}\\[4pt]
+    {\Large\color{DSblue}\bfseries Licence en Math\'ematiques et Informatique (LMI)}\\[2pt]
+    {\normalsize Sp\'ecialit\'e : Informatique}
+  \end{center}
+
+  \vspace{0.8cm}
+  \begin{center}
+    \begin{tcolorbox}[
+      colback=DSlight, colframe=DSblue,
+      width=14cm, arc=10pt, boxrule=1.5pt]
+      \centering
+      {\color{DSdark}\bfseries\huge DocuSense}\\[8pt]
+      {\color{DSpurple}\large\bfseries Plateforme Intelligente de G\'en\'eration}\\
+      {\color{DSpurple}\large\bfseries de Documentation Technique Gamifi\'ee}\\[10pt]
+      {\color{DSblue}\normalsize Propuls\'ee par l'Intelligence Artificielle G\'en\'erative}
+    \end{tcolorbox}
+  \end{center}
+
+  \vspace{0.8cm}
+  \begin{center}
+    \begin{tabular}{ll}
+      \textbf{\color{DSdark}R\'ealis\'e par :}        & \textbf{Boumehdi Rym} \\[4pt]
+      \textbf{\color{DSdark}Encadrant :}               & \textbf{[Nom de l'encadrant]} \\[4pt]
+      \textbf{\color{DSdark}Ann\'ee universitaire :}   & \textbf{2025 -- 2026} \\
+    \end{tabular}
+  \end{center}
+
+  \vfill
+  \begin{center}
+    {\color{white}\normalsize Soutenu le : \underline{\hspace{4cm}}
+     \hspace{2cm} Devant le jury :}\\[6pt]
+    {\color{white}\small
+      \begin{tabular}{ll}
+        Pr\'esident :   & [Nom] \\
+        Examinateur :   & [Nom] \\
+        Encadrant :     & [Nom] \\
+      \end{tabular}
+    }
+  \end{center}
+  \vspace{0.3cm}
+\end{titlepage}
+
+% ─────────────────────────────────────────────────────────
+%  DÉDICACE
+% ─────────────────────────────────────────────────────────
+\clearpage
+\thispagestyle{empty}
+\vspace*{6cm}
+\begin{flushright}
+  \begin{minipage}{0.6\textwidth}
+    \itshape\large\color{DSdark}
+    \begin{center}\textbf{D\'edicace}\end{center}
+    \vspace{0.5cm}
+    \`A mes parents, pour leur soutien ind\'efectible et leurs sacrifices\\[8pt]
+    \`A mes enseignants, pour la transmission du savoir\\[8pt]
+    \`A tous ceux qui croient que la technologie peut rendre\\
+    la connaissance accessible \`a tous.
+    \vspace{0.5cm}\\
+    \hfill\textit{Boumehdi Rym}
+  \end{minipage}
+\end{flushright}
+
+% ─────────────────────────────────────────────────────────
+%  REMERCIEMENTS
+% ─────────────────────────────────────────────────────────
+\clearpage
+\thispagestyle{empty}
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+Avant tout, je remercie \textbf{Allah} de m'avoir accord\'e la sant\'e, la volont\'e et la
+pers\'ev\'erance n\'ecessaires pour mener \`a bien ce projet de fin d'\'etudes.
+
+Je tiens \`a exprimer ma profonde gratitude \`a mon \textbf{encadrant}, dont les conseils
+avis\'es, la disponibilit\'e et l'accompagnement rigoureux ont \'et\'e d\'eterminants dans
+la r\'ealisation de ce travail. Ses orientations m'ont permis de structurer ma r\'eflexion
+et d'approfondir mes connaissances tout au long de ce projet.
+
+Mes remerciements s'adressent \'egalement \`a l'ensemble du \textbf{corps enseignant du
+d\'epartement Informatique de l'IFAG} pour la qualit\'e de la formation dispens\'ee au
+cours de ces trois ann\'ees de licence.
+
+Je remercie les membres du \textbf{jury} d'avoir accept\'e d'\'evaluer ce travail.
+
+Enfin, je remercie ma \textbf{famille} et mes \textbf{amis} pour leur soutien moral,
+leur patience et leurs encouragements tout au long de mon parcours acad\'emique.
+
+\vspace{1cm}
+\hfill\textit{Boumehdi Rym}
+
+% ─────────────────────────────────────────────────────────
+%  RÉSUMÉ
+% ─────────────────────────────────────────────────────────
+\clearpage
+\chapter*{R\'esum\'e}
+\addcontentsline{toc}{chapter}{R\'esum\'e}
+
+\begin{tcolorbox}[colback=DSlight, colframe=DSblue,
+  title=\textbf{R\'esum\'e -- Fran\c{c}ais}, arc=6pt]
+La documentation technique constitue un d\'efi majeur pour les d\'eveloppeurs
+logiciels~: elle est chronophage, souvent n\'eglig\'ee et difficile \`a maintenir.
+Ce projet de fin d'\'etudes pr\'esente \textbf{DocuSense}, une plateforme web
+intelligente qui automatise la cr\'eation de manuels utilisateurs gr\^ace \`a
+l'intelligence artificielle g\'en\'erative.
+
+DocuSense exploite l'API \textbf{Google Gemini 2.0 Flash} pour analyser des
+captures d'\'ecran et des vid\'eos d'interfaces applicatives, puis g\'en\'erer
+automatiquement des \'etapes de documentation structur\'ees. La plateforme
+int\`egre un \textbf{syst\`eme de gamification} compos\'e de quiz interactifs,
+de badges de progression (Bronze, Silver, Gold) et d'un classement comp\'etitif,
+afin d'am\'eliorer l'engagement et la r\'etention des connaissances par les
+utilisateurs finaux.
+
+Techniquement, l'application repose sur une architecture avec React.js pour
+le frontend, Node.js/Express.js pour le backend, MySQL via Sequelize ORM
+pour la persistance des donn\'ees, et une authentification s\'ecuris\'ee par
+JSON Web Tokens (JWT).
+
+\textbf{Mots-cl\'es~:} Documentation automatique, Intelligence Artificielle
+G\'en\'erative, Gemini AI, Gamification, JWT.
+\end{tcolorbox}
+
+\vspace{1cm}
+
+\begin{tcolorbox}[colback=green!5, colframe=DSgreen,
+  title=\textbf{Abstract -- English}, arc=6pt]
+Technical documentation represents a major challenge for software developers:
+it is time-consuming, often neglected, and difficult to maintain.
+This final year project presents \textbf{DocuSense}, an intelligent web platform
+that automates the creation of user manuals through generative artificial intelligence.
+
+DocuSense leverages the \textbf{Google Gemini 2.0 Flash API} to analyze screenshots
+and videos of application interfaces, then automatically generates structured
+documentation steps. The platform integrates a \textbf{gamification system}
+consisting of interactive quizzes, progress badges (Bronze, Silver, Gold),
+and a competitive leaderboard, in order to improve engagement and knowledge
+retention by end users.
+
+Technically, the application relies on React.js for the frontend,
+Node.js/Express.js for the backend, MySQL via Sequelize ORM for data
+persistence, and secure authentication via JSON Web Tokens (JWT).
+
+\textbf{Keywords:} Automatic Documentation, Generative Artificial Intelligence,
+Gemini AI, Gamification, JWT.
+\end{tcolorbox}
+
+\vspace{1cm}
+
+% Résumé arabe -- hors tcolorbox (incompatible avec bidi/RTL de polyglossia)
+{\color{DSorange}\noindent\rule{\linewidth}{1.5pt}}
+\begin{center}
+  {\bfseries\color{DSorange} R\'esum\'e en arabe \quad --- \quad ملخص}
+\end{center}
+{\color{DSorange}\noindent\rule{\linewidth}{0.5pt}}
+\vspace{4pt}
+
+\begin{otherlanguage}{arabic}
+تُمثِّل الوثائق التقنية تحديًا كبيرًا للمطورين البرمجيين، إذ تستغرق وقتًا طويلاً، وكثيرًا ما يُهمَل إعدادها ويصعب الحفاظ عليها. يُقدِّم هذا المشروع منصة \textbf{DocuSense}، وهي منصة ويب ذكية تعمل على أتمتة إنشاء أدلة المستخدمين بالاستعانة بالذكاء الاصطناعي التوليدي.
+
+تستعين \textbf{DocuSense} بواجهة برمجة تطبيقات \textbf{Google Gemini 2.0 Flash} لتحليل لقطات الشاشة ومقاطع الفيديو لواجهات التطبيقات، وتوليد خطوات التوثيق المنظمة تلقائيًا. تتضمن المنصة نظام تلعيب مؤلفًا من اختبارات تفاعلية وشارات تقدم (برونز وفضي وذهبي) وقائمة متصدرين تنافسية، بهدف تعزيز تفاعل المستخدمين وتحسين استيعابهم للمعرفة.
+
+تقنيًا، يعتمد التطبيق على React.js للواجهة الأمامية، وNode.js/Express.js للخلفية، وMySQL عبر Sequelize ORM لتخزين البيانات، والمصادقة الآمنة بواسطة JWT.
+
+\textbf{الكلمات المفتاحية:} توثيق تلقائي، ذكاء اصطناعي توليدي، تلعيب، Gemini AI، JWT.
+\end{otherlanguage}
+
+{\color{DSorange}\noindent\rule{\linewidth}{1.5pt}}
+
+% ─────────────────────────────────────────────────────────
+%  TABLES
+% ─────────────────────────────────────────────────────────
+\clearpage
+\tableofcontents
+
+\clearpage
+\listoffigures
+\addcontentsline{toc}{chapter}{Liste des figures}
+
+\clearpage
+\listoftables
+\addcontentsline{toc}{chapter}{Liste des tableaux}
+
+% ─────────────────────────────────────────────────────────
+%  ABRÉVIATIONS
+% ─────────────────────────────────────────────────────────
+\clearpage
+\chapter*{Liste des abr\'eviations}
+\addcontentsline{toc}{chapter}{Liste des abr\'eviations}
+
+\begin{tabular}{lp{12cm}}
+\textbf{AI / IA}  & Artificial Intelligence / Intelligence Artificielle \\
+\textbf{API}      & Application Programming Interface \\
+\textbf{CRUD}     & Create, Read, Update, Delete \\
+\textbf{CSS}      & Cascading Style Sheets \\
+\textbf{HTTP}     & HyperText Transfer Protocol \\
+\textbf{JSON}     & JavaScript Object Notation \\
+\textbf{JWT}      & JSON Web Token \\
+\textbf{LLM}      & Large Language Model \\
+\textbf{MVC}      & Model-View-Controller \\
+\textbf{ORM}      & Object-Relational Mapping \\
+\textbf{PFE}      & Projet de Fin d'\'Etudes \\
+\textbf{REST}     & Representational State Transfer \\
+\textbf{SGBDR}    & Syst\`eme de Gestion de Base de Donn\'ees Relationnelle \\
+\textbf{SPA}      & Single Page Application \\
+\textbf{SQL}      & Structured Query Language \\
+\textbf{UX}       & User Experience \\
+\end{tabular}
+
+% ============================================================
+%  INTRODUCTION GÉNÉRALE
+% ============================================================
+\clearpage
+\pagenumbering{arabic}
+\chapter*{Introduction g\'en\'erale}
+\addcontentsline{toc}{chapter}{Introduction g\'en\'erale}
+\markboth{Introduction g\'en\'erale}{Introduction g\'en\'erale}
+
+\section*{Contexte}
+
+Dans l'\'ecosyst\`eme num\'erique contemporain, la documentation technique occupe
+une place centrale dans la r\'eussite d'un produit logiciel. Elle constitue le pont
+entre les d\'eveloppeurs qui cr\'eent un logiciel et les utilisateurs finaux qui
+l'exploitent au quotidien. Pourtant, la r\'ealit\'e du terrain montre que cette
+documentation est trop souvent sacri\'ee sur l'autel des d\'elais de livraison~:
+complexe \`a maintenir, chronophage \`a r\'ediger, elle est relegu\'ee au second plan
+dans la plupart des cycles de d\'eveloppement.
+
+Une \'etude men\'ee par la soci\'et\'e \textit{Stack Overflow} aupr\`es de
+d\'eveloppeurs r\'ev\`ele que la documentation insuffisante ou inexistante est l'une
+des principales sources de frustration dans les projets logiciels. Face \`a ce constat,
+l'intelligence artificielle g\'en\'erative ouvre de nouvelles perspectives~: des
+mod\`eles de langage multimodaux, capables de comprendre \`a la fois du texte et des
+images, peuvent d\'esormais analyser automatiquement une interface graphique et en
+extraire une documentation structur\'ee.
+
+\section*{Probl\'ematique}
+
+Comment permettre \`a un d\'eveloppeur de g\'en\'erer en quelques minutes une
+documentation utilisateur compl\`ete, interactive et engageante, \`a partir d'une
+simple capture d'\'ecran ou d'une vid\'eo de son application~?
+
+\section*{Objectifs}
+
+Ce projet de fin d'\'etudes vise \`a concevoir et d\'evelopper \textbf{DocuSense},
+une plateforme web qui~:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Automatise la g\'en\'eration de documentation technique via l'IA g\'en\'erative
+        multimodale~;
+  \item Int\`egre un syst\`eme de gamification (quiz, badges, classement) pour am\'eliorer
+        l'engagement des utilisateurs~;
+  \item Offre une interface moderne, intuitive et responsive~;
+  \item Garantit la s\'ecurit\'e des donn\'ees via une authentification par JWT.
+\end{enumerate}
+
+\section*{Structure du rapport}
+
+Ce rapport est organis\'e en trois chapitres~:
+
+\begin{itemize}
+  \item \textbf{Chapitre~1 -- \'Etat de l'art et \'etude de l'existant~:} Pr\'esentation
+        du domaine, analyse des outils existants et justification des choix technologiques.
+  \item \textbf{Chapitre~2 -- Analyse et conception~:} Sp\'ecification des besoins,
+        mod\'elisation UML, conception de l'architecture et de la base de donn\'ees.
+  \item \textbf{Chapitre~3 -- R\'ealisation et tests~:} Pr\'esentation de l'environnement
+        de d\'eveloppement, impl\'ementation des fonctionnalit\'es cl\'es et des interfaces.
+\end{itemize}
+
+\section*{D\'eclaration sur l'usage de l'Intelligence Artificielle}
+
+Conform\'ement \`a la Charte de r\'edaction de l'IFAG (\S\,2.18), nous d\'eclarons
+explicitement que des outils d'intelligence artificielle g\'en\'erative ont \'et\'e
+utilis\'es dans le cadre de ce projet~:
+
+\begin{itemize}
+  \item \textbf{Google Gemini 2.0 Flash} constitue le c\oe ur fonctionnel du moteur
+        d'analyse de DocuSense~; son usage est l'objet m\^eme du projet.
+  \item Des assistants IA (\textit{Claude, ChatGPT}) ont \'et\'e ponctuellement
+        employ\'es comme aide au d\'ebogage et \`a la r\'edaction de certains passages.
+\end{itemize}
+
+L'ensemble du code a \'et\'e int\'egralement compris, test\'e et valid\'e par
+l'\'etudiante. Tout contenu g\'en\'er\'e par IA a \'et\'e relus, reformul\'e et
+contextualis\'e.
+
+% ============================================================
+%  CHAPITRE 1 -- ÉTAT DE L'ART
+% ============================================================
+\chapter{\'Etat de l'art et \'etude de l'existant}
+
+\section{Introduction}
+
+La conception d'une plateforme intelligente de g\'en\'eration de documentation n\'ecessite
+une ma\^itrise solide du domaine dans lequel elle s'inscrit. Avant d'aborder l'impl\'ementation
+technique de DocuSense, il est indispensable d'\'etablir un socle conceptuel clair et de
+situer notre contribution par rapport aux travaux et outils existants. Ce chapitre constitue
+ce fondement th\'eorique et analytique.
+
+Nous d\'ebutons par une d\'efinition de la documentation technique logicielle, en examinant
+ses formes, ses enjeux et les limites des approches manuelles traditionnelles. Nous
+pr\'esentons ensuite les avanc\'ees r\'ecentes en mati\`ere d'intelligence artificielle
+g\'en\'erative et de traitement multimodal, qui constituent le moteur de notre solution.
+Une \'etude comparative des outils existants dans ce domaine nous permettra de d\'egager
+le positionnement diff\'erenciant de DocuSense. Enfin, nous exposons et justifions
+l'ensemble des technologies retenues pour le d\'eveloppement de la plateforme.
+
+\section{La documentation technique logicielle}
+
+\subsection{D\'efinition et importance}
+
+\begin{definition}[Documentation technique]
+La documentation technique logicielle d\'esigne l'ensemble des artefacts \'ecrits ou
+multim\'edias qui d\'ecrivent l'utilisation, la configuration, l'architecture et les
+fonctionnalit\'es d'un syst\`eme informatique. Elle se d\'ecline en deux cat\'egories
+principales~: la documentation destin\'ee aux d\'eveloppeurs (API docs, code docs)
+et la documentation destin\'ee aux utilisateurs finaux (manuels utilisateurs, guides
+de d\'emarrage).
+\end{definition}
+
+La documentation utilisateur remplit plusieurs fonctions essentielles~:
+\begin{itemize}
+  \item \textbf{R\'eduction du support technique~:} Une documentation claire diminue
+        significativement le volume de tickets d'assistance.
+  \item \textbf{Acc\'el\'eration de l'adoption~:} Les utilisateurs autonomes adoptent
+        plus rapidement un produit.
+  \item \textbf{Am\'elioration de l'exp\'erience utilisateur~:} Une bonne documentation
+        r\'eduit la courbe d'apprentissage.
+  \item \textbf{P\'erennit\'e du produit~:} Elle facilite la maintenance et l'\'evolution
+        du logiciel.
+\end{itemize}
+
+\subsection{Les d\'efis de la documentation manuelle}
+
+La r\'edaction manuelle de documentation pr\'esente plusieurs inconv\'enients majeurs~:
+
+\begin{table}[H]
+  \centering
+  \caption{D\'efis de la documentation technique manuelle}
+  \label{tab:defis-doc}
+  \begin{tabularx}{\textwidth}{l X}
+    \toprule
+    \textbf{D\'efi} & \textbf{Impact} \\
+    \midrule
+    Temps de r\'edaction \'elev\'e
+      & 20 \`a 40\,\% du temps de d\'eveloppement peut \^etre consacr\'e
+        \`a la documentation \\
+    Obsolescence rapide
+      & Chaque mise \`a jour du logiciel n\'ecessite une mise \`a jour manuelle \\
+    Qualit\'e variable
+      & D\'epend fortement des comp\'etences r\'edactionnelles du d\'eveloppeur \\
+    Manque d'engagement
+      & Les docs statiques g\'en\`erent peu d'interaction avec l'utilisateur \\
+    Co\^ut \'elev\'e
+      & N\'ecessite parfois des \'equipes sp\'ecialis\'ees (technical writers) \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{L'intelligence artificielle g\'en\'erative}
+
+\subsection{D\'efinition et \'evolution}
+
+\begin{definition}[IA g\'en\'erative]
+L'intelligence artificielle g\'en\'erative d\'esigne un ensemble de mod\`eles
+d'apprentissage automatique capables de produire du contenu nouveau (texte, images,
+code, audio) \`a partir de donn\'ees d'entra\^inement massives. Les grands mod\`eles
+de langage (LLM) et les mod\`eles multimodaux constituent les piliers de cette
+r\'evolution technologique.
+\end{definition}
+
+L'av\`enement des LLM (GPT-4, Gemini, Claude, LLaMA) a ouvert des perspectives
+in\'edites pour l'automatisation de t\^aches cognitives complexes, dont la r\'edaction
+de documentation technique.
+
+\subsection{Les mod\`eles multimodaux}
+
+Les mod\`eles multimodaux \'etendent les capacit\'es des LLM en int\'egrant la
+compr\'ehension d'images, de vid\'eos et d'audio en plus du texte.
+\textbf{Google Gemini}, utilis\'e dans DocuSense, est l'un des premiers mod\`eles
+multimodaux de grande \'echelle capables de~:
+\begin{itemize}
+  \item Analyser une capture d'\'ecran d'interface et en d\'ecrire le fonctionnement~;
+  \item Extraire des informations structur\'ees d'une vid\'eo de d\'emonstration~;
+  \item G\'en\'erer du contenu textuel format\'e (JSON, Markdown) \`a partir
+        d'entr\'ees mixtes.
+\end{itemize}
+
+\subsection{Google Gemini 2.0 Flash}
+
+Le mod\`ele \textbf{Gemini 2.0 Flash} retenu pour DocuSense pr\'esente les
+caract\'eristiques suivantes~:
+
+\begin{table}[H]
+  \centering
+  \caption{Caract\'eristiques de Google Gemini 2.0 Flash}
+  \label{tab:gemini}
+  \begin{tabularx}{\textwidth}{l X}
+    \toprule
+    \textbf{Caract\'eristique} & \textbf{Valeur} \\
+    \midrule
+    Type             & Grand mod\`ele de langage multimodal \\
+    Modalit\'es      & Texte, image, vid\'eo, audio \\
+    Vitesse          & Tr\`es rapide (optimis\'e pour les applications en temps r\'eel) \\
+    Format de sortie & Texte structur\'e, JSON, Markdown \\
+    Fen\^etre de contexte & 1 million de tokens \\
+    Acc\`es          & Via API REST (Google AI Studio) \\
+    Tarification     & Freemium avec quota gratuit \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{La gamification}
+
+\subsection{Concept et principes}
+
+\begin{definition}[Gamification]
+La gamification (ou ludification) est l'application de m\'ecanismes et d'\'el\'ements
+de jeu dans des contextes non-ludiques, dans le but d'augmenter l'engagement, la
+motivation et la r\'etention des utilisateurs. Elle s'appuie sur la psychologie
+comportementale, notamment la th\'eorie de l'autod\'etermination et le circuit de
+r\'ecompense.
+\end{definition}
+
+Les \'el\'ements de gamification les plus couramment utilis\'es sont~:
+\begin{itemize}
+  \item \textbf{Points~:} R\'ecompense num\'erique pour chaque action accomplie.
+  \item \textbf{Badges~:} Distinctions visuelles attribu\'ees lors d'\'etapes cl\'es.
+  \item \textbf{Classement~:} Tableau de comparaison des performances entre utilisateurs.
+  \item \textbf{Quiz~:} \'Evaluation des connaissances avec feedback imm\'ediat.
+  \item \textbf{Progression~:} Indicateur visuel de l'avancement dans un parcours.
+\end{itemize}
+
+\subsection{Impact de la gamification sur l'apprentissage}
+
+Des \'etudes montrent que la gamification augmente de 40 \`a 60\,\% l'engagement des
+utilisateurs dans les plateformes d'apprentissage en ligne. Dans le contexte de la
+documentation logicielle, elle transforme une lecture passive en une exp\'erience
+active et m\'emorable.
+
+\section{\'Etude de l'existant}
+
+\subsection{Solutions actuelles}
+
+\begin{table}[H]
+  \centering
+  \caption{Analyse comparative des outils de documentation existants}
+  \label{tab:comparatif}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabularx}{\textwidth}{l c c c c X}
+    \toprule
+    \textbf{Outil} & \textbf{IA} & \textbf{Multimodal}
+      & \textbf{Gamif.} & \textbf{Gratuit} & \textbf{Limitation principale} \\
+    \midrule
+    Notion      & Oui  & Non  & Non & Partiel & Pas d'analyse d'interface \\
+    Confluence  & Part.& Non  & Non & Non & Co\^ut \'elev\'e, complexit\'e \\
+    GitBook     & Oui  & Non  & Non & Partiel & Pas d'IA multimodale \\
+    Scribe      & Oui  & Oui  & Non & Partiel & Pas de gamification \\
+    Document360 & Oui  & Non  & Non & Non & Co\^ut prohibitif \\
+    \textbf{DocuSense} & \textbf{Oui} & \textbf{Oui} & \textbf{Oui}
+      & \textbf{Oui} & \textbf{Notre solution} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Positionnement de DocuSense}
+
+DocuSense se distingue de l'existant par la combinaison unique de trois capacit\'es~:
+\begin{enumerate}
+  \item \textbf{G\'en\'eration IA multimodale~:} Analyse de screenshots
+        \emph{et} de vid\'eos.
+  \item \textbf{Gamification int\'egr\'ee~:} Quiz, badges et classement dans
+        la m\^eme plateforme.
+  \item \textbf{Accessibilit\'e~:} Gratuit, sans installation, utilisable d\`es
+        la cr\'eation du compte.
+\end{enumerate}
+
+\section{Technologies retenues}
+
+\subsection{Architecture g\'en\'erale}
+
+L'application DocuSense repose sur une architecture \textbf{client-serveur}
+\`a trois niveaux (three-tier)~:
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[node distance=3cm]
+    \node[mybox, minimum width=3cm] (client) {Frontend\\React.js};
+    \node[mybox, minimum width=3cm, right of=client] (server) {Backend\\Node.js/Express};
+    \node[mybox, minimum width=3cm, right of=server] (db) {Base de donn\'ees\\MySQL};
+    \node[mybox, minimum width=3cm, above=1.5cm of server] (ai) {API Gemini\\Google AI};
+
+    \draw[myarrow] (client) -- node[above, font=\scriptsize]{HTTP/REST} (server);
+    \draw[myarrow] (server) -- node[above, font=\scriptsize]{SQL/ORM} (db);
+    \draw[mydarrow] (server) -- node[right, font=\scriptsize]{HTTPS} (ai);
+  \end{tikzpicture}
+  \caption{Architecture trois-tiers de DocuSense}
+  \label{fig:architecture-globale}
+\end{figure}
+
+\subsection{Frontend -- React.js}
+
+\textbf{React.js} (v19) est une biblioth\`eque JavaScript d\'evelopp\'ee par Meta
+pour la construction d'interfaces utilisateur. Ses avantages principaux pour
+DocuSense sont~:
+\begin{itemize}
+  \item Composants r\'eutilisables et maintenance simplifi\'ee~;
+  \item Rendu d\'eclaratif et gestion d'\'etat via \texttt{useState}/\texttt{useEffect}~;
+  \item \'Ecosyst\`eme riche (React Router, Axios, Ant Design)~;
+  \item Performances optimis\'ees gr\^ace au DOM virtuel.
+\end{itemize}
+
+\subsection{Backend -- Node.js / Express.js}
+
+\textbf{Node.js} est un environnement d'ex\'ecution JavaScript c\^ot\'e serveur,
+bas\'e sur le moteur V8 de Chrome. Coupl\'e au framework \textbf{Express.js} (v5),
+il offre~:
+\begin{itemize}
+  \item Une architecture non bloquante et \'ev\'enementielle adapt\'ee aux I/O
+        intensives~;
+  \item La m\^eme syntaxe JavaScript que le frontend (coh\'erence de la stack)~;
+  \item Une API REST structur\'ee avec routage modulaire.
+\end{itemize}
+
+\subsection{Base de donn\'ees -- MySQL / Sequelize}
+
+\textbf{MySQL} est un SGBDR open-source largement adopt\'e. L'ORM \textbf{Sequelize}
+simplifie les interactions en permettant la d\'efinition des mod\`eles en JavaScript
+et la synchronisation automatique du sch\'ema.
+
+\subsection{Authentification -- JWT / bcrypt}
+
+La s\'ecurit\'e des endpoints est assur\'ee par~:
+\begin{itemize}
+  \item \textbf{bcryptjs~:} Hachage des mots de passe avec salt al\'eatoire~;
+  \item \textbf{jsonwebtoken (JWT)~:} Tokens d'authentification stateless avec
+        expiration configurable (30 jours).
+\end{itemize}
+
+\subsection{Traitement multim\'edia -- Multer / Sharp}
+
+\begin{itemize}
+  \item \textbf{Multer~:} Middleware de gestion des uploads de fichiers (images,
+        vid\'eos) avec stockage sur disque~;
+  \item \textbf{Sharp~:} Biblioth\`eque de traitement d'images haute performance
+        pour la compression (resize 1280$\times$720, qualit\'e JPEG 70\,\%) avant
+        envoi \`a l'API Gemini.
+\end{itemize}
+
+\section{Conclusion}
+
+Ce chapitre a permis de poser le cadre conceptuel et technologique de DocuSense.
+L'analyse de l'existant confirme l'originalit\'e de notre approche combinant IA
+multimodale et gamification. Les technologies retenues forment un \'ecosyst\`eme
+coh\'erent, moderne et adapt\'e aux contraintes du projet.
+
+% ============================================================
+%  CHAPITRE 2 -- ANALYSE ET CONCEPTION
+% ============================================================
+\chapter{Analyse et conception}
+
+\section{Introduction}
+
+Ce chapitre pr\'esente l'analyse fonctionnelle et technique de DocuSense. Nous
+identifions les acteurs, sp\'ecifions les besoins fonctionnels et non fonctionnels,
+puis concevons l'architecture logicielle et le sch\'ema de la base de donn\'ees.
+
+\section{Identification des acteurs}
+
+L'application DocuSense implique deux types d'acteurs principaux~:
+
+\begin{table}[H]
+  \centering
+  \caption{Acteurs du syst\`eme DocuSense}
+  \label{tab:acteurs}
+  \begin{tabularx}{\textwidth}{l l X}
+    \toprule
+    \textbf{Acteur} & \textbf{R\^ole} & \textbf{Actions principales} \\
+    \midrule
+    \textbf{D\'eveloppeur} & Cr\'eateur de contenu
+      & S'inscrire, cr\'eer des manuels, utiliser l'IA, publier des manuels \\
+    \textbf{Utilisateur final} & Consommateur de contenu
+      & Consulter les manuels, r\'epondre aux quiz, gagner des badges \\
+    \textbf{Syst\`eme IA} & Acteur externe
+      & Analyser les entr\'ees (texte, image, vid\'eo) et retourner des \'etapes JSON \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Sp\'ecification des besoins}
+
+\subsection{Besoins fonctionnels}
+
+\subsubsection{Module Authentification}
+\begin{itemize}
+  \item \textbf{BF-01~:} L'utilisateur peut cr\'eer un compte avec nom, email et
+        mot de passe.
+  \item \textbf{BF-02~:} L'utilisateur peut se connecter avec email et mot de passe.
+  \item \textbf{BF-03~:} Le syst\`eme g\'en\`ere un token JWT valide 30 jours lors
+        de la connexion.
+  \item \textbf{BF-04~:} L'utilisateur peut se d\'econnecter (suppression du token
+        c\^ot\'e client).
+  \item \textbf{BF-05~:} Toutes les routes prot\'eg\'ees v\'erifient la validit\'e
+        du token.
+\end{itemize}
+
+\subsubsection{Module Gestion des manuels}
+\begin{itemize}
+  \item \textbf{BF-06~:} Le d\'eveloppeur peut cr\'eer un manuel avec titre et
+        description.
+  \item \textbf{BF-07~:} Le d\'eveloppeur peut consulter la liste de ses manuels.
+  \item \textbf{BF-08~:} Le d\'eveloppeur peut modifier ou supprimer un manuel.
+  \item \textbf{BF-09~:} Le d\'eveloppeur peut publier ou d\'epublier un manuel.
+  \item \textbf{BF-10~:} Chaque manuel est li\'e \`a son auteur.
+\end{itemize}
+
+\subsubsection{Module Intelligence Artificielle}
+\begin{itemize}
+  \item \textbf{BF-11~:} Le d\'eveloppeur peut soumettre une description textuelle
+        pour g\'en\'erer 5 \'etapes de documentation.
+  \item \textbf{BF-12~:} Le d\'eveloppeur peut uploader une image (screenshot) pour
+        g\'en\'erer 5 \'etapes via l'analyse visuelle de l'IA.
+  \item \textbf{BF-13~:} Le d\'eveloppeur peut uploader une vid\'eo pour g\'en\'erer
+        5 \'etapes via l'analyse vid\'eo de l'IA.
+  \item \textbf{BF-14~:} Les \'etapes g\'en\'er\'ees sont retourn\'ees au format
+        JSON structur\'e.
+  \item \textbf{BF-15~:} Les fichiers sont compress\'es avant envoi \`a l'API
+        (optimisation).
+\end{itemize}
+
+\subsubsection{Module Gamification}
+\begin{itemize}
+  \item \textbf{BF-16~:} Le syst\`eme associe un quiz \`a chaque \'etape.
+  \item \textbf{BF-17~:} L'utilisateur r\'epond \`a un quiz et obtient un feedback
+        imm\'ediat (correct/incorrect).
+  \item \textbf{BF-18~:} Les points sont cumul\'es et stock\'es dans le profil de
+        progression.
+  \item \textbf{BF-19~:} Les badges sont attribu\'es automatiquement selon les
+        seuils~: Bronze (50 pts), Silver (100 pts), Gold (200 pts).
+  \item \textbf{BF-20~:} Un classement affiche les 10 meilleurs scores.
+\end{itemize}
+
+\subsection{Besoins non fonctionnels}
+
+\begin{table}[H]
+  \centering
+  \caption{Besoins non fonctionnels de DocuSense}
+  \label{tab:bnf}
+  \begin{tabularx}{\textwidth}{l l X}
+    \toprule
+    \textbf{ID} & \textbf{Cat\'egorie} & \textbf{Description} \\
+    \midrule
+    BNF-01 & S\'ecurit\'e & Les mots de passe sont hach\'es (bcrypt, salt=10). \\
+    BNF-02 & S\'ecurit\'e & Toutes les communications utilisent des tokens JWT
+                              sign\'es. \\
+    BNF-03 & Performance  & Compression des images avant envoi \`a l'API (Sharp). \\
+    BNF-04 & Performance  & R\'eponse de l'API IA en moins de 10 secondes. \\
+    BNF-05 & Disponibilit\'e & L'application est accessible 24h/24 via navigateur. \\
+    BNF-06 & Ergonomie    & Interface responsive, palette de couleurs coh\'erente. \\
+    BNF-07 & Maintenabilit\'e & Architecture modulaire (contr\^oleurs, mod\`eles,
+                                routes s\'epar\'es). \\
+    BNF-08 & Extensibilit\'e & Ajout facile de nouveaux types d'\'etapes (text,
+                                video, quiz). \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Mod\'elisation UML}
+
+\subsection{Diagramme des cas d'utilisation}
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[node distance=1.4cm]
+
+    % Acteurs (bo\^ites simples)
+    \node[actorbox] (dev)  at (0, 0)   {D\'eveloppeur};
+    \node[actorbox] (user) at (0, -6)  {Utilisateur\\final};
+
+    % Cadre syst\`eme
+    \draw[draw=DSdark, dashed, rounded corners=8pt]
+      (2.5, 1.2) rectangle (11.5, -8.5);
+    \node[font=\small\bfseries, color=DSdark] at (7, 1.0) {DocuSense};
+
+    % Cas d'utilisation -- Auth
+    \node[ucbox] (reg) at (7,  0.2) {S'inscrire};
+    \node[ucbox] (log) at (7, -1.0) {Se connecter};
+    \node[ucbox] (out) at (7, -2.2) {Se d\'econnecter};
+
+    % Cas d'utilisation -- Manuel
+    \node[ucbox] (cm)  at (7, -3.4) {Cr\'eer un manuel};
+    \node[ucbox] (gm)  at (7, -4.6) {G\'erer ses manuels};
+
+    % Cas d'utilisation -- IA
+    \node[ucbox] (ai1) at (7, -5.8) {G\'en\'erer via description};
+    \node[ucbox] (ai2) at (7, -7.0) {Analyser image / vid\'eo};
+
+    % Cas d'utilisation -- Quiz
+    \node[ucbox, minimum width=3.2cm] (qz) at (3.5, -4.6) {R\'epondre au quiz};
+    \node[ucbox, minimum width=3.2cm] (lb) at (3.5, -6.0) {Voir classement};
+    \node[ucbox, minimum width=3.2cm] (bd) at (3.5, -7.4) {Obtenir badges};
+
+    % Connexions D\'eveloppeur
+    \foreach \uc in {reg,log,out,cm,gm,ai1,ai2}
+      \draw[myarrow] (dev.east) -- (\uc.west);
+
+    % Connexions Utilisateur
+    \foreach \uc in {log,qz,lb,bd}
+      \draw[myarrow] (user.east) -- (\uc.west);
+
+  \end{tikzpicture}
+  \caption{Diagramme des cas d'utilisation de DocuSense}
+  \label{fig:use-case}
+\end{figure}
+
+\subsection{Diagramme de classes}
+
+Le diagramme de classes ci-dessous repr\'esente le mod\`ele de donn\'ees de DocuSense
+tel qu'il est impl\'ement\'e avec Sequelize~:
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+    cls/.style={rectangle, draw=DSblue, fill=DSlight, rounded corners=4pt,
+                minimum width=3.8cm, font=\footnotesize},
+    rel/.style={-Stealth, thick, DSblue},
+    node distance=2.5cm
+  ]
+    \node[cls] (user) at (0,0) {%
+      \begin{tabular}{l}
+        \textbf{User}\\\hline
+        id : INTEGER (PK)\\
+        name : STRING\\
+        email : STRING (UNI)\\
+        password : STRING\\
+        role : ENUM
+      \end{tabular}};
+
+    \node[cls] (manual) at (5.5,0) {%
+      \begin{tabular}{l}
+        \textbf{Manual}\\\hline
+        id : INTEGER (PK)\\
+        title : STRING\\
+        description : TEXT\\
+        isPublished : BOOL\\
+        authorId : FK
+      \end{tabular}};
+
+    \node[cls] (step) at (5.5,-4.5) {%
+      \begin{tabular}{l}
+        \textbf{Step}\\\hline
+        id : INTEGER (PK)\\
+        title : STRING\\
+        description : TEXT\\
+        type : ENUM\\
+        order : INTEGER\\
+        manualId : FK
+      \end{tabular}};
+
+    \node[cls] (quiz) at (0,-4.5) {%
+      \begin{tabular}{l}
+        \textbf{Quiz}\\\hline
+        id : INTEGER (PK)\\
+        question : TEXT\\
+        options : JSON\\
+        correctAnswer : STR\\
+        points : INTEGER\\
+        stepId : FK
+      \end{tabular}};
+
+    \node[cls] (prog) at (0,-9) {%
+      \begin{tabular}{l}
+        \textbf{Progress}\\\hline
+        id : INTEGER (PK)\\
+        score : INTEGER\\
+        completedSteps : JSON\\
+        badges : JSON\\
+        userId : FK\\
+        manualId : FK
+      \end{tabular}};
+
+    % Relations
+    \draw[rel] (user)   -- node[above,font=\tiny]{1..N} (manual);
+    \draw[rel] (manual) -- node[right,font=\tiny]{1..N} (step);
+    \draw[rel] (step)   -- node[above,font=\tiny]{0..1} (quiz);
+    \draw[rel] (user.south) -- ++(0,-1) -- ++(-1.2,0) |-
+                (prog.north) node[midway,font=\tiny,right]{N};
+    \draw[rel] (manual.south) -- ++(0,-0.5) -| ++(1,0) |-
+                (prog.north east) node[midway,font=\tiny]{1};
+  \end{tikzpicture}
+  \caption{Diagramme de classes de DocuSense}
+  \label{fig:class-diagram}
+\end{figure}
+
+\subsection{Diagramme de s\'equence -- Analyse d'image par IA}
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[x=3.5cm, y=-0.9cm,
+    msg/.style={-Stealth, DSblue, thick},
+    ret/.style={-Stealth, DSblue, thick, dashed},
+    life/.style={densely dotted, DSdark}
+  ]
+    % En-t\^etes participants
+    \foreach \i/\lbl in {0/Utilisateur, 1/Frontend, 2/Backend, 3/Gemini API}
+      \node[actorbox, minimum width=2.8cm] at (\i,0) {\lbl};
+
+    % Lignes de vie
+    \foreach \i in {0,1,2,3}
+      \draw[life] (\i,0.5) -- (\i,10);
+
+    % Messages
+    \draw[msg] (0,1) -- node[above,font=\tiny]{Upload image} (1,1);
+    \draw[msg] (1,2) -- node[above,font=\tiny]{POST /api/ai/analyze-image} (2,2);
+    \draw[msg] (2,3) -- node[above,font=\tiny]{Multer : stockage disque} (2,3.5);
+    \draw[msg] (2,4) -- node[above,font=\tiny]{Sharp : compression JPEG} (2,4.5);
+    \draw[msg] (2,5) -- node[above,font=\tiny]{Encodage Base64} (2,5.5);
+    \draw[msg] (2,6) -- node[above,font=\tiny]{generateContent(image+prompt)} (3,6);
+    \draw[ret] (3,7) -- node[above,font=\tiny]{JSON \{steps:[...]\}} (2,7);
+    \draw[msg] (2,7.8) -- node[above,font=\tiny]{Suppression fichiers temp.} (2,8.3);
+    \draw[ret] (2,8.8) -- node[above,font=\tiny]{res.json(parsed)} (1,8.8);
+    \draw[ret] (1,9.5) -- node[above,font=\tiny]{Affichage 5 \'etapes} (0,9.5);
+  \end{tikzpicture}
+  \caption{Diagramme de s\'equence -- Analyse d'image par IA}
+  \label{fig:sequence-ia}
+\end{figure}
+
+\section{Conception de la base de donn\'ees}
+
+\subsection{Sch\'ema relationnel}
+
+La base de donn\'ees MySQL de DocuSense comporte cinq tables~:
+
+\begin{table}[H]
+  \centering
+  \caption{Tables de la base de donn\'ees DocuSense}
+  \label{tab:tables}
+  \begin{tabularx}{\textwidth}{l l X}
+    \toprule
+    \textbf{Table} & \textbf{Cl\'e primaire} & \textbf{Description} \\
+    \midrule
+    \texttt{Users}      & id (AI) & Comptes utilisateurs \\
+    \texttt{Manuals}    & id (AI) & Manuels cr\'e\'es par les d\'eveloppeurs \\
+    \texttt{Steps}      & id (AI) & \'Etapes de documentation \\
+    \texttt{Quizzes}    & id (AI) & Questions d'\'evaluation associ\'ees \`a une \'etape \\
+    \texttt{Progresses} & id (AI) & Suivi de progression par (utilisateur, manuel) \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Relations entre les tables}
+
+\begin{itemize}
+  \item \texttt{Users} $\rightarrow$ \texttt{Manuals}~:
+        Un utilisateur peut cr\'eer plusieurs manuels (1..N).
+  \item \texttt{Manuals} $\rightarrow$ \texttt{Steps}~:
+        Un manuel contient plusieurs \'etapes (1..N).
+  \item \texttt{Steps} $\rightarrow$ \texttt{Quizzes}~:
+        Une \'etape peut avoir un quiz (0..1).
+  \item \texttt{Users} + \texttt{Manuals} $\rightarrow$ \texttt{Progresses}~:
+        Suivi par couple (utilisateur, manuel).
+\end{itemize}
+
+\section{Conception de l'API REST}
+
+\subsection{Endpoints de l'API}
+
+\begin{table}[H]
+  \centering
+  \caption{Tableau des endpoints de l'API DocuSense}
+  \label{tab:api}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabularx}{\textwidth}{l l l X}
+    \toprule
+    \textbf{M\'ethode} & \textbf{Route} & \textbf{Auth.}
+      & \textbf{Description} \\
+    \midrule
+    POST   & \texttt{/api/auth/register}          & Non & Inscription \\
+    POST   & \texttt{/api/auth/login}              & Non & Connexion, retourne JWT \\
+    \midrule
+    GET    & \texttt{/api/manuals}                 & Oui & Liste des manuels \\
+    POST   & \texttt{/api/manuals}                 & Oui & Cr\'eer un manuel \\
+    GET    & \texttt{/api/manuals/:id}             & Oui & Manuel + \'etapes \\
+    PUT    & \texttt{/api/manuals/:id}             & Oui & Modifier un manuel \\
+    DELETE & \texttt{/api/manuals/:id}             & Oui & Supprimer un manuel \\
+    \midrule
+    POST   & \texttt{/api/ai/suggest}              & Oui & G\'en\'erer \'etapes (texte) \\
+    POST   & \texttt{/api/ai/analyze-image}        & Oui & G\'en\'erer \'etapes (image) \\
+    POST   & \texttt{/api/ai/analyze-video}        & Oui & G\'en\'erer \'etapes (vid\'eo) \\
+    \midrule
+    POST   & \texttt{/api/quiz/create}             & Oui & Cr\'eer un quiz \\
+    POST   & \texttt{/api/quiz/submit}             & Oui & Soumettre une r\'eponse \\
+    GET    & \texttt{/api/quiz/leaderboard}        & Oui & Top 10 classement \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Middleware d'authentification JWT}
+
+Le middleware de protection v\'erifie le token JWT sur toutes les routes s\'ecuris\'ees~:
+
+\begin{lstlisting}[language=JavaScript, caption={Middleware d'authentification (middleware/authMiddleware.js)}]
+const protect = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1]
+  if (!token) {
+    return res.status(401).json({ message: 'Non autorise, token manquant' })
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    req.user = decoded
+    next()
+  } catch (err) {
+    res.status(401).json({ message: 'Token invalide' })
+  }
+}
+\end{lstlisting}
+
+\section{Conclusion}
+
+Ce chapitre a pr\'esent\'e l'analyse compl\`ete des besoins et la conception
+architecturale de DocuSense. Les diagrammes UML, le sch\'ema de base de donn\'ees
+et la sp\'ecification de l'API forment une base solide pour la phase de r\'ealisation.
+
+% ============================================================
+%  CHAPITRE 3 -- RÉALISATION ET TESTS
+% ============================================================
+\chapter{R\'ealisation et tests}
+
+\section{Introduction}
+
+Ce chapitre pr\'esente l'environnement de d\'eveloppement, les aspects techniques
+cl\'es de l'impl\'ementation, et les interfaces graphiques de l'application DocuSense.
+
+\section{Environnement de d\'eveloppement}
+
+\subsection{Outils et versions}
+
+\begin{table}[H]
+  \centering
+  \caption{Environnement de d\'eveloppement}
+  \label{tab:env}
+  \begin{tabularx}{\textwidth}{l l X}
+    \toprule
+    \textbf{Technologie} & \textbf{Version} & \textbf{R\^ole} \\
+    \midrule
+    Node.js          & 20.x     & Environnement d'ex\'ecution serveur \\
+    React.js         & 19.2.5   & Framework frontend \\
+    Express.js       & 5.2.1    & Framework backend \\
+    Sequelize        & 6.37.8   & ORM pour MySQL \\
+    MySQL            & 8.x      & Base de donn\'ees relationnelle \\
+    \texttt{@google/generative-ai} & 0.24.1 & SDK Gemini \\
+    Multer           & 2.1.1    & Upload de fichiers \\
+    Sharp            & 0.34.5   & Traitement d'images \\
+    bcryptjs         & 3.0.3    & Hachage de mots de passe \\
+    jsonwebtoken     & 9.0.3    & Authentification JWT \\
+    Ant Design       & 6.3.7    & Biblioth\`eque UI \\
+    Axios            & 1.16.0   & Client HTTP \\
+    React Router     & 7.14.2   & Routage SPA \\
+    VS Code          & --       & \'Editeur de code \\
+    Postman          & --       & Test des API REST \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Structure du projet}
+
+\begin{lstlisting}[language=bash, caption={Arborescence du projet DocuSense}]
+docusense/
+|-- backend/
+|   |-- config/
+|   |   `-- db.js              # Connexion MySQL via Sequelize
+|   |-- controllers/
+|   |   |-- aiController.js    # Logique IA (Gemini)
+|   |   |-- authController.js  # Inscription / Connexion
+|   |   |-- manualController.js # CRUD manuels
+|   |   `-- quizController.js  # Quiz et gamification
+|   |-- middleware/
+|   |   `-- authMiddleware.js  # Verification JWT
+|   |-- models/
+|   |   |-- User.js
+|   |   |-- Manual.js
+|   |   |-- Step.js
+|   |   |-- Quiz.js
+|   |   `-- Progress.js
+|   |-- routes/
+|   |   |-- authRoutes.js
+|   |   |-- manualRoutes.js
+|   |   |-- aiRoutes.js
+|   |   `-- quizRoutes.js
+|   |-- .env
+|   |-- package.json
+|   `-- server.js
+`-- frontend2/
+    `-- src/
+        |-- pages/
+        |   |-- Landing.js
+        |   |-- Login.js
+        |   |-- Register.js
+        |   |-- Dashboard.js
+        |   `-- Quiz.js
+        |-- services/
+        |   `-- api.js
+        `-- App.js
+\end{lstlisting}
+
+\section{Impl\'ementation du backend}
+
+\subsection{Configuration du serveur}
+
+Le fichier \texttt{server.js} constitue le point d'entr\'ee de l'application.
+Il configure Express, les middlewares CORS, JSON, importe les mod\`eles Sequelize
+et monte les routes~:
+
+\begin{lstlisting}[language=JavaScript, caption={Configuration du serveur Express (server.js)}]
+const express = require('express')
+const dotenv = require('dotenv')
+const cors = require('cors')
+const { connectDB, sequelize } = require('./config/db')
+
+dotenv.config()
+const app = express()
+
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
+app.use(express.json())
+
+require('./models/User')
+require('./models/Manual')
+require('./models/Step')
+require('./models/Quiz')
+require('./models/Progress')
+
+app.use('/api/auth',    require('./routes/authRoutes'))
+app.use('/api/manuals', require('./routes/manualRoutes'))
+app.use('/api/ai',      require('./routes/aiRoutes'))
+app.use('/api/quiz',    require('./routes/quizRoutes'))
+
+const start = async () => {
+  await connectDB()
+  await sequelize.sync({ alter: true })  // Sync automatique du schema
+  app.listen(process.env.PORT || 5000)
+}
+start()
+\end{lstlisting}
+
+\subsection{Mod\`eles Sequelize}
+
+\subsubsection{Mod\`ele User}
+
+\begin{lstlisting}[language=JavaScript, caption={Modele User (models/User.js)}]
+const User = sequelize.define('User', {
+  id:    { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+  name:  { type: DataTypes.STRING, allowNull: false },
+  email: { type: DataTypes.STRING, allowNull: false, unique: true },
+  password: { type: DataTypes.STRING, allowNull: false },
+  role:  { type: DataTypes.ENUM('developer', 'enduser'),
+           defaultValue: 'developer' },
+})
+\end{lstlisting}
+
+\subsubsection{Mod\`ele Progress (gamification)}
+
+\begin{lstlisting}[language=JavaScript, caption={Modele Progress (models/Progress.js)}]
+const Progress = sequelize.define('Progress', {
+  score:          { type: DataTypes.INTEGER, defaultValue: 0 },
+  completedSteps: { type: DataTypes.JSON,    defaultValue: [] },
+  isCompleted:    { type: DataTypes.BOOLEAN, defaultValue: false },
+  badges:         { type: DataTypes.JSON,    defaultValue: [] },
+})
+Progress.belongsTo(User,   { foreignKey: 'userId' })
+Progress.belongsTo(Manual, { foreignKey: 'manualId' })
+\end{lstlisting}
+
+\subsection{Module Intelligence Artificielle}
+
+Le contr\^oleur IA regroupe trois fonctions. Voici l'impl\'ementation de l'analyse
+d'image qui est la fonctionnalit\'e centrale~:
+
+\begin{lstlisting}[language=JavaScript, caption={Analyse d'image par Gemini (controllers/aiController.js)}]
+const analyzeImage = async (req, res) => {
+  if (!req.file)
+    return res.status(400).json({ message: 'Aucune image fournie' })
+
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+
+  // Compression de l'image via Sharp
+  const compressedPath = req.file.path + '_compressed.jpg'
+  await sharp(req.file.path)
+    .resize(1280, 720, { fit: 'inside' })
+    .jpeg({ quality: 70 })
+    .toFile(compressedPath)
+
+  const base64Image = fs.readFileSync(compressedPath).toString('base64')
+
+  const result = await model.generateContent([
+    { inlineData: { data: base64Image, mimeType: 'image/jpeg' } },
+    `Tu es un expert en documentation technique UX.
+     Analyse cette capture d'ecran et genere exactement 5 etapes.
+     Reponds UNIQUEMENT en JSON :
+     {"steps":[{"title":"...","description":"...","type":"text"},...]}`,
+  ])
+
+  // Nettoyage des fichiers temporaires
+  fs.unlinkSync(req.file.path)
+  fs.unlinkSync(compressedPath)
+
+  const text = result.response.text().replace(/```json|```/g, '').trim()
+  res.json(JSON.parse(text))
+}
+\end{lstlisting}
+
+\subsection{Module Gamification}
+
+La logique d'attribution des badges est int\'egr\'ee dans le contr\^oleur de quiz~:
+
+\begin{lstlisting}[language=JavaScript, caption={Attribution des badges (controllers/quizController.js)}]
+const submitAnswer = async (req, res) => {
+  const quiz = await Quiz.findByPk(req.body.quizId)
+  const isCorrect = quiz.correctAnswer === req.body.answer
+  const pointsEarned = isCorrect ? quiz.points : 0
+
+  let progress = await Progress.findOne({
+    where: { userId: req.user.id, manualId: req.body.manualId }
+  })
+  if (!progress) {
+    progress = await Progress.create({
+      userId: req.user.id, manualId: req.body.manualId,
+      score: 0, completedSteps: [], badges: []
+    })
+  }
+
+  const newScore = progress.score + pointsEarned
+  let badges = [...(progress.badges || [])]
+
+  // Attribution automatique des badges par seuils
+  if (newScore >= 50  && !badges.includes('bronze')) badges.push('bronze')
+  if (newScore >= 100 && !badges.includes('silver')) badges.push('silver')
+  if (newScore >= 200 && !badges.includes('gold'))   badges.push('gold')
+
+  await progress.update({ score: newScore, badges,
+    completedSteps: [...(progress.completedSteps || []), req.body.quizId] })
+
+  res.json({ isCorrect, pointsEarned, totalScore: newScore, badges })
+}
+\end{lstlisting}
+
+\section{Impl\'ementation du frontend}
+
+\subsection{Configuration du client Axios}
+
+Le service API centralise toutes les requ\^etes HTTP et injecte automatiquement
+le token JWT~:
+
+\begin{lstlisting}[language=JavaScript, caption={Client Axios (services/api.js)}]
+import axios from 'axios'
+
+const API = axios.create({ baseURL: 'http://localhost:5000/api' })
+
+API.interceptors.request.use((req) => {
+  const token = localStorage.getItem('token')
+  if (token) req.headers.Authorization = `Bearer ${token}`
+  return req
+})
+
+export default API
+\end{lstlisting}
+
+\subsection{Routeur principal React}
+
+\begin{lstlisting}[language=JavaScript, caption={Routeur React (App.js)}]
+const App = () => {
+  const token = localStorage.getItem('token')
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/"         element={<Landing />} />
+        <Route path="/login"    element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard"
+          element={token ? <Dashboard /> : <Navigate to="/login" />} />
+        <Route path="/quiz"
+          element={token ? <Quiz /> : <Navigate to="/login" />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+\end{lstlisting}
+
+\section{Pr\'esentation des interfaces}
+
+\subsection{Page d'accueil (Landing)}
+
+La page d'accueil de DocuSense pr\'esente les fonctionnalit\'es de la plateforme
+\`a travers une interface marketing moderne. Elle comprend~:
+
+\begin{itemize}
+  \item Une \textbf{navbar} avec les liens vers Connexion et Inscription~;
+  \item Une \textbf{section Hero} avec le slogan, la description et un aper\c{c}u
+        d'un manuel g\'en\'er\'e par IA~;
+  \item Des \textbf{statistiques} cl\'es~: 100\,\% automatis\'e, 5 min pour cr\'eer
+        un manuel, 3$\times$ plus d'engagement, gratuit~;
+  \item Une \textbf{grille de fonctionnalit\'es} (IA g\'en\'erative, Gamification,
+        Ultra rapide)~;
+  \item Un \textbf{call-to-action} de fin de page.
+\end{itemize}
+
+\begin{remarque}[Interface Landing]
+La palette de couleurs (bleu \texttt{\#185FA5}, bleu fonc\'e \texttt{\#0C2340},
+violet \texttt{\#8E44AD}) est coh\'erente sur toute l'application et refl\`ete
+un positionnement professionnel et technologique.
+\end{remarque}
+
+\subsection{Pages d'authentification}
+
+Les pages \textbf{Login} et \textbf{Register} adoptent un design \'epur\'e avec~:
+\begin{itemize}
+  \item Fond bleu clair (\texttt{\#E6F1FB})~;
+  \item Carte blanche centr\'ee avec ombre port\'ee~;
+  \item Champs de saisie stylis\'es avec bord blue~;
+  \item Feedback d'erreur en rouge en cas d'\'echec.
+\end{itemize}
+
+La connexion stocke le JWT dans \texttt{localStorage} et redirige vers le dashboard.
+
+\subsection{Tableau de bord (Dashboard)}
+
+Le dashboard est l'interface principale des d\'eveloppeurs, organis\'e en~:
+
+\subsubsection{Sidebar de navigation}
+\begin{itemize}
+  \item Logo DocuSense avec d\'egrad\'e bleu~;
+  \item Menu principal~: Dashboard, Mes manuels, Module IA, Gamification~;
+  \item Bouton D\'econnexion en rouge.
+\end{itemize}
+
+\subsubsection{Zone principale}
+\begin{itemize}
+  \item \textbf{Topbar} avec titre et bouton \guillemotleft~Nouveau manuel~\guillemotright~;
+  \item \textbf{M\'etriques en cartes}~: Total manuels, Publi\'es, Score total~;
+  \item \textbf{Grille de manuels} avec pour chaque manuel~:
+    \begin{itemize}
+      \item Titre, description et statut (brouillon/publi\'e)~;
+      \item Champ de description pour g\'en\'eration textuelle~;
+      \item Bouton \guillemotleft~Sugg\'erer par description~\guillemotright~;
+      \item Boutons d'upload image et vid\'eo~;
+      \item Affichage des \'etapes sugg\'er\'ees par l'IA.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Module Gamification (Quiz)}
+
+La page Quiz pr\'esente le syst\`eme de progression~:
+\begin{itemize}
+  \item \textbf{Classement~:} Tableau des 10 meilleurs scores avec positions~;
+  \item \textbf{Badges~:} Affichage visuel des trois badges~:
+    \begin{itemize}
+      \item \textcolor{orange!80!brown}{\textbf{Bronze}} (50 pts),
+            \textcolor{gray}{\textbf{Silver}} (100 pts),
+            \textcolor{yellow!70!orange}{\textbf{Gold}} (200 pts)~;
+    \end{itemize}
+  \item \textbf{R\'esultat de quiz~:} Feedback color\'e (vert si correct, rouge si
+        incorrect) avec points gagn\'es et badges obtenus.
+\end{itemize}
+
+\section{Tests}
+
+\subsection{Tests des routes API}
+
+Les endpoints ont \'et\'e test\'es avec \textbf{Postman}. Le tableau suivant r\'esume
+les r\'esultats~:
+
+\begin{table}[H]
+  \centering
+  \caption{R\'esultats des tests API}
+  \label{tab:tests-api}
+  \begin{tabularx}{\textwidth}{l l l X}
+    \toprule
+    \textbf{Endpoint} & \textbf{M\'ethode} & \textbf{Statut}
+      & \textbf{R\'esultat} \\
+    \midrule
+    \texttt{/api/auth/register}    & POST & 201 & Compte cr\'e\'e, JWT retourn\'e \\
+    \texttt{/api/auth/login}       & POST & 200 & Authentification, JWT retourn\'e \\
+    \texttt{/api/manuals}          & GET  & 200 & Liste des manuels \\
+    \texttt{/api/manuals}          & POST & 201 & Manuel cr\'e\'e \\
+    \texttt{/api/ai/suggest}       & POST & 200 & 5 \'etapes JSON g\'en\'er\'ees \\
+    \texttt{/api/ai/analyze-image} & POST & 200 & 5 \'etapes depuis screenshot \\
+    \texttt{/api/quiz/submit}      & POST & 200 & Score mis \`a jour, badge \\
+    \texttt{/api/quiz/leaderboard} & GET  & 200 & Top 10 retourn\'e \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Tests fonctionnels}
+
+\begin{table}[H]
+  \centering
+  \caption{Tests fonctionnels de DocuSense}
+  \label{tab:tests-fonc}
+  \begin{tabularx}{\textwidth}{l X l}
+    \toprule
+    \textbf{Sc\'enario} & \textbf{Description} & \textbf{R\'esultat} \\
+    \midrule
+    Inscription     & Cr\'eation d'un compte valide       & \textcolor{DSgreen}{OK} \\
+    Connexion       & Login avec identifiants corrects    & \textcolor{DSgreen}{OK} \\
+    Token invalide  & Acc\`es route prot\'eg\'ee sans JWT & \textcolor{DSgreen}{401} \\
+    Cr\'eation manuel & Ajout d'un nouveau manuel         & \textcolor{DSgreen}{OK} \\
+    G\'en\'eration texte & Description vers 5 \'etapes   & \textcolor{DSgreen}{OK} \\
+    Analyse image   & Screenshot PNG vers 5 \'etapes     & \textcolor{DSgreen}{OK} \\
+    Analyse vid\'eo & Vid\'eo MP4 vers 5 \'etapes        & \textcolor{DSgreen}{OK} \\
+    Badge Bronze    & Score $\geq$ 50 pts                 & \textcolor{DSgreen}{OK} \\
+    Classement      & Top 10 tri\'e par score DESC        & \textcolor{DSgreen}{OK} \\
+    D\'econnexion   & Suppression du token localStorage  & \textcolor{DSgreen}{OK} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Gestion des erreurs}
+
+DocuSense impl\'emente une gestion des erreurs \`a plusieurs niveaux~:
+
+\begin{itemize}
+  \item \textbf{Niveau API~:} Codes HTTP appropri\'es (400, 401, 404, 500) avec
+        messages explicites.
+  \item \textbf{Niveau IA~:} Try/catch sur tous les appels Gemini avec log des
+        erreurs.
+  \item \textbf{Niveau Frontend~:} Redirection vers /login si le token est absent
+        ou expir\'e.
+  \item \textbf{Niveau fichiers~:} Suppression syst\'ematique des fichiers
+        temporaires apr\`es traitement.
+\end{itemize}
+
+\section{Conclusion}
+
+Ce chapitre a pr\'esent\'e l'impl\'ementation compl\`ete de DocuSense~: de la
+configuration du serveur Express aux mod\`eles Sequelize, en passant par l'int\'egration
+de l'API Gemini, le syst\`eme de gamification et les interfaces React. Les tests
+r\'ealis\'es confirment le bon fonctionnement de l'ensemble des fonctionnalit\'es.
+
+% ============================================================
+%  CONCLUSION GÉNÉRALE
+% ============================================================
+\clearpage
+\chapter*{Conclusion g\'en\'erale et perspectives}
+\addcontentsline{toc}{chapter}{Conclusion g\'en\'erale et perspectives}
+\markboth{Conclusion g\'en\'erale et perspectives}{Conclusion g\'en\'erale et perspectives}
+
+\section*{Bilan du projet}
+
+Ce projet de fin d'\'etudes a abouti au d\'eveloppement d'une application web
+fonctionnelle~: \textbf{DocuSense}, une plateforme intelligente de g\'en\'eration
+de documentation technique gamifi\'ee. Les objectifs initiaux ont \'et\'e atteints~:
+
+\begin{itemize}
+  \item \textbf{Automatisation par l'IA~:} L'int\'egration de l'API Google Gemini
+        2.0 Flash permet de g\'en\'erer en quelques secondes cinq \'etapes de
+        documentation structur\'ees \`a partir d'une description textuelle, d'une
+        capture d'\'ecran ou d'une vid\'eo d'application.
+  \item \textbf{Architecture robuste~:} La stack Node.js/Express/MySQL/React,
+        combin\'ee \`a Sequelize ORM et JWT, fournit une application s\'ecuris\'ee,
+        modulaire et maintenable.
+  \item \textbf{Gamification op\'erationnelle~:} Le syst\`eme de quiz, de badges
+        progressifs et de classement comp\'etitif est pleinement fonctionnel.
+  \item \textbf{Interface moderne~:} Le design coh\'erent offre une exp\'erience
+        utilisateur qualitative.
+\end{itemize}
+
+\section*{Difficult\'es rencontr\'ees}
+
+\begin{itemize}
+  \item La gestion des fichiers volumineux envoy\'es \`a l'API Gemini a n\'ecessit\'e
+        un pipeline de compression (Sharp) pour respecter les limites de l'API.
+  \item Le parsing du JSON retourn\'e par Gemini a demand\'e un nettoyage des
+        balises Markdown avant d\'es\'erialisation.
+  \item La synchronisation automatique du sch\'ema Sequelize a parfois provoqu\'e
+        des conflits lors de l'\'evolution des mod\`eles.
+\end{itemize}
+
+\section*{Perspectives d'am\'elioration}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \textbf{Export multiformat~:} G\'en\'eration des manuels en PDF, HTML et
+        Markdown pour une distribution hors-ligne.
+  \item \textbf{Collaboration en temps r\'eel~:} \'Edition collaborative avec
+        WebSockets (Socket.io).
+  \item \textbf{Versionnement des manuels~:} Historique des versions pour tracker
+        l'\'evolution de la documentation.
+  \item \textbf{Support multilingue~:} G\'en\'eration de documentation en plusieurs
+        langues gr\^ace aux capacit\'es multilingues de Gemini.
+  \item \textbf{Tableau de bord analytique~:} Statistiques d'utilisation (taux de
+        compl\'etion, scores moyens, questions les plus \'echou\'ees).
+  \item \textbf{Application mobile~:} Version React Native pour la consultation
+        sur smartphone.
+  \item \textbf{Int\'egrations tierces~:} Webhooks vers Slack, GitHub Pages, ou
+        Confluence pour publication automatique.
+  \item \textbf{S\'ecurit\'e renforc\'ee~:} Ajout du refresh token, rate limiting
+        et protection CSRF.
+\end{enumerate}
+
+\section*{Mot de fin}
+
+DocuSense d\'emontre que l'intelligence artificielle g\'en\'erative peut r\'esoudre
+des probl\`emes concrets du quotidien des d\'eveloppeurs. En combinant la puissance
+des LLM multimodaux avec une exp\'erience utilisateur gamifi\'ee, ce projet ouvre
+la voie \`a une nouvelle g\'en\'eration d'outils de documentation~: automatiques,
+interactifs et engageants.
+
+% ============================================================
+%  BIBLIOGRAPHIE
+% ============================================================
+\clearpage
+\chapter*{Bibliographie}
+\addcontentsline{toc}{chapter}{Bibliographie}
+\markboth{Bibliographie}{Bibliographie}
+
+\begin{thebibliography}{99}
+
+\bibitem{gemini}
+Google DeepMind, \textit{Gemini: A Family of Highly Capable Multimodal Models},
+Technical Report, Google, 2023.
+
+\bibitem{react}
+Meta Platforms, \textit{React -- A JavaScript library for building user interfaces},
+Documentation officielle, 2024.
+\url{https://react.dev}
+
+\bibitem{nodejs}
+OpenJS Foundation, \textit{Node.js Documentation}, v20 LTS, 2024.
+\url{https://nodejs.org/docs/}
+
+\bibitem{express}
+StrongLoop / OpenJS Foundation, \textit{Express.js}, 2024.
+\url{https://expressjs.com}
+
+\bibitem{sequelize}
+Sequelize Contributors, \textit{Sequelize ORM}, Documentation v6, 2024.
+\url{https://sequelize.org}
+
+\bibitem{jwt}
+M. Jones, J. Bradley, N. Sakimura,
+\textit{RFC 7519~: JSON Web Token (JWT)}, IETF, Mai 2015.
+\url{https://datatracker.ietf.org/doc/html/rfc7519}
+
+\bibitem{bcrypt}
+N. Provos, D. Mazieres,
+\textit{A Future-Adaptable Password Scheme}, USENIX, 1999.
+
+\bibitem{sharp}
+Lovell Fuller, \textit{Sharp -- High performance Node.js image processing}, 2024.
+\url{https://sharp.pixelplumbing.com}
+
+\bibitem{antd}
+Ant Design Team, \textit{Ant Design}, Documentation v6, Alibaba, 2024.
+\url{https://ant.design}
+
+\bibitem{gamification}
+Deterding S., Dixon D., Khaled R., Nacke L.
+\textit{From game design elements to gamefulness: defining gamification}.
+Proc. 15th Academic MindTrek Conference, 2011.
+
+\bibitem{vaswani}
+Vaswani A. et al.
+\textit{Attention is all you need}.
+Advances in Neural Information Processing Systems, 30, 2017.
+
+\bibitem{rest}
+R. T. Fielding,
+\textit{Architectural Styles and the Design of Network-based Software Architectures},
+PhD Thesis, University of California, 2000.
+
+\bibitem{mysql}
+Oracle Corporation, \textit{MySQL 8.0 Reference Manual}, 2024.
+\url{https://dev.mysql.com/doc/}
+
+\bibitem{multer}
+Multer Contributors, \textit{Multer -- Node.js middleware for multipart/form-data},
+GitHub, 2024.
+
+\bibitem{axios}
+Matt Zabriskie, \textit{Axios -- Promise based HTTP client}, 2024.
+\url{https://axios-http.com}
+
+\end{thebibliography}
+
+% ============================================================
+%  ANNEXES
+% ============================================================
+\appendix
+
+\chapter{Variables d'environnement}
+
+Le fichier \texttt{.env} \`a la racine du backend contient les configurations
+sensibles de l'application~:
+
+\begin{lstlisting}[language=bash, caption={Structure du fichier .env (backend)}]
+# Base de donnees MySQL
+DB_HOST=localhost
+DB_NAME=docusense
+DB_USER=root
+DB_PASSWORD=votre_mot_de_passe
+
+# Authentification JWT
+JWT_SECRET=votre_cle_secrete_tres_longue_et_aleatoire
+
+# API Google Gemini
+GEMINI_API_KEY=votre_cle_api_gemini
+
+# Serveur
+PORT=5000
+\end{lstlisting}
+
+\begin{important}[S\'ecurit\'e]
+Le fichier \texttt{.env} ne doit jamais \^etre versionn\'e dans Git.
+Il doit \^etre ajout\'e au fichier \texttt{.gitignore} pour \'eviter
+l'exposition des cl\'es secr\`etes.
+\end{important}
+
+\chapter{Instructions de d\'eploiement}
+
+\section*{Pr\'erequisits}
+\begin{itemize}
+  \item Node.js v18+ install\'e
+  \item MySQL 8.x install\'e et en cours d'ex\'ecution
+  \item Compte Google AI Studio pour la cl\'e API Gemini
+\end{itemize}
+
+\section*{Installation du backend}
+\begin{lstlisting}[language=bash]
+cd backend
+npm install
+# Editer les variables dans .env
+node server.js       # ou : npx nodemon server.js
+\end{lstlisting}
+
+\section*{Installation du frontend}
+\begin{lstlisting}[language=bash]
+cd frontend2
+npm install
+npm start            # Lance sur http://localhost:3000
+\end{lstlisting}
+
+\section*{Cr\'eation de la base de donn\'ees}
+\begin{lstlisting}[language=SQL]
+CREATE DATABASE docusense
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+\end{lstlisting}
+
+Sequelize cr\'eera automatiquement les tables au d\'emarrage du serveur gr\^ace \`a
+\texttt{sequelize.sync(\{alter: true\})}.
+
+\chapter{Exemple de r\'eponse JSON de l'API Gemini}
+
+\begin{lstlisting}[language=JavaScript, caption={Exemple de r\'eponse Gemini}]
+{
+  "steps": [
+    {
+      "title": "Connexion et configuration initiale",
+      "description": "Accedez a la page de connexion et saisissez vos identifiants.",
+      "type": "text"
+    },
+    {
+      "title": "Creation du premier projet",
+      "description": "Cliquez sur '+ Nouveau manuel' pour creer votre premier
+      projet de documentation.",
+      "type": "text"
+    },
+    {
+      "title": "Parametrage des options",
+      "description": "Renseignez le titre et la description, puis cliquez sur
+      'Creer'.",
+      "type": "text"
+    },
+    {
+      "title": "Generation automatique par IA",
+      "description": "Utilisez le champ de description pour generer
+      automatiquement les etapes.",
+      "type": "text"
+    },
+    {
+      "title": "Publication et partage",
+      "description": "Publiez votre manuel pour le rendre accessible aux
+      utilisateurs finaux.",
+      "type": "text"
+    }
+  ]
+}
+\end{lstlisting}
+
+\chapter{Glossaire}
+
+\begin{description}[style=nextline]
+  \item[API] Application Programming Interface -- Interface permettant
+    \`a deux applications de communiquer via des requ\^etes standardis\'ees.
+  \item[Base64] M\'ethode d'encodage binaire en caract\`eres ASCII, utilis\'ee
+    pour transmettre des images \`a l'API Gemini.
+  \item[bcrypt] Algorithme de hachage de mots de passe adaptatif r\'esistant
+    aux attaques par force brute.
+  \item[CORS] Cross-Origin Resource Sharing -- M\'ecanisme HTTP permettant
+    \`a un serveur d'autoriser les requ\^etes depuis d'autres origines.
+  \item[Gemini] Famille de grands mod\`eles de langage multimodaux d\'evelopp\'es
+    par Google DeepMind.
+  \item[JWT] JSON Web Token -- Standard ouvert (RFC 7519) pour la cr\'eation de
+    tokens d'acc\`es sign\'es.
+  \item[LLM] Large Language Model -- Mod\`ele de langage d'IA entra\^in\'e sur
+    de tr\`es larges corpus de texte.
+  \item[Middleware] Composant logiciel interm\'ediaire traitant les requ\^etes HTTP
+    entre leur r\'eception et leur traitement final.
+  \item[Multimodal] Qualifie un mod\`ele d'IA capable de traiter simultan\'ement
+    plusieurs types de donn\'ees (texte, image, vid\'eo, audio).
+  \item[ORM] Object-Relational Mapping -- Technique permettant de manipuler une
+    base de donn\'ees relationnelle via des objets du langage de programmation.
+  \item[REST] Representational State Transfer -- Style d'architecture pour les
+    API web utilisant les m\'ethodes HTTP.
+  \item[Sharp] Biblioth\`eque Node.js haute performance pour le traitement
+    d'images.
+  \item[SPA] Single Page Application -- Application web dont le contenu est mis
+    \`a jour dynamiquement sans rechargement de la page.
+  \item[Token] Jeton num\'erique servant \`a l'authentification et \`a
+    l'autorisation dans une application.
+\end{description}
+
+% ============================================================
+\end{document}
+% ============================================================

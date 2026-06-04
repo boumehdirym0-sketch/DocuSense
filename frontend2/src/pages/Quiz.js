@@ -76,10 +76,10 @@ const Quiz = () => {
   const badgePoints = { bronze: 50, silver: 100, gold: 200 }
 
   return (
-    <div style={{display:'flex', height:'100vh', fontFamily:'Inter, Arial, sans-serif'}}>
+    <div className="page-layout" style={{display:'flex', height:'100vh', fontFamily:'Inter, Arial, sans-serif'}}>
 
       {/* SIDEBAR */}
-      <div style={{width:230, background:'#fff', borderRight:'1px solid #EEF2F7', padding:'24px 16px', display:'flex', flexDirection:'column', gap:4}}>
+      <div className="sidebar" style={{width:230, background:'#fff', borderRight:'1px solid #EEF2F7', padding:'24px 16px', display:'flex', flexDirection:'column', gap:4}}>
         <div style={{display:'flex', alignItems:'center', gap:10, marginBottom:32, padding:'0 8px'}}>
           <div style={{width:34, height:34, background:'linear-gradient(135deg,#185FA5,#378ADD)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontSize:14, fontWeight:800}}>DS</div>
           <span style={{fontSize:18, fontWeight:800, color:'#0C447C'}}>Docu<span style={{color:'#185FA5'}}>Sense</span></span>
@@ -96,7 +96,7 @@ const Quiz = () => {
       </div>
 
       {/* MAIN */}
-      <div style={{flex:1, padding:'28px 32px', background:'#F8FAFF', overflowY:'auto'}}>
+      <div className="main-content" style={{flex:1, padding:'28px 32px', background:'#F8FAFF', overflowY:'auto'}}>
         <div style={{fontSize:24, fontWeight:700, color:'#0C2340', marginBottom:4}}>Gamification</div>
         <div style={{fontSize:14, color:'#94A3B8', marginBottom:28}}>Quiz, badges et classement</div>
 

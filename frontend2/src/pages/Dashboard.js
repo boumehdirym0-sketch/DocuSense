@@ -293,7 +293,7 @@ const Dashboard = () => {
   ]
 
   const Sidebar = () => (
-    <div style={{ width: 230, background: '#fff', borderRight: '1px solid #EEF2F7', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0 }}>
+    <div className="sidebar" style={{ width: 230, background: '#fff', borderRight: '1px solid #EEF2F7', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24, padding: '0 8px' }}>
         <div style={{ width: 34, height: 34, background: 'linear-gradient(135deg,#185FA5,#378ADD)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 14, fontWeight: 800, boxShadow: '0 4px 10px rgba(24,95,165,0.3)' }}>DS</div>
         <span style={{ fontSize: 18, fontWeight: 800, color: '#0C447C' }}>Docu<span style={{ color: '#185FA5' }}>Sense</span></span>
@@ -707,10 +707,10 @@ const Dashboard = () => {
   )
 
   return (
-    <div style={{ display: 'flex', height: '100vh', background: '#F8FAFF', fontFamily: 'Inter, Arial, sans-serif' }}>
+    <div className="page-layout" style={{ display: 'flex', height: '100vh', background: '#F8FAFF', fontFamily: 'Inter, Arial, sans-serif' }}>
       {Sidebar()}
 
-      <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
+      <div className="main-content" style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
         {activeSection === 'dashboard' && SectionDashboard()}
         {activeSection === 'manuels' && SectionManuels()}
         {activeSection === 'archives' && SectionArchives()}

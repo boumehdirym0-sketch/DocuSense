@@ -173,18 +173,18 @@ const EndUser = () => {
             <div style={{fontSize:14, color:'#94A3B8', marginBottom:20}}>Sélectionne un manuel pour commencer l'apprentissage</div>
 
             {/* BARRE DE RECHERCHE ET FILTRES */}
-            <div style={{display:'flex', gap:10, marginBottom:24, flexWrap:'wrap'}}>
+            <div style={{display:'flex', gap:10, marginBottom:24, flexWrap:'wrap', background:'#fff', borderRadius:12, padding:16, border:'1px solid #E2E8F0', boxShadow:'0 2px 8px rgba(0,0,0,0.06)'}}>
               <input
                 type="text"
                 placeholder="🔍 Rechercher par nom..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                style={{flex:1, minWidth:200, padding:'10px 14px', borderRadius:10, border:'1.5px solid #EEF2F7', fontSize:14, outline:'none', background:'#fff', color:'#0C2340'}}
+                style={{flex:1, minWidth:180, padding:'10px 14px', borderRadius:8, border:'1.5px solid #CBD5E1', fontSize:14, outline:'none', background:'#F8FAFF', color:'#0C2340'}}
               />
               <select
                 value={sortOrder}
                 onChange={e => setSortOrder(e.target.value)}
-                style={{padding:'10px 14px', borderRadius:10, border:'1.5px solid #EEF2F7', fontSize:14, background:'#fff', color:'#0C2340', cursor:'pointer', outline:'none'}}
+                style={{padding:'10px 14px', borderRadius:8, border:'1.5px solid #CBD5E1', fontSize:14, background:'#F8FAFF', color:'#0C2340', cursor:'pointer', outline:'none', fontWeight:500}}
               >
                 <option value="recent">📅 Plus récent</option>
                 <option value="oldest">📅 Plus ancien</option>

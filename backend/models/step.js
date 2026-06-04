@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../config/db')
-const Manual = require('./Manual')
+const Manual = require('./manual')
 
 const Step = sequelize.define('Step', {
   id: {

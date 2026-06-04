@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../config/db')
-const Step = require('./Step')
+const Step = require('./step')
 
 const Quiz = sequelize.define('Quiz', {
   id: {

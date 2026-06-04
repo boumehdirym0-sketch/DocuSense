@@ -1,6 +1,6 @@
-const Manual = require('../models/Manual')
-const Step = require('../models/Step')
-const Quiz = require('../models/Quiz')
+const Manual = require('../models/manual')
+const Step = require('../models/step')
+const Quiz = require('../models/quiz')
 
 const getPublishedManuals = async (req, res) => {
   try {

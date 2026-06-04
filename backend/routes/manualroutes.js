@@ -12,7 +12,7 @@ const {
   permanentDeleteManual,
   getArchivedManuals,
   saveSteps
-} = require('../controllers/manualController')
+} = require('../controllers/manualcontroller')
 
 router.get('/published', protect, getPublishedManuals)
 router.get('/archived', protect, getArchivedManuals)

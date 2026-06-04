@@ -4,7 +4,7 @@ const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 const { protect } = require('../middleware/authMiddleware')
-const { suggestSteps, analyzeImage, analyzeVideo, analyzeImageStep } = require('../controllers/aiController')
+const { suggestSteps, analyzeImage, analyzeVideo, analyzeImageStep } = require('../controllers/aicontroller')
 
 // Créer le dossier uploads s'il n'existe pas
 if (!fs.existsSync('uploads')) {

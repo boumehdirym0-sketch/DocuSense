@@ -42,6 +42,8 @@ const EndUser = () => {
   const [manuals, setManuals] = useState([])
   const [selected, setSelected] = useState(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [search, setSearch] = useState('')
+  const [sortOrder, setSortOrder] = useState('recent')
   const [currentStep, setCurrentStep] = useState(0)
   const [quizAnswer, setQuizAnswer] = useState('')
   const [quizResult, setQuizResult] = useState(null)
@@ -168,16 +170,47 @@ const EndUser = () => {
         {!selected && (
           <>
             <div style={{fontSize:24, fontWeight:700, color:'#0C2340', marginBottom:4}}>Manuels disponibles</div>
-            <div style={{fontSize:14, color:'#94A3B8', marginBottom:28}}>Sélectionne un manuel pour commencer l'apprentissage</div>
+            <div style={{fontSize:14, color:'#94A3B8', marginBottom:20}}>Sélectionne un manuel pour commencer l'apprentissage</div>
 
-            {manuals.length === 0 ? (
+            {/* BARRE DE RECHERCHE ET FILTRES */}
+            <div style={{display:'flex', gap:10, marginBottom:24, flexWrap:'wrap'}}>
+              <input
+                type="text"
+                placeholder="🔍 Rechercher par nom..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                style={{flex:1, minWidth:200, padding:'10px 14px', borderRadius:10, border:'1.5px solid #EEF2F7', fontSize:14, outline:'none', background:'#fff', color:'#0C2340'}}
+              />
+              <select
+                value={sortOrder}
+                onChange={e => setSortOrder(e.target.value)}
+                style={{padding:'10px 14px', borderRadius:10, border:'1.5px solid #EEF2F7', fontSize:14, background:'#fff', color:'#0C2340', cursor:'pointer', outline:'none'}}
+              >
+                <option value="recent">📅 Plus récent</option>
+                <option value="oldest">📅 Plus ancien</option>
+                <option value="az">🔤 A → Z</option>
+                <option value="za">🔤 Z → A</option>
+              </select>
+            </div>
+
+            {(() => {
+              const filtered = manuals
+                .filter(m => m.title.toLowerCase().includes(search.toLowerCase()))
+                .sort((a, b) => {
+                  if (sortOrder === 'az') return a.title.localeCompare(b.title)
+                  if (sortOrder === 'za') return b.title.localeCompare(a.title)
+                  if (sortOrder === 'oldest') return new Date(a.createdAt) - new Date(b.createdAt)
+                  return new Date(b.createdAt) - new Date(a.createdAt)
+                })
+
+              return filtered.length === 0 ? (
               <div style={{textAlign:'center', padding:'60px', color:'#94A3B8', background:'#fff', borderRadius:14, border:'1px solid #EEF2F7'}}>
                 <div style={{fontSize:40, marginBottom:12}}>📭</div>
-                <div style={{fontSize:15}}>Aucun manuel publié pour l'instant</div>
+                <div style={{fontSize:15}}>{manuals.length === 0 ? 'Aucun manuel publié pour l\'instant' : 'Aucun résultat pour cette recherche'}</div>
               </div>
             ) : (
               <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(280px, 1fr))', gap:16}}>
-                {manuals.map(m => (
+                {filtered.map(m => (
                   <div key={m.id} onClick={() => openManual(m)} style={{background:'#fff', borderRadius:14, padding:24, cursor:'pointer', border:'1px solid #EEF2F7', boxShadow:'0 2px 8px rgba(0,0,0,0.04)', transition:'all 0.2s'}}>
                     <div style={{width:44, height:44, background:'linear-gradient(135deg,#EFF6FF,#E0EEFF)', borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, marginBottom:14}}>📖</div>
                     <div style={{fontSize:15, fontWeight:600, color:'#0C2340', marginBottom:6}}>{m.title}</div>
@@ -189,7 +222,8 @@ const EndUser = () => {
                   </div>
                 ))}
               </div>
-            )}
+            )
+            })()}
 
             {/* LEADERBOARD */}
             {leaderboard.length > 0 && (

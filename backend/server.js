@@ -33,20 +33,6 @@ app.get('/', (req, res) => {
   res.json({ message: 'DocuSense API is running !' })
 })
 
-app.get('/api/setup-admin', async (req, res) => {
-  try {
-    const bcrypt = require('bcryptjs')
-    const User = require('./models/user')
-    const exists = await User.findOne({ where: { email: 'admin@docusense.com' } })
-    if (exists) return res.json({ message: 'Admin déjà créé', email: 'admin@docusense.com' })
-    const hashed = await bcrypt.hash('boumehdi123', 10)
-    await User.create({ name: 'Admin', email: 'admin@docusense.com', password: hashed, role: 'admin' })
-    res.json({ message: 'Admin créé avec succès', email: 'admin@docusense.com' })
-  } catch (err) {
-    res.status(500).json({ message: err.message })
-  }
-})
-
 const PORT = process.env.PORT || 5000
 
 const start = async () => {

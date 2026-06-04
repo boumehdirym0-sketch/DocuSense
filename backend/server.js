@@ -25,9 +25,9 @@ require('./models/progress')
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'))
-app.use('/api/manuals', require('./routes/manualRoutes'))
+app.use('/api/manuals', require('./routes/manualroutes'))
 app.use('/api/ai', require('./routes/aiRoutes'))
-app.use('/api/quiz', require('./routes/quizRoutes'))
+app.use('/api/quiz', require('./routes/quizroutes'))
 app.use('/api/admin', require('./routes/adminRoutes'))
 app.get('/', (req, res) => {
   res.json({ message: 'DocuSense API is running !' })

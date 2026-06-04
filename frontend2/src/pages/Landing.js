@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const Landing = () => {
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
   const role = localStorage.getItem('role')
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   const scrollTo = (id) => {
     const el = document.getElementById(id)
@@ -12,44 +13,68 @@ const Landing = () => {
       const top = el.getBoundingClientRect().top + window.pageYOffset - 70
       window.scrollTo({ top, behavior: 'smooth' })
     }
+    setMobileNavOpen(false)
   }
+
+  const navLinks = [
+    {label:'Fonctionnalités', id:'fonctionnalites'},
+    {label:'Tarifs', id:'tarifs'},
+    {label:'Documentation', id:'documentation'},
+    {label:'À propos', id:'apropos'},
+  ]
 
   return (
     <div style={{fontFamily:'Inter, Arial, sans-serif', margin:0, padding:0}}>
 
       {/* NAVBAR */}
-      <nav style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'18px 24px', background:'#fff', borderBottom:'1px solid #F0F4F8', position:'sticky', top:0, zIndex:100, flexWrap:'wrap', gap:10}}>
-        <div style={{fontSize:22, fontWeight:800, color:'#0C447C'}}>
-          Docu<span style={{color:'#185FA5'}}>Sense</span>
-        </div>
-        <div className="landing-nav-links" style={{display:'flex', gap:28}}>
-          {[
-            {label:'Fonctionnalités', id:'fonctionnalites'},
-            {label:'Tarifs', id:'tarifs'},
-            {label:'Documentation', id:'documentation'},
-            {label:'À propos', id:'apropos'},
-          ].map(l => (
-            <span key={l.label} onClick={() => scrollTo(l.id)} style={{color:'#64748B', fontSize:14, cursor:'pointer'}}>
-              {l.label}
-            </span>
-          ))}
-        </div>
-        <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
-          {token ? (
-            <button onClick={() => navigate(role === 'enduser' ? '/enduser' : '/dashboard')} style={{padding:'9px 16px', background:'linear-gradient(135deg,#185FA5,#378ADD)', color:'#fff', border:'none', borderRadius:8, cursor:'pointer', fontSize:13, fontWeight:600}}>
-              Tableau de bord →
+      <nav style={{background:'#fff', borderBottom:'1px solid #F0F4F8', position:'sticky', top:0, zIndex:100}}>
+        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'16px 24px'}}>
+          <div style={{fontSize:22, fontWeight:800, color:'#0C447C'}}>
+            Docu<span style={{color:'#185FA5'}}>Sense</span>
+          </div>
+
+          {/* Liens desktop */}
+          <div className="landing-nav-links" style={{display:'flex', gap:28}}>
+            {navLinks.map(l => (
+              <span key={l.label} onClick={() => scrollTo(l.id)} style={{color:'#64748B', fontSize:14, cursor:'pointer'}}>
+                {l.label}
+              </span>
+            ))}
+          </div>
+
+          <div style={{display:'flex', alignItems:'center', gap:8}}>
+            {token ? (
+              <button onClick={() => navigate(role === 'enduser' ? '/enduser' : '/dashboard')} style={{padding:'9px 16px', background:'linear-gradient(135deg,#185FA5,#378ADD)', color:'#fff', border:'none', borderRadius:8, cursor:'pointer', fontSize:13, fontWeight:600}}>
+                Tableau de bord →
+              </button>
+            ) : (
+              <>
+                <button onClick={() => navigate('/login')} style={{padding:'9px 14px', background:'#fff', color:'#185FA5', border:'1.5px solid #185FA5', borderRadius:8, cursor:'pointer', fontSize:13, fontWeight:500}}>
+                  Connexion
+                </button>
+                <button onClick={() => navigate('/register')} style={{padding:'9px 14px', background:'#185FA5', color:'#fff', border:'none', borderRadius:8, cursor:'pointer', fontSize:13, fontWeight:600}}>
+                  Commencer
+                </button>
+              </>
+            )}
+            {/* Hamburger mobile */}
+            <button className="hamburger-btn" onClick={() => setMobileNavOpen(o => !o)} style={{marginLeft:4}}>
+              <span /><span /><span />
             </button>
-          ) : (
-            <>
-              <button onClick={() => navigate('/login')} style={{padding:'9px 16px', background:'#fff', color:'#185FA5', border:'1.5px solid #185FA5', borderRadius:8, cursor:'pointer', fontSize:13, fontWeight:500}}>
-                Connexion
-              </button>
-              <button onClick={() => navigate('/register')} style={{padding:'9px 16px', background:'#185FA5', color:'#fff', border:'none', borderRadius:8, cursor:'pointer', fontSize:13, fontWeight:600}}>
-                Commencer
-              </button>
-            </>
-          )}
+          </div>
         </div>
+
+        {/* Menu mobile déroulant */}
+        {mobileNavOpen && (
+          <div style={{borderTop:'1px solid #F0F4F8', background:'#fff', padding:'8px 0'}}>
+            {navLinks.map(l => (
+              <div key={l.label} onClick={() => scrollTo(l.id)}
+                style={{padding:'12px 24px', fontSize:15, color:'#334155', cursor:'pointer', fontWeight:500}}>
+                {l.label}
+              </div>
+            ))}
+          </div>
+        )}
       </nav>
 
       {/* HERO */}

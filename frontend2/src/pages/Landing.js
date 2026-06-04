@@ -18,11 +18,11 @@ const Landing = () => {
     <div style={{fontFamily:'Inter, Arial, sans-serif', margin:0, padding:0}}>
 
       {/* NAVBAR */}
-      <nav style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'18px 56px', background:'#fff', borderBottom:'1px solid #F0F4F8', position:'sticky', top:0, zIndex:100}}>
+      <nav style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'18px 24px', background:'#fff', borderBottom:'1px solid #F0F4F8', position:'sticky', top:0, zIndex:100, flexWrap:'wrap', gap:10}}>
         <div style={{fontSize:22, fontWeight:800, color:'#0C447C'}}>
           Docu<span style={{color:'#185FA5'}}>Sense</span>
         </div>
-        <div style={{display:'flex', gap:28}}>
+        <div className="landing-nav-links" style={{display:'flex', gap:28}}>
           {[
             {label:'Fonctionnalités', id:'fonctionnalites'},
             {label:'Tarifs', id:'tarifs'},
@@ -34,18 +34,18 @@ const Landing = () => {
             </span>
           ))}
         </div>
-        <div style={{display:'flex', gap:10}}>
+        <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
           {token ? (
-            <button onClick={() => navigate(role === 'enduser' ? '/enduser' : '/dashboard')} style={{padding:'9px 22px', background:'linear-gradient(135deg,#185FA5,#378ADD)', color:'#fff', border:'none', borderRadius:8, cursor:'pointer', fontSize:14, fontWeight:600, boxShadow:'0 4px 12px rgba(24,95,165,0.3)'}}>
+            <button onClick={() => navigate(role === 'enduser' ? '/enduser' : '/dashboard')} style={{padding:'9px 16px', background:'linear-gradient(135deg,#185FA5,#378ADD)', color:'#fff', border:'none', borderRadius:8, cursor:'pointer', fontSize:13, fontWeight:600}}>
               Tableau de bord →
             </button>
           ) : (
             <>
-              <button onClick={() => navigate('/login')} style={{padding:'9px 20px', background:'#fff', color:'#185FA5', border:'1.5px solid #185FA5', borderRadius:8, cursor:'pointer', fontSize:14, fontWeight:500}}>
+              <button onClick={() => navigate('/login')} style={{padding:'9px 16px', background:'#fff', color:'#185FA5', border:'1.5px solid #185FA5', borderRadius:8, cursor:'pointer', fontSize:13, fontWeight:500}}>
                 Connexion
               </button>
-              <button onClick={() => navigate('/register')} style={{padding:'9px 20px', background:'#185FA5', color:'#fff', border:'none', borderRadius:8, cursor:'pointer', fontSize:14, fontWeight:600}}>
-                Commencer gratuitement
+              <button onClick={() => navigate('/register')} style={{padding:'9px 16px', background:'#185FA5', color:'#fff', border:'none', borderRadius:8, cursor:'pointer', fontSize:13, fontWeight:600}}>
+                Commencer
               </button>
             </>
           )}
@@ -53,11 +53,11 @@ const Landing = () => {
       </nav>
 
       {/* HERO */}
-      <div style={{background:'linear-gradient(135deg,#0C2340 0%,#185FA5 60%,#8E44AD 100%)', padding:'100px 56px', textAlign:'center'}}>
+      <div style={{background:'linear-gradient(135deg,#0C2340 0%,#185FA5 60%,#8E44AD 100%)', padding:'80px 24px', textAlign:'center'}}>
         <div style={{display:'inline-flex', alignItems:'center', gap:8, background:'rgba(255,255,255,0.15)', borderRadius:20, padding:'6px 16px', marginBottom:24}}>
           <span style={{fontSize:13, color:'#fff', fontWeight:500}}>✨ Propulsé par Groq AI</span>
         </div>
-        <h1 style={{fontSize:52, fontWeight:800, color:'#fff', marginBottom:20, lineHeight:1.2}}>
+        <h1 style={{fontSize:'clamp(28px, 6vw, 52px)', fontWeight:800, color:'#fff', marginBottom:20, lineHeight:1.2}}>
           Documentez vos apps<br/>
           <span style={{color:'#7EC8E3'}}>avec l'intelligence artificielle</span>
         </h1>
@@ -87,7 +87,7 @@ const Landing = () => {
       </div>
 
       {/* FONCTIONNALITÉS */}
-      <div id="fonctionnalites" style={{padding:'80px 56px', background:'#fff'}}>
+      <div id="fonctionnalites" style={{padding:'60px 24px', background:'#fff'}}>
         <div style={{textAlign:'center', marginBottom:48}}>
           <h2 style={{fontSize:34, fontWeight:700, color:'#0C2340', marginBottom:12}}>Tout ce dont vous avez besoin</h2>
           <p style={{color:'#64748B', fontSize:15, maxWidth:560, margin:'0 auto'}}>
@@ -115,10 +115,10 @@ const Landing = () => {
       </div>
 
       {/* TARIFS */}
-      <div id="tarifs" style={{padding:'80px 56px', background:'#F8FAFF', textAlign:'center'}}>
+      <div id="tarifs" style={{padding:'60px 24px', background:'#F8FAFF', textAlign:'center'}}>
         <h2 style={{fontSize:34, fontWeight:700, color:'#0C2340', marginBottom:12}}>Simple et gratuit</h2>
         <p style={{color:'#64748B', fontSize:15, marginBottom:48}}>DocuSense est un projet académique — accès complet et gratuit.</p>
-        <div style={{display:'inline-block', background:'#fff', borderRadius:16, padding:'40px 60px', border:'2px solid #185FA5', boxShadow:'0 8px 32px rgba(24,95,165,0.12)'}}>
+        <div style={{display:'inline-block', background:'#fff', borderRadius:16, padding:'32px 24px', border:'2px solid #185FA5', boxShadow:'0 8px 32px rgba(24,95,165,0.12)', maxWidth:'100%', width:'100%', boxSizing:'border-box'}}>
           <div style={{fontSize:48, fontWeight:800, color:'#185FA5', marginBottom:8}}>Gratuit</div>
           <div style={{fontSize:14, color:'#64748B', marginBottom:24}}>Accès complet à toutes les fonctionnalités</div>
           {[
@@ -141,12 +141,12 @@ const Landing = () => {
       </div>
 
       {/* DOCUMENTATION */}
-      <div id="documentation" style={{padding:'80px 56px', background:'#fff'}}>
+      <div id="documentation" style={{padding:'60px 24px', background:'#fff'}}>
         <div style={{textAlign:'center', marginBottom:48}}>
           <h2 style={{fontSize:34, fontWeight:700, color:'#0C2340', marginBottom:12}}>Comment ça marche ?</h2>
           <p style={{color:'#64748B', fontSize:15}}>En 3 étapes simples, votre manuel est prêt.</p>
         </div>
-        <div style={{display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:32, maxWidth:900, margin:'0 auto'}}>
+        <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(220px, 1fr))', gap:24, maxWidth:900, margin:'0 auto'}}>
           {[
             {num:'1', title:'Créez un manuel', desc:'Donnez un titre à votre manuel et choisissez votre méthode de génération : description textuelle, image ou vidéo.'},
             {num:'2', title:'L\'IA génère les étapes', desc:'Groq AI analyse votre contenu et génère automatiquement des étapes structurées avec quiz intégrés.'},
@@ -164,7 +164,7 @@ const Landing = () => {
       </div>
 
       {/* À PROPOS */}
-      <div id="apropos" style={{background:'#F8FAFF', padding:'80px 56px', textAlign:'center'}}>
+      <div id="apropos" style={{background:'#F8FAFF', padding:'60px 24px', textAlign:'center'}}>
         <h2 style={{fontSize:34, fontWeight:700, color:'#0C2340', marginBottom:12}}>À propos</h2>
         <p style={{color:'#64748B', fontSize:15, lineHeight:1.8, maxWidth:640, margin:'0 auto 32px'}}>
           DocuSense est un projet PFE réalisé par <strong>Boumehdi Rym</strong>, étudiante en Licence Informatique à l'<strong>IFAG</strong>, sous la direction de <strong>Mr Abbas</strong>.
@@ -187,8 +187,8 @@ const Landing = () => {
       </div>
 
       {/* CTA */}
-      <div style={{background:'linear-gradient(135deg,#185FA5,#8E44AD)', padding:'80px 56px', textAlign:'center'}}>
-        <h2 style={{fontSize:38, fontWeight:700, color:'#fff', marginBottom:14}}>Prêt à révolutionner votre documentation ?</h2>
+      <div style={{background:'linear-gradient(135deg,#185FA5,#8E44AD)', padding:'60px 24px', textAlign:'center'}}>
+        <h2 style={{fontSize:'clamp(24px, 5vw, 38px)', fontWeight:700, color:'#fff', marginBottom:14}}>Prêt à révolutionner votre documentation ?</h2>
         <p style={{color:'rgba(255,255,255,0.8)', fontSize:15, marginBottom:40}}>Rejoignez les développeurs qui font confiance à DocuSense</p>
         <button onClick={() => navigate('/register')} style={{padding:'16px 48px', background:'#fff', color:'#185FA5', border:'none', borderRadius:10, cursor:'pointer', fontSize:16, fontWeight:700, boxShadow:'0 4px 20px rgba(0,0,0,0.15)'}}>
           Commencer gratuitement →

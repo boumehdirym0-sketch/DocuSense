@@ -60,7 +60,7 @@ const EndUser = () => {
         setUserName(data.name)
       }).catch(() => {})
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchManuals = async () => {
     try {

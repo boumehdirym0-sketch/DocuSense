@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import API from '../services/api'
 import { useNavigate } from 'react-router-dom'
 
-const ROLE_LABELS = { developer: 'Développeur', enduser: 'Utilisateur', admin: 'Administrateur' }
 const ROLE_COLORS = { developer: '#185FA5', enduser: '#8E44AD', admin: '#E67E22' }
 const ROLE_BG = { developer: '#EFF6FF', enduser: '#F5F0FF', admin: '#FFF7ED' }
 
@@ -23,7 +22,7 @@ const Admin = () => {
 
   useEffect(() => {
     fetchStats()
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (activeSection === 'utilisateurs') fetchUsers()

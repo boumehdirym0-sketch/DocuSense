@@ -24,7 +24,7 @@ const Quiz = () => {
   const [correctAnswer, setCorrectAnswer] = useState(SAMPLE_QUIZ.correctAnswer)
   const [points, setPoints] = useState(10)
   const [manualId, setManualId] = useState(1)
-  const [manuals, setManuals] = useState([])
+  const [, setManuals] = useState([])
   const [showCreate, setShowCreate] = useState(false)
   const [quizId, setQuizId] = useState(null)
   const navigate = useNavigate()

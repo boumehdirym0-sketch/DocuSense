@@ -41,7 +41,7 @@ const Dashboard = () => {
       localStorage.setItem('role', data.role)
       setUserInfo(u => ({ ...u, name: data.name, role: data.role }))
     }).catch(() => {})
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (activeSection === 'archives') fetchArchivedManuals()

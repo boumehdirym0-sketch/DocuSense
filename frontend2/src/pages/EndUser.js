@@ -41,6 +41,7 @@ const renderDescription = (text) => {
 const EndUser = () => {
   const [manuals, setManuals] = useState([])
   const [selected, setSelected] = useState(null)
+  const [menuOpen, setMenuOpen] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
   const [quizAnswer, setQuizAnswer] = useState('')
   const [quizResult, setQuizResult] = useState(null)
@@ -115,10 +116,18 @@ const EndUser = () => {
 
   return (
     <div className="page-layout" style={{display:'flex', height:'100vh', fontFamily:'Inter, Arial, sans-serif', background:'#F8FAFF'}}>
+      <div className="mobile-topbar">
+        <button className="hamburger-btn" onClick={() => setMenuOpen(o => !o)}>
+          <span /><span /><span />
+        </button>
+        <span className="logo-text">Docu<span style={{color:'#185FA5'}}>Sense</span></span>
+        <div style={{width:34}} />
+      </div>
+      <div className={`sidebar-overlay${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(false)} />
 
       {/* SIDEBAR */}
-      <div className="sidebar" style={{width:230, background:'#fff', borderRight:'1px solid #EEF2F7', padding:'24px 16px', display:'flex', flexDirection:'column', gap:4}}>
-        <div onClick={() => setSelected(null)} style={{display:'flex', alignItems:'center', gap:10, marginBottom:16, cursor:'pointer'}}>
+      <div className={`sidebar${menuOpen ? ' open' : ''}`} style={{width:230, background:'#fff', borderRight:'1px solid #EEF2F7', padding:'24px 16px', display:'flex', flexDirection:'column', gap:4}}>
+        <div onClick={() => { setSelected(null); setMenuOpen(false) }} style={{display:'flex', alignItems:'center', gap:10, marginBottom:16, cursor:'pointer'}}>
           <div style={{width:34, height:34, background:'linear-gradient(135deg,#185FA5,#378ADD)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontSize:14, fontWeight:800}}>DS</div>
           <span style={{fontSize:18, fontWeight:800, color:'#0C447C'}}>Docu<span style={{color:'#185FA5'}}>Sense</span></span>
         </div>

@@ -1,52 +1,106 @@
-/* ===== RESPONSIVE MOBILE (max 768px) ===== */
+/* ===== RESPONSIVE MOBILE ===== */
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
+
+/* --- Desktop : cacher les éléments mobiles --- */
+.mobile-topbar { display: none; }
+.sidebar-overlay { display: none; }
 
 @media (max-width: 768px) {
 
-  /* --- Layout principal avec sidebar --- */
+  /* Layout principal */
   .page-layout {
     flex-direction: column !important;
-    height: auto !important;
-    min-height: 100vh !important;
-    overflow-x: hidden !important;
+    height: 100vh !important;
+    overflow: hidden !important;
   }
 
-  /* --- Sidebar → barre horizontale en haut --- */
+  /* Sidebar = drawer qui glisse depuis la gauche */
   .sidebar {
-    width: 100% !important;
-    min-width: unset !important;
-    height: auto !important;
-    flex-direction: row !important;
-    padding: 8px 12px !important;
-    border-right: none !important;
-    border-bottom: 2px solid #EEF2F7 !important;
-    overflow-x: auto !important;
-    flex-wrap: nowrap !important;
-    gap: 4px !important;
-    align-items: center !important;
-  }
-
-  .sidebar > div:first-child {
-    margin-bottom: 0 !important;
-    margin-right: 8px !important;
-  }
-
-  /* --- Contenu principal --- */
-  .main-content {
-    padding: 16px !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: -280px !important;
+    width: 260px !important;
+    height: 100vh !important;
+    z-index: 1000 !important;
+    flex-direction: column !important;
+    transition: left 0.3s ease !important;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.18) !important;
     overflow-y: auto !important;
-    flex: 1 !important;
+    border-right: none !important;
   }
 
-  /* --- Grilles 2 colonnes → 1 colonne --- */
+  .sidebar.open {
+    left: 0 !important;
+  }
+
+  /* Overlay sombre quand menu ouvert */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .sidebar-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Barre du haut sur mobile */
+  .mobile-topbar {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #fff;
+    border-bottom: 1px solid #EEF2F7;
+    flex-shrink: 0;
+    z-index: 100;
+  }
+
+  .mobile-topbar .logo-text {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0C447C;
+  }
+
+  /* Bouton hamburger */
+  .hamburger-btn {
+    display: flex !important;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 6px;
+    border: none;
+    background: none;
+  }
+
+  .hamburger-btn span {
+    display: block;
+    width: 22px;
+    height: 2.5px;
+    background: #185FA5;
+    border-radius: 2px;
+  }
+
+  /* Contenu principal */
+  .main-content {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    padding: 16px !important;
+  }
+
+  /* Grilles 2 colonnes → 1 colonne */
   .responsive-grid {
     grid-template-columns: 1fr !important;
   }
 
-  /* --- Landing page --- */
+  /* Landing page */
   .landing-hero {
     flex-direction: column !important;
     padding: 40px 20px !important;
@@ -54,61 +108,17 @@
     gap: 24px !important;
   }
 
-  .landing-hero h1 {
-    font-size: 28px !important;
-  }
+  .landing-nav-links { display: none !important; }
+  .landing-features-grid { grid-template-columns: 1fr !important; padding: 0 16px !important; }
+  .landing-pricing-grid { grid-template-columns: 1fr !important; padding: 0 16px !important; }
+  .landing-section { padding: 40px 16px !important; }
+  .landing-cta-buttons { flex-direction: column !important; align-items: center !important; }
 
-  .landing-nav {
-    padding: 12px 16px !important;
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-  }
-
-  .landing-nav-links {
-    display: none !important;
-  }
-
-  .landing-features-grid {
-    grid-template-columns: 1fr !important;
-    padding: 0 16px !important;
-  }
-
-  .landing-pricing-grid {
-    grid-template-columns: 1fr !important;
-    padding: 0 16px !important;
-  }
-
-  .landing-section {
-    padding: 40px 16px !important;
-  }
-
-  .landing-cta-buttons {
-    flex-direction: column !important;
-    align-items: center !important;
-  }
-
-  /* --- Boutons côte à côte → empilés --- */
-  .btn-row {
-    flex-direction: column !important;
-    gap: 8px !important;
-  }
-
-  /* --- Tables --- */
-  table {
-    font-size: 12px !important;
-  }
-
-  td, th {
-    padding: 6px 8px !important;
-  }
+  /* Tables */
+  table { font-size: 12px !important; }
+  td, th { padding: 6px 8px !important; }
 }
 
 @media (max-width: 480px) {
-  .main-content {
-    padding: 10px !important;
-  }
-
-  .landing-hero h1 {
-    font-size: 22px !important;
-  }
+  .main-content { padding: 10px !important; }
 }

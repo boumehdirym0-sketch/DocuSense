@@ -22,6 +22,7 @@ const Dashboard = () => {
   const [error, setError] = useState('')
   const [activeSection, setActiveSection] = useState('dashboard')
   const [toast, setToast] = useState(null)
+  const [menuOpen, setMenuOpen] = useState(false)
   const [userInfo, setUserInfo] = useState({
     name: localStorage.getItem('name') || '',
     email: localStorage.getItem('email') || '',
@@ -282,6 +283,7 @@ const Dashboard = () => {
     setSuggestions([])
     setSelectedManual(null)
     setError('')
+    setMenuOpen(false)
   }
 
   // ── SIDEBAR ─────────────────────────────────────────────────────────
@@ -293,7 +295,7 @@ const Dashboard = () => {
   ]
 
   const Sidebar = () => (
-    <div className="sidebar" style={{ width: 230, background: '#fff', borderRight: '1px solid #EEF2F7', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0 }}>
+    <div className={`sidebar${menuOpen ? ' open' : ''}`} style={{ width: 230, background: '#fff', borderRight: '1px solid #EEF2F7', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24, padding: '0 8px' }}>
         <div style={{ width: 34, height: 34, background: 'linear-gradient(135deg,#185FA5,#378ADD)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 14, fontWeight: 800, boxShadow: '0 4px 10px rgba(24,95,165,0.3)' }}>DS</div>
         <span style={{ fontSize: 18, fontWeight: 800, color: '#0C447C' }}>Docu<span style={{ color: '#185FA5' }}>Sense</span></span>
@@ -708,6 +710,14 @@ const Dashboard = () => {
 
   return (
     <div className="page-layout" style={{ display: 'flex', height: '100vh', background: '#F8FAFF', fontFamily: 'Inter, Arial, sans-serif' }}>
+      <div className="mobile-topbar">
+        <button className="hamburger-btn" onClick={() => setMenuOpen(o => !o)}>
+          <span /><span /><span />
+        </button>
+        <span className="logo-text">Docu<span style={{ color: '#185FA5' }}>Sense</span></span>
+        <div style={{ width: 34 }} />
+      </div>
+      <div className={`sidebar-overlay${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(false)} />
       {Sidebar()}
 
       <div className="main-content" style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>

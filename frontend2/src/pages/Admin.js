@@ -7,6 +7,8 @@ const ROLE_BG = { developer: '#EFF6FF', enduser: '#F5F0FF', admin: '#FFF7ED' }
 
 const Admin = () => {
   const [activeSection, setActiveSection] = useState('dashboard')
+  const [menuOpen, setMenuOpen] = useState(false)
+  const navTo = (section) => { setActiveSection(section); setMenuOpen(false) }
   const [stats, setStats] = useState(null)
   const [users, setUsers] = useState([])
   const [manuals, setManuals] = useState([])
@@ -108,7 +110,7 @@ const Admin = () => {
   ]
 
   const Sidebar = () => (
-    <div className="sidebar" style={{ width: 230, background: '#fff', borderRight: '1px solid #EEF2F7', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0 }}>
+    <div className={`sidebar${menuOpen ? ' open' : ''}`} style={{ width: 230, background: '#fff', borderRight: '1px solid #EEF2F7', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24, padding: '0 8px' }}>
         <div style={{ width: 34, height: 34, background: 'linear-gradient(135deg,#E67E22,#F39C12)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 14, fontWeight: 800, boxShadow: '0 4px 10px rgba(230,126,34,0.3)' }}>DS</div>
         <span style={{ fontSize: 18, fontWeight: 800, color: '#0C447C' }}>Docu<span style={{ color: '#E67E22' }}>Sense</span></span>
@@ -123,7 +125,7 @@ const Admin = () => {
       <div style={{ fontSize: 10, fontWeight: 600, color: '#94A3B8', letterSpacing: 1.5, padding: '0 8px', margin: '4px 0' }}>MENU</div>
 
       {menuItems.map(item => (
-        <div key={item.section} onClick={() => setActiveSection(item.section)}
+        <div key={item.section} onClick={() => navTo(item.section)}
           style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 10, cursor: 'pointer', background: activeSection === item.section ? '#FFF7ED' : 'transparent', color: activeSection === item.section ? '#E67E22' : '#64748B', fontSize: 14, fontWeight: activeSection === item.section ? 600 : 400, transition: 'all 0.15s' }}>
           <span style={{ fontSize: 16 }}>{item.icon}</span>
           {item.label}
@@ -336,6 +338,14 @@ const Admin = () => {
 
   return (
     <div className="page-layout" style={{ display: 'flex', height: '100vh', background: '#F8FAFF', fontFamily: 'Inter, Arial, sans-serif' }}>
+      <div className="mobile-topbar">
+        <button className="hamburger-btn" onClick={() => setMenuOpen(o => !o)}>
+          <span /><span /><span />
+        </button>
+        <span className="logo-text">Docu<span style={{ color: '#E67E22' }}>Sense</span></span>
+        <div style={{ width: 34 }} />
+      </div>
+      <div className={`sidebar-overlay${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(false)} />
       <Sidebar />
 
       <div className="main-content" style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>

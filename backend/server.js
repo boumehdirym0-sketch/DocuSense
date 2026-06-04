@@ -7,17 +7,21 @@ dotenv.config()
 
 const app = express()
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    process.env.FRONTEND_URL,
+  ].filter(Boolean),
   credentials: true
 }))
 app.use(express.json())
 
 // Importer les modèles
-require('./models/User')
-require('./models/Manual')
-require('./models/Step')
-require('./models/Quiz')
-require('./models/Progress')
+require('./models/user')
+require('./models/manual')
+require('./models/step')
+require('./models/quiz')
+require('./models/progress')
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'))

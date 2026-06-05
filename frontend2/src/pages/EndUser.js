@@ -179,10 +179,8 @@ const EndUser = () => {
                 placeholder="🔍 Rechercher par nom..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                autoComplete="off"
+                autoComplete="new-password"
                 name="search-manual"
-                readOnly
-                onFocus={e => e.target.removeAttribute('readOnly')}
                 style={{flex:1, minWidth:180, padding:'10px 14px', borderRadius:8, border:'1.5px solid #CBD5E1', fontSize:14, outline:'none', background:'#F8FAFF', color:'#0C2340'}}
               />
               <select

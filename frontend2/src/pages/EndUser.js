@@ -175,11 +175,14 @@ const EndUser = () => {
             {/* BARRE DE RECHERCHE ET FILTRES */}
             <div style={{display:'flex', gap:10, marginBottom:24, flexWrap:'wrap', background:'#fff', borderRadius:12, padding:16, border:'1px solid #E2E8F0', boxShadow:'0 2px 8px rgba(0,0,0,0.06)'}}>
               <input
-                type="search"
+                type="text"
                 placeholder="🔍 Rechercher par nom..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 autoComplete="off"
+                name="search-manual"
+                readOnly
+                onFocus={e => e.target.removeAttribute('readOnly')}
                 style={{flex:1, minWidth:180, padding:'10px 14px', borderRadius:8, border:'1.5px solid #CBD5E1', fontSize:14, outline:'none', background:'#F8FAFF', color:'#0C2340'}}
               />
               <select

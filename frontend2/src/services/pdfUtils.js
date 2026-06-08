@@ -32,7 +32,7 @@ const addFooter = (doc, W, H, pageNum) => {
   doc.line(14, H - 14, W - 14, H - 14)
   textColor(doc, GRAY_LIGHT)
   doc.setFontSize(7.5); doc.setFont('helvetica', 'normal')
-  doc.text('DocuSense © 2026 — Généré par intelligence artificielle', 14, H - 5)
+  doc.text('DocuSense © 2026 — Plateforme de documentation intelligente', 14, H - 5)
   doc.text(`Page ${pageNum}`, W - 14, H - 5, { align: 'right' })
 }
 

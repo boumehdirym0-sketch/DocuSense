@@ -91,7 +91,7 @@ export const exportManualToPDF = (manual, steps) => {
   const stats = [
     { value: String(steps.length), label: 'étapes' },
     { value: 'IA', label: 'généré par' },
-    { value: '2025', label: 'DocuSense' },
+    { value: '2026', label: 'DocuSense' },
   ]
   const colW = W / 3
   stats.forEach((s, i) => {

@@ -56,13 +56,11 @@ const EndUser = () => {
   useEffect(() => {
     fetchManuals()
     fetchLeaderboard()
-    if (!localStorage.getItem('name')) {
-      API.get('/auth/me').then(({ data }) => {
-        localStorage.setItem('name', data.name)
-        localStorage.setItem('role', data.role)
-        setUserName(data.name)
-      }).catch(() => {})
-    }
+    API.get('/auth/me').then(({ data }) => {
+      localStorage.setItem('name', data.name)
+      localStorage.setItem('role', data.role)
+      setUserName(data.name)
+    }).catch(() => {})
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchManuals = async () => {

@@ -40,6 +40,7 @@ const Register = () => {
     e.preventDefault()
     try {
       await API.post('/auth/register', { name, email, password, role })
+      localStorage.clear()
       setRegisteredEmail(email)
       setRegistered(true)
     } catch (err) {

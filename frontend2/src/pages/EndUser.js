@@ -92,12 +92,6 @@ const EndUser = () => {
     setQuizCompleted(false)
   }
 
-  const quizSteps = steps.filter(s => s.Quiz)
-  const activeQuiz = quizMode ? (quizSteps[quizStepIndex]?.Quiz || null) : null
-  const activeQuizOptions = activeQuiz
-    ? (Array.isArray(activeQuiz.options) ? activeQuiz.options : (() => { try { return JSON.parse(activeQuiz.options) } catch { return [] } })())
-    : []
-
   const submitQuizInMode = async () => {
     const quiz = quizSteps[quizStepIndex]?.Quiz
     if (!quiz) return
@@ -147,6 +141,12 @@ const EndUser = () => {
   const currentQuiz = steps[currentStep]?.Quiz || null
   const quizOptions = currentQuiz
     ? (Array.isArray(currentQuiz.options) ? currentQuiz.options : (() => { try { return JSON.parse(currentQuiz.options) } catch { return [] } })())
+    : []
+
+  const quizSteps = steps.filter(s => s.Quiz)
+  const activeQuiz = quizMode ? (quizSteps[quizStepIndex]?.Quiz || null) : null
+  const activeQuizOptions = activeQuiz
+    ? (Array.isArray(activeQuiz.options) ? activeQuiz.options : (() => { try { return JSON.parse(activeQuiz.options) } catch { return [] } })())
     : []
 
   return (

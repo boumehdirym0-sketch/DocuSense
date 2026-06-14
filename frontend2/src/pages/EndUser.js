@@ -51,6 +51,9 @@ const EndUser = () => {
   const [badges, setBadges] = useState([])
   const [leaderboard, setLeaderboard] = useState([])
   const [userName, setUserName] = useState(localStorage.getItem('name') || '')
+  const [quizMode, setQuizMode] = useState(false)
+  const [quizStepIndex, setQuizStepIndex] = useState(0)
+  const [quizCompleted, setQuizCompleted] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -84,6 +87,38 @@ const EndUser = () => {
     setCurrentStep(0)
     setQuizAnswer('')
     setQuizResult(null)
+    setQuizMode(false)
+    setQuizStepIndex(0)
+    setQuizCompleted(false)
+  }
+
+  const quizSteps = steps.filter(s => s.Quiz)
+  const activeQuiz = quizMode ? (quizSteps[quizStepIndex]?.Quiz || null) : null
+  const activeQuizOptions = activeQuiz
+    ? (Array.isArray(activeQuiz.options) ? activeQuiz.options : (() => { try { return JSON.parse(activeQuiz.options) } catch { return [] } })())
+    : []
+
+  const submitQuizInMode = async () => {
+    const quiz = quizSteps[quizStepIndex]?.Quiz
+    if (!quiz) return
+    try {
+      const { data } = await API.post('/quiz/submit', { quizId: quiz.id, answer: quizAnswer, manualId: selected.id })
+      setQuizResult(data)
+      setScore(data.totalScore)
+      setBadges(data.badges)
+      fetchLeaderboard()
+    } catch (err) { console.error(err) }
+  }
+
+  const nextQuiz = () => {
+    if (quizStepIndex < quizSteps.length - 1) {
+      setQuizStepIndex(i => i + 1)
+      setQuizAnswer('')
+      setQuizResult(null)
+    } else {
+      setQuizCompleted(true)
+      setQuizMode(false)
+    }
   }
 
   const submitQuiz = async (quiz) => {
@@ -285,54 +320,51 @@ const EndUser = () => {
                   </button>
                 </div>
 
-                {currentStep === steps.length - 1 && (
+                {currentStep === steps.length - 1 && !quizMode && !quizCompleted && (
                   <div style={{marginTop:20, padding:20, background:'linear-gradient(135deg,#F0FFF4,#DCFCE7)', borderRadius:12, border:'1px solid #BBF7D0', display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:12}}>
                     <div>
-                      <div style={{fontSize:15, fontWeight:700, color:'#166534'}}>🎉 Manuel terminé !</div>
-                      <div style={{fontSize:13, color:'#15803D', marginTop:2}}>Tu as parcouru toutes les étapes. Score : <strong>{score} pts</strong></div>
+                      <div style={{fontSize:15, fontWeight:700, color:'#166534'}}>📖 Lecture terminée !</div>
+                      <div style={{fontSize:13, color:'#15803D', marginTop:2}}>Tu as parcouru toutes les étapes.</div>
                     </div>
-                    <button onClick={() => generateCertificate(userName || 'Utilisateur', selected.title, score, badges)} style={{padding:'10px 22px', background:'linear-gradient(135deg,#185FA5,#378ADD)', color:'#fff', border:'none', borderRadius:10, cursor:'pointer', fontSize:13, fontWeight:700, boxShadow:'0 4px 12px rgba(24,95,165,0.35)', whiteSpace:'nowrap'}}>
-                      🏆 Télécharger mon certificat
-                    </button>
+                    {quizSteps.length > 0 ? (
+                      <button onClick={() => { setQuizMode(true); setQuizStepIndex(0); setQuizAnswer(''); setQuizResult(null) }} style={{padding:'10px 22px', background:'linear-gradient(135deg,#8E44AD,#A855F7)', color:'#fff', border:'none', borderRadius:10, cursor:'pointer', fontSize:13, fontWeight:700, boxShadow:'0 4px 12px rgba(142,68,173,0.35)', whiteSpace:'nowrap'}}>
+                        🧠 Passer au Quiz →
+                      </button>
+                    ) : (
+                      <button onClick={() => generateCertificate(userName || 'Utilisateur', selected.title, score, badges)} style={{padding:'10px 22px', background:'linear-gradient(135deg,#185FA5,#378ADD)', color:'#fff', border:'none', borderRadius:10, cursor:'pointer', fontSize:13, fontWeight:700, boxShadow:'0 4px 12px rgba(24,95,165,0.35)', whiteSpace:'nowrap'}}>
+                        🏆 Télécharger mon certificat
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
             )}
 
-            {/* QUIZ DE L'ETAPE */}
-            {currentQuiz ? (
+            {/* MODE QUIZ */}
+            {quizMode && !quizCompleted && activeQuiz && (
               <div style={{background:'#F5F0FF', borderRadius:14, padding:24, border:'1px solid #C39BD3', marginTop:4}}>
-                <div style={{display:'flex', alignItems:'center', gap:8, marginBottom:16}}>
-                  <div style={{background:'#8E44AD', color:'#fff', borderRadius:8, padding:'4px 12px', fontSize:12, fontWeight:700}}>🧠 QUIZ</div>
-                  <div style={{fontSize:13, color:'#8E44AD', fontWeight:600}}>Validez votre compréhension pour gagner des points</div>
+                <div style={{display:'flex', alignItems:'center', gap:8, marginBottom:8}}>
+                  <div style={{background:'#8E44AD', color:'#fff', borderRadius:8, padding:'4px 12px', fontSize:12, fontWeight:700}}>🧠 QUIZ {quizStepIndex + 1} / {quizSteps.length}</div>
+                  <div style={{fontSize:13, color:'#8E44AD', fontWeight:600}}>Validez votre compréhension</div>
                 </div>
-
-                <div style={{fontSize:15, fontWeight:600, color:'#0C2340', marginBottom:16, lineHeight:1.5}}>{currentQuiz.question}</div>
-
+                <div style={{height:6, background:'#E9D8FD', borderRadius:3, marginBottom:16, overflow:'hidden'}}>
+                  <div style={{height:'100%', width:`${((quizStepIndex+1)/quizSteps.length)*100}%`, background:'linear-gradient(90deg,#8E44AD,#A855F7)', borderRadius:3, transition:'width 0.3s'}} />
+                </div>
+                <div style={{fontSize:15, fontWeight:600, color:'#0C2340', marginBottom:16, lineHeight:1.5}}>{activeQuiz.question}</div>
                 <div style={{display:'flex', flexDirection:'column', gap:10, marginBottom:16}}>
-                  {quizOptions.map((opt, i) => {
+                  {activeQuizOptions.map((opt, i) => {
                     const letters = ['A', 'B', 'C', 'D']
                     const isSelected = quizAnswer === opt
-                    const isCorrectRevealed = quizResult && opt === currentQuiz.correctAnswer
+                    const isCorrectRevealed = quizResult && opt === activeQuiz.correctAnswer
                     const isWrongSelected = quizResult && isSelected && !quizResult.isCorrect
                     return (
-                      <button
-                        key={i}
-                        onClick={() => { if (!quizResult) setQuizAnswer(opt) }}
-                        style={{
-                          display:'flex', alignItems:'center', gap:12,
-                          padding:'12px 16px', borderRadius:10, textAlign:'left',
-                          cursor: quizResult ? 'default' : 'pointer',
+                      <button key={i} onClick={() => { if (!quizResult) setQuizAnswer(opt) }}
+                        style={{display:'flex', alignItems:'center', gap:12, padding:'12px 16px', borderRadius:10, textAlign:'left', cursor: quizResult ? 'default' : 'pointer',
                           border: isCorrectRevealed ? '2px solid #27AE60' : isWrongSelected ? '2px solid #E74C3C' : isSelected ? '2px solid #8E44AD' : '1.5px solid #E2EEF9',
                           background: isCorrectRevealed ? '#F0FFF4' : isWrongSelected ? '#FFF5F5' : isSelected ? '#F5F0FF' : '#fff',
                           color: isCorrectRevealed ? '#166534' : isWrongSelected ? '#E74C3C' : isSelected ? '#8E44AD' : '#334155',
-                          fontWeight: isSelected || isCorrectRevealed ? 600 : 400,
-                          fontSize:13, transition:'all 0.15s'
-                        }}
-                      >
-                        <span style={{width:26, height:26, borderRadius:6, background: isCorrectRevealed ? '#27AE60' : isWrongSelected ? '#E74C3C' : isSelected ? '#8E44AD' : '#E2E8F0', color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', fontSize:11, fontWeight:700, flexShrink:0}}>
-                          {letters[i]}
-                        </span>
+                          fontWeight: isSelected || isCorrectRevealed ? 600 : 400, fontSize:13, transition:'all 0.15s'}}>
+                        <span style={{width:26, height:26, borderRadius:6, background: isCorrectRevealed ? '#27AE60' : isWrongSelected ? '#E74C3C' : isSelected ? '#8E44AD' : '#E2E8F0', color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', fontSize:11, fontWeight:700, flexShrink:0}}>{letters[i]}</span>
                         <span style={{flex:1}}>{opt}</span>
                         {isCorrectRevealed && <span>✅</span>}
                         {isWrongSelected && <span>❌</span>}
@@ -340,45 +372,46 @@ const EndUser = () => {
                     )
                   })}
                 </div>
-
                 {!quizResult && (
-                  <button
-                    onClick={() => submitQuiz(currentQuiz)}
-                    disabled={!quizAnswer}
-                    style={{padding:'11px 32px', background: quizAnswer ? 'linear-gradient(135deg,#8E44AD,#A855F7)' : '#E2E8F0', color: quizAnswer ? '#fff' : '#94A3B8', border:'none', borderRadius:10, cursor: quizAnswer ? 'pointer' : 'not-allowed', fontSize:14, fontWeight:700, boxShadow: quizAnswer ? '0 4px 12px rgba(142,68,173,0.35)' : 'none', transition:'all 0.2s'}}
-                  >
+                  <button onClick={submitQuizInMode} disabled={!quizAnswer}
+                    style={{padding:'11px 32px', background: quizAnswer ? 'linear-gradient(135deg,#8E44AD,#A855F7)' : '#E2E8F0', color: quizAnswer ? '#fff' : '#94A3B8', border:'none', borderRadius:10, cursor: quizAnswer ? 'pointer' : 'not-allowed', fontSize:14, fontWeight:700, boxShadow: quizAnswer ? '0 4px 12px rgba(142,68,173,0.35)' : 'none', transition:'all 0.2s'}}>
                     Valider ma réponse →
                   </button>
                 )}
-
                 {quizResult && (
                   <div style={{marginTop:12, padding:16, borderRadius:10, background: quizResult.isCorrect ? '#F0FFF4' : '#FFF5F5', border:`1px solid ${quizResult.isCorrect ? '#BBF7D0' : '#FECACA'}`}}>
                     <div style={{fontSize:16, fontWeight:700, color: quizResult.isCorrect ? '#27AE60' : '#E74C3C', marginBottom:6}}>
                       {quizResult.isCorrect ? '🎯 Bonne réponse !' : '❌ Mauvaise réponse'}
                     </div>
-                    {!quizResult.isCorrect && (
-                      <div style={{fontSize:13, color:'#64748B', marginBottom:6}}>La bonne réponse était : <strong style={{color:'#27AE60'}}>{currentQuiz.correctAnswer}</strong></div>
-                    )}
-                    <div style={{fontSize:13, color:'#334155', marginBottom:12}}>+{quizResult.pointsEarned} pts — Score total : <strong style={{color:'#185FA5'}}>{quizResult.totalScore} pts</strong></div>
+                    {!quizResult.isCorrect && <div style={{fontSize:13, color:'#64748B', marginBottom:6}}>La bonne réponse était : <strong style={{color:'#27AE60'}}>{activeQuiz.correctAnswer}</strong></div>}
+                    <div style={{fontSize:13, color:'#334155', marginBottom:12}}>+{quizResult.pointsEarned} pts — Score : <strong style={{color:'#185FA5'}}>{quizResult.totalScore} pts</strong></div>
                     {quizResult.badges?.map(b => (
                       <span key={b} style={{display:'inline-block', marginBottom:12, padding:'5px 14px', background:badgeColor[b], color:'#fff', borderRadius:20, fontSize:12, fontWeight:700, marginRight:6}}>
                         {badgeIcon[b]} Badge {b.charAt(0).toUpperCase()+b.slice(1)} débloqué !
                       </span>
                     ))}
-                    <div style={{display:'flex', gap:10, marginTop:4}}>
-                      <button onClick={() => { setCurrentStep(s => s-1); setQuizAnswer(''); setQuizResult(null) }} disabled={currentStep===0} style={{padding:'10px 20px', background: currentStep===0 ? '#F8FAFC' : '#EFF6FF', color: currentStep===0 ? '#94A3B8' : '#185FA5', border:'none', borderRadius:8, cursor: currentStep===0 ? 'not-allowed' : 'pointer', fontSize:13, fontWeight:600}}>
-                        ← Précédent
-                      </button>
-                      <button onClick={() => { setCurrentStep(s => s+1); setQuizAnswer(''); setQuizResult(null) }} disabled={currentStep===steps.length-1} style={{padding:'10px 20px', background: currentStep===steps.length-1 ? '#F8FAFC' : '#185FA5', color: currentStep===steps.length-1 ? '#94A3B8' : '#fff', border:'none', borderRadius:8, cursor: currentStep===steps.length-1 ? 'not-allowed' : 'pointer', fontSize:13, fontWeight:600}}>
-                        Suivant →
-                      </button>
-                    </div>
+                    <button onClick={nextQuiz}
+                      style={{marginTop:8, padding:'10px 24px', background: quizStepIndex < quizSteps.length - 1 ? 'linear-gradient(135deg,#185FA5,#378ADD)' : 'linear-gradient(135deg,#27AE60,#2ECC71)', color:'#fff', border:'none', borderRadius:8, cursor:'pointer', fontSize:13, fontWeight:700, boxShadow:'0 4px 12px rgba(0,0,0,0.15)'}}>
+                      {quizStepIndex < quizSteps.length - 1 ? 'Quiz suivant →' : '🏆 Voir mon certificat'}
+                    </button>
                   </div>
                 )}
               </div>
-            ) : steps.length > 0 && (
-              <div style={{padding:'14px 18px', background:'#FFFBEB', borderRadius:10, border:'1px solid #FDE68A', color:'#92400E', fontSize:13}}>
-                ⚠️ Ce manuel a été créé avant la génération automatique de quiz. Régénérez et sauvegardez les étapes depuis le dashboard pour activer les quiz.
+            )}
+
+            {/* CERTIFICAT */}
+            {quizCompleted && (
+              <div style={{marginTop:20, padding:28, background:'linear-gradient(135deg,#FFF9E6,#FAEEDA)', borderRadius:14, border:'2px solid #FAD7A0', textAlign:'center'}}>
+                <div style={{fontSize:52, marginBottom:12}}>🏆</div>
+                <div style={{fontSize:20, fontWeight:700, color:'#0C2340', marginBottom:6}}>Félicitations {userName} !</div>
+                <div style={{fontSize:14, color:'#64748B', marginBottom:20}}>
+                  Tu as terminé <strong>{selected.title}</strong> et répondu à tous les quiz.<br />
+                  Score final : <strong style={{color:'#185FA5'}}>{score} pts</strong>
+                </div>
+                <button onClick={() => generateCertificate(userName || 'Utilisateur', selected.title, score, badges)}
+                  style={{padding:'12px 28px', background:'linear-gradient(135deg,#185FA5,#378ADD)', color:'#fff', border:'none', borderRadius:12, cursor:'pointer', fontSize:15, fontWeight:700, boxShadow:'0 4px 16px rgba(24,95,165,0.35)'}}>
+                  📄 Télécharger mon certificat
+                </button>
               </div>
             )}
           </>

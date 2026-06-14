@@ -487,10 +487,10 @@ const Admin = () => {
       <Sidebar />
 
       <div className="main-content" style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
-        {activeSection === 'dashboard' && <SectionDashboard />}
-        {activeSection === 'approbations' && <SectionApprobations />}
-        {activeSection === 'utilisateurs' && <SectionUtilisateurs />}
-        {activeSection === 'manuels' && <SectionManuels />}
+        {activeSection === 'dashboard' && SectionDashboard()}
+        {activeSection === 'approbations' && SectionApprobations()}
+        {activeSection === 'utilisateurs' && SectionUtilisateurs()}
+        {activeSection === 'manuels' && SectionManuels()}
       </div>
 
       {toast && (

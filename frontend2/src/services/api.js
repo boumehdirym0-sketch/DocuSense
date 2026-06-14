@@ -5,10 +5,10 @@ const API = axios.create({
 })
 
 API.interceptors.request.use((req) => {
-  const token = sessionStorage.getItem('token')
-  if (token) {
-    req.headers.Authorization = `Bearer ${token}`
-  }
+  const adminToken = sessionStorage.getItem('admin_token')
+  const userToken = sessionStorage.getItem('token')
+  const token = (req.url.includes('/admin') && adminToken) ? adminToken : (userToken || adminToken)
+  if (token) req.headers.Authorization = `Bearer ${token}`
   return req
 })
 

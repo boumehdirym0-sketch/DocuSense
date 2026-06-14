@@ -15,15 +15,16 @@ const Private = ({ children }) => {
 }
 
 const AdminOnly = ({ children }) => {
-  const token = sessionStorage.getItem('token')
-  const role = sessionStorage.getItem('role')
-  return token && role === 'admin' ? children : <Navigate to="/login" replace />
+  const token = sessionStorage.getItem('admin_token')
+  return token ? children : <Navigate to="/login" replace />
 }
 
 const AutoRedirect = () => {
+  const adminToken = sessionStorage.getItem('admin_token')
+  if (adminToken) return <Navigate to="/admin" replace />
   const token = sessionStorage.getItem('token')
   const role = sessionStorage.getItem('role')
-  if (token) return <Navigate to={role === 'admin' ? '/admin' : role === 'enduser' ? '/enduser' : '/dashboard'} replace />
+  if (token) return <Navigate to={role === 'enduser' ? '/enduser' : '/dashboard'} replace />
   return <Landing />
 }
 

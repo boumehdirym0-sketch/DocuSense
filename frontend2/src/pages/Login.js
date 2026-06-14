@@ -25,10 +25,16 @@ const Login = () => {
         return
       }
 
-      sessionStorage.setItem('token', data.token)
-      sessionStorage.setItem('role', data.role)
-      sessionStorage.setItem('name', data.name)
-      sessionStorage.setItem('email', data.email)
+      if (data.role === 'admin') {
+        sessionStorage.setItem('admin_token', data.token)
+        sessionStorage.setItem('admin_name', data.name)
+        sessionStorage.setItem('admin_email', data.email)
+      } else {
+        sessionStorage.setItem('token', data.token)
+        sessionStorage.setItem('role', data.role)
+        sessionStorage.setItem('name', data.name)
+        sessionStorage.setItem('email', data.email)
+      }
       navigate(data.role === 'admin' ? '/admin' : data.role === 'enduser' ? '/enduser' : '/dashboard', { replace: true })
     } catch (err) {
       setError(err.response?.data?.message || 'Erreur de connexion')

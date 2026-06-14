@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 
 const Landing = () => {
   const navigate = useNavigate()
-  const token = sessionStorage.getItem('token')
-  const role = sessionStorage.getItem('role')
+  const token = sessionStorage.getItem('admin_token') || sessionStorage.getItem('token')
+  const role = sessionStorage.getItem('admin_token') ? 'admin' : sessionStorage.getItem('role')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' })
   const [contactSent, setContactSent] = useState(false)

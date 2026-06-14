@@ -13,6 +13,7 @@ const Admin = () => {
   const [users, setUsers] = useState([])
   const [manuals, setManuals] = useState([])
   const [pendingUsers, setPendingUsers] = useState([])
+  const [userSearch, setUserSearch] = useState('')
   const [toast, setToast] = useState(null)
   const [loading, setLoading] = useState(false)
   const [adminName] = useState(localStorage.getItem('name') || 'Admin')
@@ -245,71 +246,97 @@ const Admin = () => {
     </>
   )
 
-  const SectionUtilisateurs = () => (
-    <>
-      <div style={{ marginBottom: 28 }}>
-        <div style={{ fontSize: 24, fontWeight: 700, color: '#0C2340' }}>Gestion des utilisateurs</div>
-        <div style={{ fontSize: 14, color: '#94A3B8', marginTop: 4 }}>{users.length} utilisateur{users.length !== 1 ? 's' : ''} enregistré{users.length !== 1 ? 's' : ''}</div>
-      </div>
+  const SectionUtilisateurs = () => {
+    const filtered = users.filter(u =>
+      u.name.toLowerCase().includes(userSearch.toLowerCase()) ||
+      u.email.toLowerCase().includes(userSearch.toLowerCase())
+    )
+    const STATUS_LABEL = { active: { label: 'Actif', color: '#166534', bg: '#F0FFF4', border: '#BBF7D0' }, pending: { label: 'En attente', color: '#92400E', bg: '#FFF7ED', border: '#FAD7A0' }, rejected: { label: 'Refusé', color: '#991B1B', bg: '#FFF5F5', border: '#FECACA' } }
 
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: 60, color: '#94A3B8' }}>⏳ Chargement...</div>
-      ) : (
-        <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #EEF2F7', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ background: '#F8FAFF', borderBottom: '1px solid #EEF2F7' }}>
-                {['Utilisateur', 'Email', 'Rôle', 'Inscrit le', 'Actions'].map(h => (
-                  <th key={h} style={{ padding: '14px 20px', textAlign: 'left', fontSize: 12, fontWeight: 600, color: '#64748B', letterSpacing: 0.5 }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user, i) => (
-                <tr key={user.id} style={{ borderBottom: i < users.length - 1 ? '1px solid #F0F4F8' : 'none' }}>
-                  <td style={{ padding: '14px 20px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{ width: 36, height: 36, background: `linear-gradient(135deg,${ROLE_BG[user.role]},${ROLE_BG[user.role]})`, border: `2px solid ${ROLE_COLORS[user.role]}20`, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 700, color: ROLE_COLORS[user.role] }}>
-                        {user.name.charAt(0).toUpperCase()}
-                      </div>
-                      <span style={{ fontSize: 14, fontWeight: 600, color: '#0C2340' }}>{user.name}</span>
-                    </div>
-                  </td>
-                  <td style={{ padding: '14px 20px', fontSize: 13, color: '#64748B' }}>{user.email}</td>
-                  <td style={{ padding: '14px 20px' }}>
-                    <select
-                      value={user.role}
-                      onChange={e => changeRole(user.id, e.target.value)}
-                      style={{ padding: '6px 10px', borderRadius: 8, border: `1.5px solid ${ROLE_COLORS[user.role]}40`, background: ROLE_BG[user.role], color: ROLE_COLORS[user.role], fontSize: 12, fontWeight: 600, cursor: 'pointer', outline: 'none' }}>
-                      <option value="developer">Développeur</option>
-                      <option value="enduser">Utilisateur</option>
-                      <option value="admin">Administrateur</option>
-                    </select>
-                  </td>
-                  <td style={{ padding: '14px 20px', fontSize: 13, color: '#94A3B8' }}>
-                    {new Date(user.createdAt).toLocaleDateString('fr-FR')}
-                  </td>
-                  <td style={{ padding: '14px 20px' }}>
-                    <button
-                      onClick={() => deleteUser(user)}
-                      style={{ padding: '6px 14px', background: '#FFF5F5', color: '#E74C3C', border: '1px solid #FECACA', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>
-                      Supprimer
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {users.length === 0 && (
-            <div style={{ textAlign: 'center', padding: 60, color: '#94A3B8' }}>
-              <div style={{ fontSize: 36, marginBottom: 12 }}>👥</div>
-              <div>Aucun utilisateur trouvé</div>
-            </div>
-          )}
+    return (
+      <>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <div style={{ fontSize: 24, fontWeight: 700, color: '#0C2340' }}>Gestion des utilisateurs</div>
+            <div style={{ fontSize: 14, color: '#94A3B8', marginTop: 4 }}>{filtered.length} utilisateur{filtered.length !== 1 ? 's' : ''} trouvé{filtered.length !== 1 ? 's' : ''}</div>
+          </div>
+          <div style={{ position: 'relative' }}>
+            <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 15, color: '#94A3B8' }}>🔍</span>
+            <input
+              type="text"
+              placeholder="Rechercher par nom ou email..."
+              value={userSearch}
+              onChange={e => setUserSearch(e.target.value)}
+              style={{ paddingLeft: 36, paddingRight: 14, paddingTop: 10, paddingBottom: 10, borderRadius: 10, border: '1.5px solid #E2EEF9', fontSize: 13, outline: 'none', width: 260, color: '#334155' }}
+            />
+          </div>
         </div>
-      )}
-    </>
-  )
+
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: 60, color: '#94A3B8' }}>⏳ Chargement...</div>
+        ) : (
+          <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #EEF2F7', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ background: '#F8FAFF', borderBottom: '1px solid #EEF2F7' }}>
+                  {['Utilisateur', 'Email', 'Statut', 'Rôle', 'Inscrit le', 'Actions'].map(h => (
+                    <th key={h} style={{ padding: '14px 20px', textAlign: 'left', fontSize: 12, fontWeight: 600, color: '#64748B', letterSpacing: 0.5 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((user, i) => {
+                  const st = STATUS_LABEL[user.status] || STATUS_LABEL.pending
+                  return (
+                    <tr key={user.id} style={{ borderBottom: i < filtered.length - 1 ? '1px solid #F0F4F8' : 'none' }}>
+                      <td style={{ padding: '14px 20px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <div style={{ width: 36, height: 36, background: ROLE_BG[user.role] || '#EFF6FF', border: `2px solid ${(ROLE_COLORS[user.role] || '#185FA5')}20`, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 700, color: ROLE_COLORS[user.role] || '#185FA5' }}>
+                            {user.name.charAt(0).toUpperCase()}
+                          </div>
+                          <span style={{ fontSize: 14, fontWeight: 600, color: '#0C2340' }}>{user.name}</span>
+                        </div>
+                      </td>
+                      <td style={{ padding: '14px 20px', fontSize: 13, color: '#64748B' }}>{user.email}</td>
+                      <td style={{ padding: '14px 20px' }}>
+                        <span style={{ fontSize: 12, background: st.bg, color: st.color, border: `1px solid ${st.border}`, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>{st.label}</span>
+                      </td>
+                      <td style={{ padding: '14px 20px' }}>
+                        <select
+                          value={user.role}
+                          onChange={e => changeRole(user.id, e.target.value)}
+                          style={{ padding: '6px 10px', borderRadius: 8, border: `1.5px solid ${(ROLE_COLORS[user.role] || '#185FA5')}40`, background: ROLE_BG[user.role] || '#EFF6FF', color: ROLE_COLORS[user.role] || '#185FA5', fontSize: 12, fontWeight: 600, cursor: 'pointer', outline: 'none' }}>
+                          <option value="developer">Développeur</option>
+                          <option value="enduser">Utilisateur</option>
+                          <option value="admin">Administrateur</option>
+                        </select>
+                      </td>
+                      <td style={{ padding: '14px 20px', fontSize: 13, color: '#94A3B8' }}>
+                        {new Date(user.createdAt).toLocaleDateString('fr-FR')}
+                      </td>
+                      <td style={{ padding: '14px 20px' }}>
+                        <button
+                          onClick={() => deleteUser(user)}
+                          style={{ padding: '6px 14px', background: '#FFF5F5', color: '#E74C3C', border: '1px solid #FECACA', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>
+                          Supprimer
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+            {filtered.length === 0 && (
+              <div style={{ textAlign: 'center', padding: 60, color: '#94A3B8' }}>
+                <div style={{ fontSize: 36, marginBottom: 12 }}>🔍</div>
+                <div>{userSearch ? `Aucun résultat pour « ${userSearch} »` : 'Aucun utilisateur trouvé'}</div>
+              </div>
+            )}
+          </div>
+        )}
+      </>
+    )
+  }
 
   const SectionApprobations = () => (
     <>

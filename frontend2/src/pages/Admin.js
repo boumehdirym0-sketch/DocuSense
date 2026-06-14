@@ -26,12 +26,18 @@ const Admin = () => {
 
   useEffect(() => {
     fetchStats()
+    const interval = setInterval(fetchStats, 8000)
+    return () => clearInterval(interval)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (activeSection === 'utilisateurs') fetchUsers()
     if (activeSection === 'manuels') fetchManuals()
-    if (activeSection === 'approbations') fetchPendingUsers()
+    if (activeSection === 'approbations') {
+      fetchPendingUsers()
+      const interval = setInterval(fetchPendingUsers, 8000)
+      return () => clearInterval(interval)
+    }
   }, [activeSection])
 
   const fetchStats = async () => {
@@ -39,7 +45,7 @@ const Admin = () => {
       const { data } = await API.get('/admin/stats')
       setStats(data)
     } catch (err) {
-      if (err.response?.status === 403) navigate('/login')
+      if (err.response?.status === 401 || err.response?.status === 403) navigate('/login')
     }
   }
 

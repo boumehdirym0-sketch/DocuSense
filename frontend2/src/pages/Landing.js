@@ -20,6 +20,9 @@ const Landing = () => {
 
   const handleContact = (e) => {
     e.preventDefault()
+    const subject = encodeURIComponent(`Message de ${contactForm.name} via DocuSense`)
+    const body = encodeURIComponent(`Nom : ${contactForm.name}\nEmail : ${contactForm.email}\n\nMessage :\n${contactForm.message}`)
+    window.open(`mailto:docusense9@gmail.com?subject=${subject}&body=${body}`)
     setContactSent(true)
     setContactForm({ name: '', email: '', message: '' })
     setTimeout(() => setContactSent(false), 4000)
@@ -246,6 +249,24 @@ const Landing = () => {
           <h2 style={{fontSize:34, fontWeight:700, color:'#0C2340', marginBottom:12}}>Nous contacter</h2>
           <p style={{color:'#64748B', fontSize:15}}>Une question, une suggestion ? Écrivez-nous.</p>
         </div>
+        {/* Coordonnées */}
+        <div style={{display:'flex', justifyContent:'center', gap:24, flexWrap:'wrap', marginBottom:40}}>
+          <a href="mailto:docusense9@gmail.com" style={{display:'flex', alignItems:'center', gap:12, background:'#F8FAFF', borderRadius:12, padding:'16px 24px', border:'1px solid #EEF2F7', textDecoration:'none'}}>
+            <div style={{width:40, height:40, background:'linear-gradient(135deg,#185FA5,#378ADD)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18}}>📧</div>
+            <div>
+              <div style={{fontSize:11, color:'#94A3B8', fontWeight:600}}>EMAIL</div>
+              <div style={{fontSize:14, fontWeight:600, color:'#0C2340'}}>docusense9@gmail.com</div>
+            </div>
+          </a>
+          <a href="tel:0791244909" style={{display:'flex', alignItems:'center', gap:12, background:'#F8FAFF', borderRadius:12, padding:'16px 24px', border:'1px solid #EEF2F7', textDecoration:'none'}}>
+            <div style={{width:40, height:40, background:'linear-gradient(135deg,#27AE60,#2ECC71)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18}}>📞</div>
+            <div>
+              <div style={{fontSize:11, color:'#94A3B8', fontWeight:600}}>TÉLÉPHONE</div>
+              <div style={{fontSize:14, fontWeight:600, color:'#0C2340'}}>07 91 24 49 09</div>
+            </div>
+          </a>
+        </div>
+
         <div style={{maxWidth:560, margin:'0 auto', background:'#F8FAFF', borderRadius:16, padding:32, border:'1px solid #EEF2F7'}}>
           {contactSent ? (
             <div style={{textAlign:'center', padding:'32px 0'}}>

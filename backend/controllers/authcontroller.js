@@ -55,6 +55,17 @@ const login = async (req, res) => {
   }
 }
 
+const checkStatus = async (req, res) => {
+  try {
+    const { email } = req.query
+    const user = await User.findOne({ where: { email }, attributes: ['status'] })
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' })
+    res.json({ status: user.status })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}
+
 const getMe = async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id, { attributes: ['id', 'name', 'email', 'role'] })
@@ -65,4 +76,4 @@ const getMe = async (req, res) => {
   }
 }
 
-module.exports = { register, login, getMe }
+module.exports = { register, login, getMe, checkStatus }

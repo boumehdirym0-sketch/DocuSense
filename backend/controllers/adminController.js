@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const Manual = require('../models/manual')
+const { sendApprovalEmail } = require('../utils/mailer')
 
 const getStats = async (req, res) => {
   try {
@@ -43,6 +44,11 @@ const approveUser = async (req, res) => {
     const user = await User.findByPk(req.params.id)
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' })
     await user.update({ status: 'active' })
+    try {
+      await sendApprovalEmail(user.email, user.name)
+    } catch (mailErr) {
+      console.error('Email non envoyé:', mailErr.message)
+    }
     res.json({ message: 'Utilisateur approuvé' })
   } catch (err) {
     res.status(500).json({ message: err.message })

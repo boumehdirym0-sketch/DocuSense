@@ -9,6 +9,8 @@ const Register = () => {
   const [role, setRole] = useState('developer')
   const [error, setError] = useState('')
   const [registered, setRegistered] = useState(false)
+  const [approved, setApproved] = useState(false)
+  const [registeredEmail, setRegisteredEmail] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -19,10 +21,26 @@ const Register = () => {
     }
   }, [navigate])
 
+  useEffect(() => {
+    if (!registered || approved) return
+    const interval = setInterval(async () => {
+      try {
+        const { data } = await API.get(`/auth/status?email=${encodeURIComponent(registeredEmail)}`)
+        if (data.status === 'active') {
+          setApproved(true)
+          clearInterval(interval)
+          setTimeout(() => navigate('/login', { replace: true }), 3000)
+        }
+      } catch (e) {}
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [registered, approved, registeredEmail, navigate])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
       await API.post('/auth/register', { name, email, password, role })
+      setRegisteredEmail(email)
       setRegistered(true)
     } catch (err) {
       setError(err.response?.data?.message || 'Erreur lors de l\'inscription')
@@ -30,6 +48,24 @@ const Register = () => {
   }
 
   if (registered) {
+    if (approved) {
+      return (
+        <div style={styles.container}>
+          <div style={styles.card}>
+            <h1 style={styles.logo}>Docu<span style={styles.logoBlue}>Sense</span></h1>
+            <div style={{ textAlign: 'center', padding: '20px 0' }}>
+              <div style={{ fontSize: 52, marginBottom: 16 }}>🎉</div>
+              <h2 style={{ fontSize: 20, fontWeight: 700, color: '#166534', marginBottom: 12 }}>Inscription validée !</h2>
+              <div style={{ background: '#F0FFF4', border: '1px solid #BBF7D0', borderRadius: 12, padding: '16px 20px', marginBottom: 20, color: '#166534', fontSize: 14, lineHeight: 1.6 }}>
+                Votre inscription a été approuvée. Bienvenu(e) sur DocuSense !<br />
+                Redirection vers la page de connexion...
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div style={styles.container}>
         <div style={styles.card}>
@@ -39,7 +75,7 @@ const Register = () => {
             <h2 style={{ fontSize: 20, fontWeight: 700, color: '#0C2340', marginBottom: 12 }}>Inscription envoyée !</h2>
             <div style={{ background: '#FFF7ED', border: '1px solid #FAD7A0', borderRadius: 12, padding: '16px 20px', marginBottom: 20, color: '#92400E', fontSize: 14, lineHeight: 1.6 }}>
               Votre compte est en attente de validation par un administrateur.<br />
-              Vous recevrez l'accès une fois votre demande approuvée.
+              Vous serez automatiquement redirigé(e) dès l'approbation.
             </div>
             <a href="/login" style={{ color: '#185FA5', fontWeight: 600, fontSize: 14 }}>Retour à la connexion</a>
           </div>

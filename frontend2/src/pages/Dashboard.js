@@ -286,7 +286,7 @@ const Dashboard = () => {
     sessionStorage.removeItem('role')
     sessionStorage.removeItem('name')
     sessionStorage.removeItem('email')
-    navigate('/', { replace: true })
+    navigate('/login', { replace: true })
   }
 
   const nav = (section) => {

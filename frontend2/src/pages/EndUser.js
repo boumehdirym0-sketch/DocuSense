@@ -120,7 +120,7 @@ const EndUser = () => {
     sessionStorage.removeItem('role')
     sessionStorage.removeItem('name')
     sessionStorage.removeItem('email')
-    navigate('/', { replace: true })
+    navigate('/login', { replace: true })
   }
 
   const badgeColor = { bronze: '#CD7F32', silver: '#A8A9AD', gold: '#FFD700' }

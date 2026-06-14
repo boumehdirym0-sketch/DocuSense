@@ -1,6 +1,20 @@
+/**
+ * Contrôleur administrateur - DocuSense
+ * Fournit les fonctionnalités réservées aux administrateurs :
+ * - Statistiques globales de la plateforme
+ * - Gestion des utilisateurs (liste, rôles, suppression)
+ * - Workflow d'approbation des inscriptions (pending → active/rejected)
+ * - Gestion des manuels (liste, suppression)
+ */
+
 const User = require('../models/user')
 const Manual = require('../models/manual')
 
+/**
+ * GET /api/admin/stats
+ * Retourne les statistiques globales : nombre d'utilisateurs par rôle,
+ * nombre de comptes en attente, et état des manuels (publiés, archivés).
+ */
 const getStats = async (req, res) => {
   try {
     const totalUsers = await User.count()
@@ -17,6 +31,10 @@ const getStats = async (req, res) => {
   }
 }
 
+/**
+ * GET /api/admin/users
+ * Retourne la liste complète des utilisateurs avec leur statut et rôle.
+ */
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll({ attributes: ['id', 'name', 'email', 'role', 'status', 'createdAt'] })
@@ -26,6 +44,11 @@ const getAllUsers = async (req, res) => {
   }
 }
 
+/**
+ * GET /api/admin/users/pending
+ * Retourne uniquement les utilisateurs dont le statut est 'pending'.
+ * Utilisé par la section "Approbations" du panel admin.
+ */
 const getPendingUsers = async (req, res) => {
   try {
     const users = await User.findAll({
@@ -38,6 +61,11 @@ const getPendingUsers = async (req, res) => {
   }
 }
 
+/**
+ * PUT /api/admin/users/:id/approve
+ * Approuve un utilisateur en passant son statut de 'pending' à 'active'.
+ * L'utilisateur peut ensuite se connecter normalement.
+ */
 const approveUser = async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id)
@@ -49,6 +77,11 @@ const approveUser = async (req, res) => {
   }
 }
 
+/**
+ * PUT /api/admin/users/:id/reject
+ * Refuse un utilisateur en passant son statut à 'rejected'.
+ * L'utilisateur ne pourra plus se connecter.
+ */
 const rejectUser = async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id)

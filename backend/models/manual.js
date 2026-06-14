@@ -1,3 +1,10 @@
+/**
+ * Modèle Sequelize - Manuel
+ * Représente un manuel de documentation créé par un développeur.
+ * Un manuel contient plusieurs étapes (Steps), chacune avec un quiz associé.
+ * Il peut être en brouillon, publié (visible aux utilisateurs finaux) ou archivé.
+ */
+
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../config/db')
 const User = require('./user')

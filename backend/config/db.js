@@ -1,3 +1,10 @@
+/**
+ * Configuration de la base de données - DocuSense
+ * En production (Render) : PostgreSQL via la variable DATABASE_URL
+ * En développement (local) : MySQL via XAMPP
+ * La détection est automatique selon la présence de DATABASE_URL.
+ */
+
 const { Sequelize } = require('sequelize')
 require('dotenv').config()
 

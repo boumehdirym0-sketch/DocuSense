@@ -286,7 +286,7 @@ const Dashboard = () => {
     sessionStorage.removeItem('role')
     sessionStorage.removeItem('name')
     sessionStorage.removeItem('email')
-    navigate('/login', { replace: true })
+    navigate(sessionStorage.getItem('admin_token') ? '/admin' : '/login', { replace: true })
   }
 
   const nav = (section) => {

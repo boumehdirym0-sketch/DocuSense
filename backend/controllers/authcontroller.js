@@ -14,14 +14,11 @@ const register = async (req, res) => {
     const hashed = await bcrypt.hash(password, 10)
     const allowedRoles = ['developer', 'enduser']
     const role = allowedRoles.includes(req.body.role) ? req.body.role : 'developer'
-    const user = await User.create({ name, email, password: hashed, role })
+    await User.create({ name, email, password: hashed, role, status: 'pending' })
 
     res.status(201).json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      token: generateToken(user.id, user.role),
+      message: 'Compte créé avec succès. Veuillez patienter que votre compte soit validé par un administrateur.',
+      status: 'pending',
     })
   } catch (err) {
     res.status(500).json({ message: err.message })
@@ -36,6 +33,15 @@ const login = async (req, res) => {
 
     const match = await bcrypt.compare(password, user.password)
     if (!match) return res.status(401).json({ message: 'Mot de passe incorrect' })
+
+    if (user.role !== 'admin') {
+      if (user.status === 'pending') {
+        return res.status(403).json({ message: 'Votre compte est en attente de validation par un administrateur.' })
+      }
+      if (user.status === 'rejected') {
+        return res.status(403).json({ message: 'Votre compte a été refusé. Contactez l\'administrateur.' })
+      }
+    }
 
     res.json({
       id: user.id,

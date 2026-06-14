@@ -12,6 +12,7 @@ const Admin = () => {
   const [stats, setStats] = useState(null)
   const [users, setUsers] = useState([])
   const [manuals, setManuals] = useState([])
+  const [pendingUsers, setPendingUsers] = useState([])
   const [toast, setToast] = useState(null)
   const [loading, setLoading] = useState(false)
   const [adminName] = useState(localStorage.getItem('name') || 'Admin')
@@ -29,6 +30,7 @@ const Admin = () => {
   useEffect(() => {
     if (activeSection === 'utilisateurs') fetchUsers()
     if (activeSection === 'manuels') fetchManuals()
+    if (activeSection === 'approbations') fetchPendingUsers()
   }, [activeSection])
 
   const fetchStats = async () => {
@@ -61,6 +63,41 @@ const Admin = () => {
       console.error(err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchPendingUsers = async () => {
+    try {
+      setLoading(true)
+      const { data } = await API.get('/admin/users/pending')
+      setPendingUsers(data)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleApprove = async (userId) => {
+    try {
+      await API.put(`/admin/users/${userId}/approve`)
+      showToast('Utilisateur approuvé')
+      fetchPendingUsers()
+      fetchStats()
+    } catch (err) {
+      showToast(err.response?.data?.message || 'Erreur', 'error')
+    }
+  }
+
+  const handleReject = async (userId) => {
+    if (!window.confirm('Refuser cet utilisateur ?')) return
+    try {
+      await API.put(`/admin/users/${userId}/reject`)
+      showToast('Utilisateur refusé', 'error')
+      fetchPendingUsers()
+      fetchStats()
+    } catch (err) {
+      showToast(err.response?.data?.message || 'Erreur', 'error')
     }
   }
 
@@ -105,6 +142,7 @@ const Admin = () => {
 
   const menuItems = [
     { icon: '📊', label: 'Dashboard', section: 'dashboard' },
+    { icon: '⏳', label: 'Approbations', section: 'approbations', badge: stats?.pendingUsers },
     { icon: '👥', label: 'Utilisateurs', section: 'utilisateurs' },
     { icon: '📚', label: 'Tous les manuels', section: 'manuels' },
   ]
@@ -128,7 +166,10 @@ const Admin = () => {
         <div key={item.section} onClick={() => navTo(item.section)}
           style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 10, cursor: 'pointer', background: activeSection === item.section ? '#FFF7ED' : 'transparent', color: activeSection === item.section ? '#E67E22' : '#64748B', fontSize: 14, fontWeight: activeSection === item.section ? 600 : 400, transition: 'all 0.15s' }}>
           <span style={{ fontSize: 16 }}>{item.icon}</span>
-          {item.label}
+          <span style={{ flex: 1 }}>{item.label}</span>
+          {item.badge > 0 && (
+            <span style={{ background: '#E74C3C', color: '#fff', fontSize: 11, fontWeight: 700, borderRadius: 10, padding: '2px 7px', minWidth: 18, textAlign: 'center' }}>{item.badge}</span>
+          )}
         </div>
       ))}
 
@@ -148,12 +189,13 @@ const Admin = () => {
       {stats && (
         <>
           <div style={{ fontSize: 13, fontWeight: 600, color: '#94A3B8', letterSpacing: 1, marginBottom: 12, textTransform: 'uppercase' }}>Utilisateurs</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 28 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 14, marginBottom: 28 }}>
             {[
               { icon: '👥', label: 'Total utilisateurs', value: stats.totalUsers, color: '#185FA5', bg: '#EFF6FF', border: '#185FA5' },
               { icon: '🛠️', label: 'Développeurs', value: stats.developers, color: '#27AE60', bg: '#F0FFF4', border: '#27AE60' },
               { icon: '👤', label: 'Utilisateurs finaux', value: stats.endusers, color: '#8E44AD', bg: '#F5F0FF', border: '#8E44AD' },
               { icon: '🔑', label: 'Administrateurs', value: stats.admins, color: '#E67E22', bg: '#FFF7ED', border: '#E67E22' },
+              { icon: '⏳', label: 'En attente', value: stats.pendingUsers ?? 0, color: '#E74C3C', bg: '#FFF5F5', border: '#E74C3C' },
             ].map(m => (
               <div key={m.label} style={{ background: '#fff', border: '1px solid #EEF2F7', borderTop: `3px solid ${m.border}`, borderRadius: 14, padding: '18px 20px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
@@ -269,6 +311,75 @@ const Admin = () => {
     </>
   )
 
+  const SectionApprobations = () => (
+    <>
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ fontSize: 24, fontWeight: 700, color: '#0C2340' }}>Approbations</div>
+        <div style={{ fontSize: 14, color: '#94A3B8', marginTop: 4 }}>
+          {pendingUsers.length} demande{pendingUsers.length !== 1 ? 's' : ''} en attente de validation
+        </div>
+      </div>
+
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: 60, color: '#94A3B8' }}>⏳ Chargement...</div>
+      ) : pendingUsers.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: 60, color: '#94A3B8', background: '#fff', borderRadius: 14, border: '1px solid #EEF2F7' }}>
+          <div style={{ fontSize: 36, marginBottom: 12 }}>✅</div>
+          <div>Aucune demande en attente</div>
+        </div>
+      ) : (
+        <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #EEF2F7', overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ background: '#F8FAFF', borderBottom: '1px solid #EEF2F7' }}>
+                {['Utilisateur', 'Email', 'Rôle demandé', 'Date d\'inscription', 'Actions'].map(h => (
+                  <th key={h} style={{ padding: '14px 20px', textAlign: 'left', fontSize: 12, fontWeight: 600, color: '#64748B', letterSpacing: 0.5 }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {pendingUsers.map((user, i) => (
+                <tr key={user.id} style={{ borderBottom: i < pendingUsers.length - 1 ? '1px solid #F0F4F8' : 'none' }}>
+                  <td style={{ padding: '14px 20px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ width: 36, height: 36, background: '#FFF7ED', border: '2px solid #FAD7A020', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 700, color: '#E67E22' }}>
+                        {user.name.charAt(0).toUpperCase()}
+                      </div>
+                      <span style={{ fontSize: 14, fontWeight: 600, color: '#0C2340' }}>{user.name}</span>
+                    </div>
+                  </td>
+                  <td style={{ padding: '14px 20px', fontSize: 13, color: '#64748B' }}>{user.email}</td>
+                  <td style={{ padding: '14px 20px' }}>
+                    <span style={{ fontSize: 12, background: ROLE_BG[user.role], color: ROLE_COLORS[user.role], padding: '4px 12px', borderRadius: 20, fontWeight: 600 }}>
+                      {user.role === 'developer' ? '🛠️ Développeur' : '👤 Utilisateur'}
+                    </span>
+                  </td>
+                  <td style={{ padding: '14px 20px', fontSize: 13, color: '#94A3B8' }}>
+                    {new Date(user.createdAt).toLocaleDateString('fr-FR')}
+                  </td>
+                  <td style={{ padding: '14px 20px' }}>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button
+                        onClick={() => handleApprove(user.id)}
+                        style={{ padding: '6px 14px', background: '#F0FFF4', color: '#166534', border: '1px solid #BBF7D0', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>
+                        ✅ Accepter
+                      </button>
+                      <button
+                        onClick={() => handleReject(user.id)}
+                        style={{ padding: '6px 14px', background: '#FFF5F5', color: '#E74C3C', border: '1px solid #FECACA', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>
+                        ❌ Refuser
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
+  )
+
   const SectionManuels = () => (
     <>
       <div style={{ marginBottom: 28 }}>
@@ -350,6 +461,7 @@ const Admin = () => {
 
       <div className="main-content" style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
         {activeSection === 'dashboard' && <SectionDashboard />}
+        {activeSection === 'approbations' && <SectionApprobations />}
         {activeSection === 'utilisateurs' && <SectionUtilisateurs />}
         {activeSection === 'manuels' && <SectionManuels />}
       </div>

@@ -8,6 +8,7 @@ const Register = () => {
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('developer')
   const [error, setError] = useState('')
+  const [registered, setRegistered] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -21,15 +22,30 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const { data } = await API.post('/auth/register', { name, email, password, role })
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('role', data.role)
-      localStorage.setItem('name', data.name)
-      localStorage.setItem('email', data.email)
-      navigate(data.role === 'enduser' ? '/enduser' : '/dashboard', { replace: true })
+      await API.post('/auth/register', { name, email, password, role })
+      setRegistered(true)
     } catch (err) {
       setError(err.response?.data?.message || 'Erreur lors de l\'inscription')
     }
+  }
+
+  if (registered) {
+    return (
+      <div style={styles.container}>
+        <div style={styles.card}>
+          <h1 style={styles.logo}>Docu<span style={styles.logoBlue}>Sense</span></h1>
+          <div style={{ textAlign: 'center', padding: '20px 0' }}>
+            <div style={{ fontSize: 52, marginBottom: 16 }}>⏳</div>
+            <h2 style={{ fontSize: 20, fontWeight: 700, color: '#0C2340', marginBottom: 12 }}>Inscription envoyée !</h2>
+            <div style={{ background: '#FFF7ED', border: '1px solid #FAD7A0', borderRadius: 12, padding: '16px 20px', marginBottom: 20, color: '#92400E', fontSize: 14, lineHeight: 1.6 }}>
+              Votre compte est en attente de validation par un administrateur.<br />
+              Vous recevrez l'accès une fois votre demande approuvée.
+            </div>
+            <a href="/login" style={{ color: '#185FA5', fontWeight: 600, fontSize: 14 }}>Retour à la connexion</a>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (

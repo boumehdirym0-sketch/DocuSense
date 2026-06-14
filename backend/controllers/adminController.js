@@ -7,10 +7,11 @@ const getStats = async (req, res) => {
     const developers = await User.count({ where: { role: 'developer' } })
     const endusers = await User.count({ where: { role: 'enduser' } })
     const admins = await User.count({ where: { role: 'admin' } })
+    const pendingUsers = await User.count({ where: { status: 'pending' } })
     const totalManuals = await Manual.count({ where: { isArchived: false } })
     const publishedManuals = await Manual.count({ where: { isPublished: true, isArchived: false } })
     const archivedManuals = await Manual.count({ where: { isArchived: true } })
-    res.json({ totalUsers, developers, endusers, admins, totalManuals, publishedManuals, archivedManuals })
+    res.json({ totalUsers, developers, endusers, admins, pendingUsers, totalManuals, publishedManuals, archivedManuals })
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
@@ -18,8 +19,42 @@ const getStats = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll({ attributes: ['id', 'name', 'email', 'role', 'createdAt'] })
+    const users = await User.findAll({ attributes: ['id', 'name', 'email', 'role', 'status', 'createdAt'] })
     res.json(users)
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}
+
+const getPendingUsers = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      where: { status: 'pending' },
+      attributes: ['id', 'name', 'email', 'role', 'createdAt'],
+    })
+    res.json(users)
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}
+
+const approveUser = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id)
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' })
+    await user.update({ status: 'active' })
+    res.json({ message: 'Utilisateur approuvé' })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}
+
+const rejectUser = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id)
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' })
+    await user.update({ status: 'rejected' })
+    res.json({ message: 'Utilisateur refusé' })
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
@@ -80,4 +115,4 @@ const deleteManual = async (req, res) => {
   }
 }
 
-module.exports = { getStats, getAllUsers, updateUserRole, deleteUser, getAllManuals, deleteManual }
+module.exports = { getStats, getAllUsers, getPendingUsers, approveUser, rejectUser, updateUserRole, deleteUser, getAllManuals, deleteManual }

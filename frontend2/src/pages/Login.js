@@ -74,8 +74,14 @@ const Login = () => {
         </div>
 
         {error && (
-          <div style={{ background: '#FFF5F5', border: '1px solid #FECACA', borderRadius: 8, padding: '10px 14px', marginBottom: 16, color: '#E74C3C', fontSize: 13 }}>
-            {error}
+          <div style={{
+            background: error.includes('attente') ? '#FFF7ED' : '#FFF5F5',
+            border: `1px solid ${error.includes('attente') ? '#FAD7A0' : '#FECACA'}`,
+            borderRadius: 8, padding: '10px 14px', marginBottom: 16,
+            color: error.includes('attente') ? '#92400E' : '#E74C3C',
+            fontSize: 13
+          }}>
+            {error.includes('attente') && '⏳ '}{error}
           </div>
         )}
 

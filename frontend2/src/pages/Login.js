@@ -10,13 +10,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    const role = localStorage.getItem('role')
-    if (token) {
-      navigate(role === 'admin' ? '/admin' : role === 'enduser' ? '/enduser' : '/dashboard', { replace: true })
-    }
-  }, [navigate])
 
   const handleSubmit = async (e) => {
     e.preventDefault()

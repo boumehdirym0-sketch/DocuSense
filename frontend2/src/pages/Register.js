@@ -14,14 +14,6 @@ const Register = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    const savedRole = localStorage.getItem('role')
-    if (token) {
-      navigate(savedRole === 'admin' ? '/admin' : savedRole === 'enduser' ? '/enduser' : '/dashboard', { replace: true })
-    }
-  }, [navigate])
-
-  useEffect(() => {
     if (!registered || approved) return
     const interval = setInterval(async () => {
       try {
@@ -29,11 +21,7 @@ const Register = () => {
         if (data.status === 'active') {
           setApproved(true)
           clearInterval(interval)
-          localStorage.setItem('token', data.token)
-          localStorage.setItem('role', data.role)
-          localStorage.setItem('name', data.name)
-          localStorage.setItem('email', data.email)
-          setTimeout(() => navigate(data.role === 'enduser' ? '/enduser' : '/dashboard', { replace: true }), 3000)
+          setTimeout(() => navigate('/login', { replace: true }), 3000)
         }
       } catch (e) {}
     }, 4000)
@@ -62,7 +50,7 @@ const Register = () => {
               <h2 style={{ fontSize: 20, fontWeight: 700, color: '#166534', marginBottom: 12 }}>Inscription validée !</h2>
               <div style={{ background: '#F0FFF4', border: '1px solid #BBF7D0', borderRadius: 12, padding: '16px 20px', marginBottom: 20, color: '#166534', fontSize: 14, lineHeight: 1.6 }}>
                 Votre inscription a été approuvée. Bienvenu(e) sur DocuSense !<br />
-                Redirection vers votre espace...
+                Redirection vers la page de connexion...
               </div>
             </div>
           </div>

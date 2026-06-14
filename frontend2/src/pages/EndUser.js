@@ -115,20 +115,6 @@ const EndUser = () => {
     }
   }
 
-  const submitQuiz = async (quiz) => {
-    try {
-      const { data } = await API.post('/quiz/submit', {
-        quizId: quiz.id,
-        answer: quizAnswer,
-        manualId: selected.id
-      })
-      setQuizResult(data)
-      setScore(data.totalScore)
-      setBadges(data.badges)
-      fetchLeaderboard()
-    } catch (err) { console.error(err) }
-  }
-
   const logout = () => {
     localStorage.clear()
     navigate('/', { replace: true })
@@ -138,11 +124,6 @@ const EndUser = () => {
   const badgeIcon = { bronze: '🥉', silver: '🥈', gold: '🥇' }
 
   const steps = selected?.Steps || []
-  const currentQuiz = steps[currentStep]?.Quiz || null
-  const quizOptions = currentQuiz
-    ? (Array.isArray(currentQuiz.options) ? currentQuiz.options : (() => { try { return JSON.parse(currentQuiz.options) } catch { return [] } })())
-    : []
-
   const quizSteps = steps.filter(s => s.Quiz)
   const activeQuiz = quizMode ? (quizSteps[quizStepIndex]?.Quiz || null) : null
   const activeQuizOptions = activeQuiz

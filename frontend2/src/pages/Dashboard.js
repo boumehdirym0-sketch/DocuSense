@@ -89,6 +89,8 @@ const Dashboard = () => {
       setLoading(true)
       setSelectedManual(manualId)
       setError('')
+      setSuggestions([])
+      setStepByStepMode(s => ({ ...s, [manualId]: false }))
       const { data } = await API.post('/ai/suggest', { appDescription })
       setSuggestions(data.steps)
     } catch (err) {
@@ -102,6 +104,8 @@ const Dashboard = () => {
     try {
       setLoading(true)
       setError('')
+      setSuggestions([])
+      setStepByStepMode(s => ({ ...s, [manualId]: false }))
       setSelectedManual(manualId)
       const formData = new FormData()
       formData.append('image', file)
@@ -139,6 +143,8 @@ const Dashboard = () => {
     try {
       setLoading(true)
       setError('')
+      setSuggestions([])
+      setStepByStepMode(s => ({ ...s, [manualId]: false }))
       setSelectedManual(manualId)
       const frame = await extractVideoFrame(file)
       const formData = new FormData()
@@ -226,6 +232,8 @@ const Dashboard = () => {
       showToast('Étapes sauvegardées !')
       setSuggestions([])
       setSelectedManual(null)
+      await loadSavedSteps(manualId)
+      setShowSavedSteps(s => ({ ...s, [manualId]: true }))
     } catch (err) {
       console.error(err)
     }
@@ -483,6 +491,7 @@ const Dashboard = () => {
           onClick={async () => {
             const newMode = !stepByStepMode[manual.id]
             setStepByStepMode(s => ({ ...s, [manual.id]: newMode }))
+            if (newMode) { setSuggestions([]); setSelectedManual(null) }
             if (newMode && !(stepByStepSteps[manual.id] || []).length) {
               try {
                 const { data } = await API.get(`/manuals/${manual.id}`)

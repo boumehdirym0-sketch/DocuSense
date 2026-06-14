@@ -250,19 +250,26 @@ const Landing = () => {
           <p style={{color:'#64748B', fontSize:15}}>Une question, une suggestion ? Écrivez-nous.</p>
         </div>
         {/* Coordonnées */}
-        <div style={{display:'flex', justifyContent:'center', gap:24, flexWrap:'wrap', marginBottom:40}}>
-          <a href="mailto:docusense9@gmail.com" style={{display:'flex', alignItems:'center', gap:12, background:'#F8FAFF', borderRadius:12, padding:'16px 24px', border:'1px solid #EEF2F7', textDecoration:'none'}}>
+        <div style={{display:'flex', justifyContent:'center', gap:20, flexWrap:'wrap', marginBottom:40}}>
+          <a href="mailto:docusense6@gmail.com" style={{display:'flex', alignItems:'center', gap:12, background:'#F8FAFF', borderRadius:12, padding:'16px 24px', border:'1px solid #EEF2F7', textDecoration:'none'}}>
             <div style={{width:40, height:40, background:'linear-gradient(135deg,#185FA5,#378ADD)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18}}>📧</div>
             <div>
               <div style={{fontSize:11, color:'#94A3B8', fontWeight:600}}>EMAIL</div>
-              <div style={{fontSize:14, fontWeight:600, color:'#0C2340'}}>docusense9@gmail.com</div>
+              <div style={{fontSize:14, fontWeight:600, color:'#0C2340'}}>contact@docusense.com</div>
             </div>
           </a>
-          <a href="tel:0791244909" style={{display:'flex', alignItems:'center', gap:12, background:'#F8FAFF', borderRadius:12, padding:'16px 24px', border:'1px solid #EEF2F7', textDecoration:'none'}}>
-            <div style={{width:40, height:40, background:'linear-gradient(135deg,#27AE60,#2ECC71)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18}}>📞</div>
+          <a href="https://wa.me/213791244909" target="_blank" rel="noreferrer" style={{display:'flex', alignItems:'center', gap:12, background:'#F8FAFF', borderRadius:12, padding:'16px 24px', border:'1px solid #EEF2F7', textDecoration:'none'}}>
+            <div style={{width:40, height:40, background:'linear-gradient(135deg,#25D366,#128C7E)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18}}>💬</div>
             <div>
-              <div style={{fontSize:11, color:'#94A3B8', fontWeight:600}}>TÉLÉPHONE</div>
+              <div style={{fontSize:11, color:'#94A3B8', fontWeight:600}}>WHATSAPP</div>
               <div style={{fontSize:14, fontWeight:600, color:'#0C2340'}}>07 91 24 49 09</div>
+            </div>
+          </a>
+          <a href="https://www.linkedin.com/in/rym-boumehdi-3015a3394" target="_blank" rel="noreferrer" style={{display:'flex', alignItems:'center', gap:12, background:'#F8FAFF', borderRadius:12, padding:'16px 24px', border:'1px solid #EEF2F7', textDecoration:'none'}}>
+            <div style={{width:40, height:40, background:'linear-gradient(135deg,#0077B5,#00A0DC)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18}}>🔗</div>
+            <div>
+              <div style={{fontSize:11, color:'#94A3B8', fontWeight:600}}>LINKEDIN</div>
+              <div style={{fontSize:14, fontWeight:600, color:'#0C2340'}}>Rym Boumehdi</div>
             </div>
           </a>
         </div>

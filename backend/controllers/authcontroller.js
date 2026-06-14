@@ -58,8 +58,17 @@ const login = async (req, res) => {
 const checkStatus = async (req, res) => {
   try {
     const { email } = req.query
-    const user = await User.findOne({ where: { email }, attributes: ['status'] })
+    const user = await User.findOne({ where: { email } })
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' })
+    if (user.status === 'active') {
+      return res.json({
+        status: 'active',
+        token: generateToken(user.id, user.role),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      })
+    }
     res.json({ status: user.status })
   } catch (err) {
     res.status(500).json({ message: err.message })

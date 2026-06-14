@@ -45,7 +45,7 @@ const Admin = () => {
       const { data } = await API.get('/admin/stats')
       setStats(data)
     } catch (err) {
-      if (err.response?.status === 401 || err.response?.status === 403) navigate('/login')
+      // Le polling échoue silencieusement — seul le bouton Déconnexion redirige
     }
   }
 
@@ -143,7 +143,10 @@ const Admin = () => {
   }
 
   const logout = () => {
-    sessionStorage.clear()
+    sessionStorage.removeItem('token')
+    sessionStorage.removeItem('role')
+    sessionStorage.removeItem('name')
+    sessionStorage.removeItem('email')
     navigate('/', { replace: true })
   }
 

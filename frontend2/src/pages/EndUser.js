@@ -116,7 +116,10 @@ const EndUser = () => {
   }
 
   const logout = () => {
-    sessionStorage.clear()
+    sessionStorage.removeItem('token')
+    sessionStorage.removeItem('role')
+    sessionStorage.removeItem('name')
+    sessionStorage.removeItem('email')
     navigate('/', { replace: true })
   }
 

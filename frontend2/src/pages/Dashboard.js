@@ -24,9 +24,9 @@ const Dashboard = () => {
   const [toast, setToast] = useState(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [userInfo, setUserInfo] = useState({
-    name: localStorage.getItem('name') || '',
-    email: localStorage.getItem('email') || '',
-    role: localStorage.getItem('role') || '',
+    name: sessionStorage.getItem('name') || '',
+    email: sessionStorage.getItem('email') || '',
+    role: sessionStorage.getItem('role') || '',
   })
   const navigate = useNavigate()
 
@@ -38,8 +38,8 @@ const Dashboard = () => {
   useEffect(() => {
     fetchManuals()
     API.get('/auth/me').then(({ data }) => {
-      localStorage.setItem('name', data.name)
-      localStorage.setItem('role', data.role)
+      sessionStorage.setItem('name', data.name)
+      sessionStorage.setItem('role', data.role)
       setUserInfo(u => ({ ...u, name: data.name, role: data.role }))
     }).catch(() => {})
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -282,7 +282,7 @@ const Dashboard = () => {
   }
 
   const logout = () => {
-    localStorage.clear()
+    sessionStorage.clear()
     navigate('/', { replace: true })
   }
 
@@ -695,7 +695,7 @@ const Dashboard = () => {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
           {[
             { label: 'Nom complet', value: userInfo.name || '—', icon: '👤' },
-            { label: 'Email', value: userInfo.email || localStorage.getItem('email') || '—', icon: '📧' },
+            { label: 'Email', value: userInfo.email || sessionStorage.getItem('email') || '—', icon: '📧' },
             { label: 'Rôle', value: userInfo.role === 'developer' ? 'Développeur' : 'Utilisateur final', icon: '🏷' },
             { label: 'Plateforme', value: 'DocuSense v1.0', icon: '🚀' },
             { label: 'Manuels créés', value: manuals.length, icon: '📚' },

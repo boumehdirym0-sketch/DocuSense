@@ -50,7 +50,7 @@ const EndUser = () => {
   const [score, setScore] = useState(0)
   const [badges, setBadges] = useState([])
   const [leaderboard, setLeaderboard] = useState([])
-  const [userName, setUserName] = useState(localStorage.getItem('name') || '')
+  const [userName, setUserName] = useState(sessionStorage.getItem('name') || '')
   const [quizMode, setQuizMode] = useState(false)
   const [quizStepIndex, setQuizStepIndex] = useState(0)
   const [quizCompleted, setQuizCompleted] = useState(false)
@@ -60,8 +60,8 @@ const EndUser = () => {
     fetchManuals()
     fetchLeaderboard()
     API.get('/auth/me').then(({ data }) => {
-      localStorage.setItem('name', data.name)
-      localStorage.setItem('role', data.role)
+      sessionStorage.setItem('name', data.name)
+      sessionStorage.setItem('role', data.role)
       setUserName(data.name)
     }).catch(() => {})
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -116,7 +116,7 @@ const EndUser = () => {
   }
 
   const logout = () => {
-    localStorage.clear()
+    sessionStorage.clear()
     navigate('/', { replace: true })
   }
 

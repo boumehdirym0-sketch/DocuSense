@@ -99,7 +99,7 @@ const Quiz = () => {
         <div style={{display:'flex', alignItems:'center', gap:10, padding:'10px 12px', borderRadius:10, background:'#EFF6FF', color:'#185FA5', fontSize:14, fontWeight:600}}>
           <span>🏆</span> Gamification
         </div>
-        <div onClick={() => { localStorage.clear(); navigate('/', { replace: true }) }} style={{display:'flex', alignItems:'center', gap:10, padding:'10px 12px', borderRadius:10, cursor:'pointer', color:'#E74C3C', fontSize:14, marginTop:'auto', background:'#FFF5F5'}}>
+        <div onClick={() => { sessionStorage.clear(); navigate('/', { replace: true }) }} style={{display:'flex', alignItems:'center', gap:10, padding:'10px 12px', borderRadius:10, cursor:'pointer', color:'#E74C3C', fontSize:14, marginTop:'auto', background:'#FFF5F5'}}>
           <span>🚪</span> Déconnexion
         </div>
       </div>

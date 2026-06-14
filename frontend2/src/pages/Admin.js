@@ -16,7 +16,7 @@ const Admin = () => {
   const [userSearch, setUserSearch] = useState('')
   const [toast, setToast] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [adminName] = useState(localStorage.getItem('name') || 'Admin')
+  const [adminName] = useState(sessionStorage.getItem('name') || 'Admin')
   const navigate = useNavigate()
 
   const showToast = (msg, type = 'success') => {
@@ -143,7 +143,7 @@ const Admin = () => {
   }
 
   const logout = () => {
-    localStorage.clear()
+    sessionStorage.clear()
     navigate('/', { replace: true })
   }
 

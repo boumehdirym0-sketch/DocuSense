@@ -25,10 +25,10 @@ const Login = () => {
         return
       }
 
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('role', data.role)
-      localStorage.setItem('name', data.name)
-      localStorage.setItem('email', data.email)
+      sessionStorage.setItem('token', data.token)
+      sessionStorage.setItem('role', data.role)
+      sessionStorage.setItem('name', data.name)
+      sessionStorage.setItem('email', data.email)
       navigate(data.role === 'admin' ? '/admin' : data.role === 'enduser' ? '/enduser' : '/dashboard', { replace: true })
     } catch (err) {
       setError(err.response?.data?.message || 'Erreur de connexion')

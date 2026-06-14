@@ -10,19 +10,19 @@ import EndUser from './pages/EndUser'
 import Admin from './pages/Admin'
 
 const Private = ({ children }) => {
-  const token = localStorage.getItem('token')
+  const token = sessionStorage.getItem('token')
   return token ? children : <Navigate to="/login" replace />
 }
 
 const AdminOnly = ({ children }) => {
-  const token = localStorage.getItem('token')
-  const role = localStorage.getItem('role')
+  const token = sessionStorage.getItem('token')
+  const role = sessionStorage.getItem('role')
   return token && role === 'admin' ? children : <Navigate to="/login" replace />
 }
 
 const AutoRedirect = () => {
-  const token = localStorage.getItem('token')
-  const role = localStorage.getItem('role')
+  const token = sessionStorage.getItem('token')
+  const role = sessionStorage.getItem('role')
   if (token) return <Navigate to={role === 'admin' ? '/admin' : role === 'enduser' ? '/enduser' : '/dashboard'} replace />
   return <Landing />
 }

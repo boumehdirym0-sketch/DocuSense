@@ -488,15 +488,13 @@ const Dashboard = () => {
 
         {/* Bouton mode étape par étape */}
         <button
-          onClick={async () => {
+          onClick={() => {
             const newMode = !stepByStepMode[manual.id]
             setStepByStepMode(s => ({ ...s, [manual.id]: newMode }))
-            if (newMode) { setSuggestions([]); setSelectedManual(null) }
-            if (newMode && !(stepByStepSteps[manual.id] || []).length) {
-              try {
-                const { data } = await API.get(`/manuals/${manual.id}`)
-                setStepByStepSteps(s => ({ ...s, [manual.id]: data.Steps || [] }))
-              } catch (err) {}
+            if (newMode) {
+              setSuggestions([])
+              setSelectedManual(null)
+              setStepByStepSteps(s => ({ ...s, [manual.id]: [] }))
             }
           }}
           style={{ width: '100%', padding: '9px', background: stepByStepMode[manual.id] ? 'linear-gradient(135deg,#E8F5E9,#C8E6C9)' : 'linear-gradient(135deg,#F3E5F5,#E1BEE7)', color: stepByStepMode[manual.id] ? '#2E7D32' : '#6A1B9A', border: stepByStepMode[manual.id] ? '1px solid #A5D6A7' : '1px solid #CE93D8', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>

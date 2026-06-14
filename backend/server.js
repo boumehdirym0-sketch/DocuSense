@@ -37,7 +37,16 @@ const PORT = process.env.PORT || 5000
 
 const start = async () => {
   await connectDB()
-  await sequelize.sync()
+  await sequelize.sync({ alter: true })
+  // Add status column if missing (safe for both MySQL and PostgreSQL)
+  try {
+    const isPostgres = !!process.env.DATABASE_URL
+    if (isPostgres) {
+      await sequelize.query(`ALTER TABLE "Users" ADD COLUMN IF NOT EXISTS status VARCHAR(255) DEFAULT 'pending'`)
+    } else {
+      await sequelize.query(`ALTER TABLE Users ADD COLUMN IF NOT EXISTS status VARCHAR(255) DEFAULT 'pending'`)
+    }
+  } catch (e) { /* column already exists */ }
   console.log('Tables synchronisées !')
   app.listen(PORT, () => {
     console.log(`Serveur démarré sur le port ${PORT}`)

@@ -18,14 +18,24 @@ const Landing = () => {
     setMobileNavOpen(false)
   }
 
-  const handleContact = (e) => {
+  const handleContact = async (e) => {
     e.preventDefault()
-    const subject = encodeURIComponent(`Message de ${contactForm.name} via DocuSense`)
-    const body = encodeURIComponent(`Nom : ${contactForm.name}\nEmail : ${contactForm.email}\n\nMessage :\n${contactForm.message}`)
-    window.open(`mailto:docusense9@gmail.com?subject=${subject}&body=${body}`)
-    setContactSent(true)
-    setContactForm({ name: '', email: '', message: '' })
-    setTimeout(() => setContactSent(false), 4000)
+    try {
+      await fetch('https://formspree.io/f/mbdeqywa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          name: contactForm.name,
+          email: contactForm.email,
+          message: contactForm.message
+        })
+      })
+      setContactSent(true)
+      setContactForm({ name: '', email: '', message: '' })
+      setTimeout(() => setContactSent(false), 4000)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const navLinks = [
